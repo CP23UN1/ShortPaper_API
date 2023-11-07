@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShortPaper_API", "ShortPaper_API\ShortPaper_API.csproj", "{859100E9-5ED4-463D-B5A9-3F871BD0492E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{859100E9-5ED4-463D-B5A9-3F871BD0492E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{859100E9-5ED4-463D-B5A9-3F871BD0492E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{859100E9-5ED4-463D-B5A9-3F871BD0492E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{859100E9-5ED4-463D-B5A9-3F871BD0492E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {22D91BA3-71DE-41C2-9C21-ED59B46BE2A0}
+	EndGlobalSection
+EndGlobal
