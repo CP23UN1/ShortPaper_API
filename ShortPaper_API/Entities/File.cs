@@ -7,10 +7,6 @@ public partial class File
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
-
-    public int StatusId { get; set; }
-
     public string Filename { get; set; } = null!;
 
     public string Filesize { get; set; } = null!;
@@ -25,7 +21,13 @@ public partial class File
 
     public DateTime UpdatedDatetime { get; set; }
 
-    public virtual FileStatus Status { get; set; } = null!;
+    public int StatusId { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public int ProjectId { get; set; }
+
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+    public virtual Project Project { get; set; } = null!;
+
+    public virtual FileStatus Status { get; set; } = null!;
 }

@@ -19,17 +19,15 @@ public partial class User
 
     public string? PhoneNumber { get; set; }
 
-    public string? ProjectTopic { get; set; }
-
-    public string? RegisteredSubjectId { get; set; }
-
-    public string? ProjectSubjectId { get; set; }
-
     public string? Year { get; set; }
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+    public int RegisteredSubjectid { get; set; }
 
-    public virtual ICollection<Committee> Committees { get; set; } = new List<Committee>();
+    public int ShortpaperSubjectid { get; set; }
 
-    public virtual ICollection<File> Files { get; set; } = new List<File>();
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
+    public virtual Subject RegisteredSubject { get; set; } = null!;
+
+    public virtual Subject ShortpaperSubject { get; set; } = null!;
 }

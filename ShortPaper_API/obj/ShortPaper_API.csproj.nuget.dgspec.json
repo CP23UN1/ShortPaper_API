@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj": {}
+    "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj": {
+    "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+        "projectUniqueName": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
         "projectName": "ShortPaper_API",
-        "projectPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
-        "packagesPath": "C:\\Users\\jajah\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\obj\\",
+        "projectPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\jajah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -42,7 +42,7 @@
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
-              "version": "[7.0.1, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -56,6 +56,10 @@
               "target": "Package",
               "version": "[7.0.13, )"
             },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[7.0.9, )"
+            },
             "MySql.Data": {
               "target": "Package",
               "version": "[8.2.0, )"
@@ -66,7 +70,27 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[6.5.0, )"
+            },
+            "System.Core": {
+              "target": "Package",
+              "version": "[3.5.21022.801, )"
+            },
+            "System.Data.Common": {
+              "target": "Package",
+              "version": "[4.3.0, )"
+            },
+            "System.Data.DataSetExtensions": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.5, )"
+            },
+            "System.Linq": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
@@ -88,7 +112,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -7,8 +7,6 @@ public partial class Comment
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
-
     public string Comments { get; set; } = null!;
 
     /// <summary>
@@ -19,5 +17,13 @@ public partial class Comment
 
     public DateTime UpdatedDatetime { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public int ReplyCommentid { get; set; }
+
+    public int FileId { get; set; }
+
+    public virtual File File { get; set; } = null!;
+
+    public virtual ICollection<Comment> InverseReplyComment { get; set; } = new List<Comment>();
+
+    public virtual Comment ReplyComment { get; set; } = null!;
 }
