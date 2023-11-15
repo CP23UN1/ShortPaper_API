@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.Controllers;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +15,12 @@ builder.Services.AddSwaggerGen();
 // Configure your DbContext
 builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 {
-    options.UseMySQL(builder.Configuration.GetConnectionString("YourConnectionString"));
+    options.UseMySQL(builder.Configuration.GetConnectionString("ConnectionString"));
 });
+
+// Add Controller and Services Scoped
+builder.Services.AddControllers();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

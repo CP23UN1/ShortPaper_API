@@ -27,7 +27,7 @@ public partial class User
 
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
-    public virtual Subject RegisteredSubject { get; set; } = null!;
+    public virtual Subject? RegisteredSubject { get; set; } = null!;
 
-    public virtual Subject ShortpaperSubject { get; set; } = null!;
+    public virtual Subject? ShortpaperSubject { get; set; } = null!;
 }

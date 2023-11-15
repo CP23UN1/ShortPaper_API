@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ShortPaper_API.Entities; // Make sure to import your DbContext namespace
+using ShortPaper_API.Entities;
+using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API
 {
@@ -23,10 +24,13 @@ namespace ShortPaper_API
             // Add DbContext
             services.AddDbContext<ShortpaperDbContext>(options =>
             {
-                options.UseMySQL(Configuration.GetConnectionString("server=localhost;port=3306;user=root;password=Arm@2020;database=shortpaper_db"));
+                options.UseMySQL(Configuration.GetConnectionString("ConnectionString"));
             });
 
             services.AddControllers();
+
+            // Add Services Scoped
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

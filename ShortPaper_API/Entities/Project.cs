@@ -7,7 +7,7 @@ public partial class Project
 {
     public int ProjectId { get; set; }
 
-    public string? Topic { get; set; }
+    public string Topic { get; set; } = null!;
 
     public int? CommitteeFirst { get; set; }
 

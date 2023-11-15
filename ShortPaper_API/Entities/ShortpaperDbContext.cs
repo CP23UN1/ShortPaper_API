@@ -213,6 +213,7 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.RegisteredSubjectid).HasColumnName("registered_subjectid");
             entity.Property(e => e.Role)
                 .HasMaxLength(10)
+                .HasDefaultValueSql("'student'")
                 .HasColumnName("role");
             entity.Property(e => e.ShortpaperSubjectid).HasColumnName("shortpaper_subjectid");
             entity.Property(e => e.StudentId)
