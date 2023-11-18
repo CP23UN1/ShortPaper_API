@@ -21,6 +21,17 @@ namespace ShortPaper_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Add Cors Config
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(builder =>
+            //    {
+            //        builder.AllowAnyOrigin()
+            //               .AllowAnyMethod()
+            //               .AllowAnyHeader();
+            //    });
+            //});
+
             // Add DbContext
             services.AddDbContext<ShortpaperDbContext>(options =>
             {
@@ -31,6 +42,15 @@ namespace ShortPaper_API
 
             // Add Services Scoped
             services.AddScoped<IUserService, UserService>();
+
+            // In ConfigureServices method
+            services.AddCors();
+
+            //services.AddHttpsRedirection(options =>
+            //{
+            //    options.HttpsPort = 443;
+            //});
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +62,11 @@ namespace ShortPaper_API
             }
             else
             {
-                // Production error handling
-                // app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            // Use CORS before other middleware
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseHttpsRedirection();
             app.UseRouting();
@@ -55,6 +76,10 @@ namespace ShortPaper_API
             {
                 endpoints.MapControllers();
             });
+
+            //app.UseHttpsRedirection();
+
+
         }
     }
 }

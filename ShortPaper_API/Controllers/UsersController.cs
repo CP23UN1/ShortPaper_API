@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Repositories;
@@ -6,7 +7,8 @@ using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("api/user")]
+    //[EnableCors("VueCorsPolicy")]
+    [Route("api")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -21,20 +23,23 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
+        [Route("users")]
         public List<User> GetUsers()
         {
             var users = _userService.GetUsers();
             return users;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("/user/{id}")]
         public User GetUserById(int id)
         {
             var user = _userService.GetUser(id);
             return user;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
+        [Route("/user/create")]
         public User CreateUser(User newUser)
         {
             /*var newUser = new User
@@ -53,14 +58,16 @@ namespace ShortPaper_API.Controllers
             return newUser;
         }
 
-        [HttpPut("update")]
+        [HttpPut]
+        [Route("/user/update/{id}")]
         public User UpdateUser(User user)
         {
             var updateUser = _userService.UpdateUser(user);
             return updateUser;
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete]
+        [Route("/user/delete/{id}")]
         public int DeleteUser(int id)
         {
             var deleteUser = _userService.DeleteUser(id);

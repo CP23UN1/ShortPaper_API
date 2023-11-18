@@ -4,6 +4,19 @@ using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "AllowSpecificOrigin";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins("*")
+                            .WithMethods("GET", "POST", "PUT", "DELETE")
+                            .AllowAnyHeader();
+                      });
+});
 
 // Add services to the container.
 
@@ -22,6 +35,7 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +46,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
