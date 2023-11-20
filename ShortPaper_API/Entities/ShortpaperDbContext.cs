@@ -66,7 +66,6 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasOne(d => d.ReplyComment).WithMany(p => p.InverseReplyComment)
                 .HasForeignKey(d => d.ReplyCommentid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_comments_comments1");
         });
 
@@ -225,12 +224,10 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasOne(d => d.RegisteredSubject).WithMany(p => p.UserRegisteredSubjects)
                 .HasForeignKey(d => d.RegisteredSubjectid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_users_subjects1");
 
             entity.HasOne(d => d.ShortpaperSubject).WithMany(p => p.UserShortpaperSubjects)
                 .HasForeignKey(d => d.ShortpaperSubjectid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_users_subjects2");
         });
 

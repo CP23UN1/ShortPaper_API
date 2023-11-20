@@ -8,14 +8,14 @@ using ShortPaper_API.Services.Users;
 namespace ShortPaper_API.Controllers
 {
     //[EnableCors("VueCorsPolicy")]
-    [Route("api")]
+    [Route("/api")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly ShortpaperDbContext _dbContext;
         private readonly IUserService _userService;
 
-        public UsersController(ShortpaperDbContext dbContext, IUserService userService)
+        public UserController(ShortpaperDbContext dbContext, IUserService userService)
         
         {
             _dbContext = dbContext;
@@ -23,7 +23,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("users")]
+        [Route("/users")]
         public List<User> GetUsers()
         {
             var users = _userService.GetUsers();

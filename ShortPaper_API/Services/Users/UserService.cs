@@ -16,21 +16,55 @@ namespace ShortPaper_API.Services.Users
             _db = db;
         }
 
+        public List<User> GetUsers()
+        {
+            var users = (from a in _db.Users
+                         join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                         into userRegist
+                         from regist in userRegist.DefaultIfEmpty()
+                         join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                         into userPaper
+                         from paper in userPaper.DefaultIfEmpty()
+                         select new User
+                         {
+                             UserId = a.UserId,
+                             StudentId = a.StudentId,
+                             Firstname = a.Firstname,
+                             Lastname = a.Lastname,
+                             Role = a.Role,
+                             Email = a.Email,
+                             PhoneNumber = a.PhoneNumber,
+                             Year = a.Year,
+                             RegisteredSubject = regist != null
+                    ? new Subject
+                    {
+                        Id = regist.Id,
+                        SubjectId = regist.SubjectId,
+                        SubjectName = regist.SubjectName
+                    } : null,
+                             ShortpaperSubject = paper != null
+                    ? new Subject
+                    {
+                        Id = paper.Id,
+                        SubjectId = paper.SubjectId,
+                        SubjectName = paper.SubjectName
+                    } : null
+                         }).ToList();
+
+            //var subject = (from b in _db.Subjects              
+            //                select b).ToList();
+            
+            return users;
+        }
+
         public User GetUser(int id)
         {
             var user = (from a in _db.Users
                         where a.UserId == id
                         select a).FirstOrDefault();
+            
 
             return user;
-        }
-
-        public List<User> GetUsers()
-        {
-            var listOfUser = (from a in _db.Users
-                          select a).ToList();
-
-            return listOfUser;
         }
 
         public User CreateUser(User newUser)

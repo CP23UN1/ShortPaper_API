@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.Controllers;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Services.Subjects;
 using ShortPaper_API.Services.Users;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,7 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 // Add Controller and Services Scoped
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
 
 
 var app = builder.Build();

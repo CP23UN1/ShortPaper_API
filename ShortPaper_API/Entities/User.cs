@@ -21,13 +21,13 @@ public partial class User
 
     public string? Year { get; set; }
 
-    public int RegisteredSubjectid { get; set; }
+    public int? RegisteredSubjectid { get; set; }
 
-    public int ShortpaperSubjectid { get; set; }
+    public int? ShortpaperSubjectid { get; set; }
 
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
-    public virtual Subject? RegisteredSubject { get; set; } = null!;
+    public virtual Subject? RegisteredSubject { get; set; }
 
-    public virtual Subject? ShortpaperSubject { get; set; } = null!;
+    public virtual Subject? ShortpaperSubject { get; set; }
 }

@@ -17,7 +17,7 @@ public partial class Comment
 
     public DateTime UpdatedDatetime { get; set; }
 
-    public int ReplyCommentid { get; set; }
+    public int? ReplyCommentid { get; set; }
 
     public int FileId { get; set; }
 
@@ -25,5 +25,5 @@ public partial class Comment
 
     public virtual ICollection<Comment> InverseReplyComment { get; set; } = new List<Comment>();
 
-    public virtual Comment ReplyComment { get; set; } = null!;
+    public virtual Comment? ReplyComment { get; set; }
 }
