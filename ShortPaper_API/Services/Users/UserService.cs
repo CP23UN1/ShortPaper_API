@@ -21,10 +21,14 @@ namespace ShortPaper_API.Services.Users
         {
             var users = (from a in _db.Users
                          join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
-                         into userRegist from regist in userRegist.DefaultIfEmpty()
+                         into userRegist
+                         from regist in userRegist.DefaultIfEmpty()
                          join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
-                         into userPaper from paper in userPaper.DefaultIfEmpty()
-                         where !a.Role.Contains("student")
+                         into userPaper
+                         from paper in userPaper.DefaultIfEmpty()
+                         join d in _db.Projects on a.UserId equals d.UserId
+                           into project
+                         from proj in project.DefaultIfEmpty()
                          select new UserDTO
                          {
                              UserId = a.UserId,
@@ -48,7 +52,8 @@ namespace ShortPaper_API.Services.Users
                                  Id = paper.Id,
                                  SubjectId = paper.SubjectId,
                                  SubjectName = paper.SubjectName
-                             } : null
+                             } : null,
+                             ProjectName = proj.Topic
                          }).ToList();
 
             return users;
@@ -63,6 +68,9 @@ namespace ShortPaper_API.Services.Users
                             join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                             into userPaper
                             from paper in userPaper.DefaultIfEmpty()
+                            join d in _db.Projects on a.UserId equals d.UserId
+                           into project
+                            from proj in project.DefaultIfEmpty()
                             where a.Role.Contains("student")
                             select new UserDTO
                             {
@@ -87,7 +95,8 @@ namespace ShortPaper_API.Services.Users
                                  Id = paper.Id,
                                  SubjectId = paper.SubjectId,
                                  SubjectName = paper.SubjectName
-                             } : null
+                             } : null,
+                                ProjectName = proj.Topic
                             }).ToList();
 
             return students;
@@ -102,6 +111,9 @@ namespace ShortPaper_API.Services.Users
                            join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                            into userPaper
                            from paper in userPaper.DefaultIfEmpty()
+                           join d in _db.Projects on a.UserId equals d.UserId
+                           into project
+                           from proj in project.DefaultIfEmpty()
                            where a.UserId == id && a.Role.Contains("student")
                            select new UserDTO
                            {
@@ -109,23 +121,26 @@ namespace ShortPaper_API.Services.Users
                                StudentId = a.StudentId,
                                Firstname = a.Firstname,
                                Lastname = a.Lastname,
-                               Email = a.Email, 
+                               Email = a.Email,
                                PhoneNumber = a.PhoneNumber,
                                Year = a.Year,
-                               RegisteredSubject = regist != null
-                               ? new Subject
-                               {
-                                   Id = regist.Id,
-                                   SubjectId = regist.SubjectId,
-                                   SubjectName = regist.SubjectName
-                               } : null,
-                               ShortpaperSubject = paper != null
-                               ? new Subject
-                               {
-                                   Id = paper.Id,
-                                   SubjectId = paper.SubjectId,
-                                   SubjectName = paper.SubjectName
-                               } : null
+                               RegisteredSubjectid = regist.Id,
+                               ShortpaperSubjectid = paper.Id,
+                               ProjectName = proj.Topic
+                               //RegisteredSubject = regist != null
+                               //? new Subject
+                               //{
+                               //    Id = regist.Id,
+                               //    SubjectId = regist.SubjectId,
+                               //    SubjectName = regist.SubjectName
+                               //} : null,
+                               //ShortpaperSubject = paper != null
+                               //? new Subject
+                               //{
+                               //    Id = paper.Id,
+                               //    SubjectId = paper.SubjectId,
+                               //    SubjectName = paper.SubjectName
+                               //} : null,
                            }).FirstOrDefault();
 
             return student;
@@ -134,14 +149,43 @@ namespace ShortPaper_API.Services.Users
         public UserDTO GetUser(int id)
         {
             var user = (from a in _db.Users
-                        where a.UserId == id && !a.Role.Contains("student")
+                        join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                            into userRegist
+                        from regist in userRegist.DefaultIfEmpty()
+                        join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                        into userPaper
+                        from paper in userPaper.DefaultIfEmpty()
+                        join d in _db.Projects on a.UserId equals d.UserId
+                           into project
+                        from proj in project.DefaultIfEmpty()
+                        where a.UserId == id
                         select new UserDTO
                         {
                             UserId = a.UserId,
+                            StudentId = a.StudentId,
                             Firstname = a.Firstname,
                             Lastname = a.Lastname,
                             Email = a.Email,
                             PhoneNumber = a.PhoneNumber,
+                            Year = a.Year,
+                            RegisteredSubjectid = regist.Id,
+                            ShortpaperSubjectid = paper.Id,
+                            ProjectName = proj.Topic
+                            //RegisteredSubject = regist != null
+                            //? new Subject
+                            //{
+                            //    Id = regist.Id,
+                            //    SubjectId = regist.SubjectId,
+                            //    SubjectName = regist.SubjectName
+                            //} : null,
+                            //ShortpaperSubject = paper != null
+                            //? new Subject
+                            //{
+                            //    Id = paper.Id,
+                            //    SubjectId = paper.SubjectId,
+                            //    SubjectName = paper.SubjectName
+                            //} : null,
+
                         }).FirstOrDefault();
 
             return user;
@@ -179,6 +223,25 @@ namespace ShortPaper_API.Services.Users
             updateUser.Lastname = user.Lastname;
             updateUser.Email = user.Email;
             updateUser.PhoneNumber = user.PhoneNumber;
+
+            var checkProject = (from b in _db.Projects
+                                where b.UserId == user.UserId
+                                select b).FirstOrDefault();
+
+            if (checkProject == null)
+            {
+                var newProject = new Project
+                {
+                    Topic = user.ProjectName,
+                    UserId = user.UserId,
+                };
+
+                _db.Projects.Add(newProject);
+            }
+            else
+            {
+                checkProject.Topic = user.ProjectName;
+            }
 
             _db.SaveChanges();
 
