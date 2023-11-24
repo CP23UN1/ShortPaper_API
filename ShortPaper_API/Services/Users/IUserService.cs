@@ -1,14 +1,18 @@
-﻿using ShortPaper_API.Entities;
+﻿using ShortPaper_API.DTO;
+using ShortPaper_API.Entities;
 using ShortPaper_API.Repositories;
 
 namespace ShortPaper_API.Services.Users
 {
     public interface IUserService
     {
-        List<User> GetUsers();
-        User GetUser(int id);
-        User CreateUser(User user);
-        User UpdateUser(User user);
-        int DeleteUser(int id);
+        List<UserDTO> GetUsers();
+        List<UserDTO> GetStudents();
+        UserDTO GetStudent(int id);
+        UserDTO GetUser(int id);
+        UserDTO CreateUser(UserDTO user);
+        UserDTO UpdateUserForStudent(UserDTO user);
+        UserDTO UpdateUserForAdmin(UserDTO user);
+        User DeleteUser(int id);
     }
 }
