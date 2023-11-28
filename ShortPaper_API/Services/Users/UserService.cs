@@ -1,5 +1,6 @@
 ﻿using ShortPaper_API.Entities;
 using System.Data;
+using System.Net.Mail;
 using System.Linq;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -215,6 +216,13 @@ namespace ShortPaper_API.Services.Users
 
         public UserDTO UpdateUserForStudent(UserDTO user)
         {
+
+            if (!IsValidEmail(user.Email))
+            {
+                // Handle invalid email address (throw exception, return an error code, etc.)
+                throw new ArgumentException("Invalid email address");
+            }
+
             var updateUser = (from a in _db.Users
                               where a.UserId == user.UserId && a.Role.Contains("student")
                               select a).FirstOrDefault();
@@ -247,6 +255,19 @@ namespace ShortPaper_API.Services.Users
 
             return user;
         }
+
+        private bool IsValidEmail(string email)
+    {
+        try
+        {
+            var mailAddress = new MailAddress(email);
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
 
         public UserDTO UpdateUserForAdmin(UserDTO user)
         {

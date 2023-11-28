@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API
@@ -41,7 +42,8 @@ namespace ShortPaper_API
             services.AddControllers();
 
             // Add Services Scoped
-            services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IFileService, FileService>();
 
             // In ConfigureServices method
             services.AddCors();
