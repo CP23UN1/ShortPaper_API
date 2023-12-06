@@ -27,7 +27,7 @@ namespace ShortPaper_API.Services.Users
                          join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                          into userPaper
                          from paper in userPaper.DefaultIfEmpty()
-                         join d in _db.Projects on a.UserId equals d.UserId
+                         join d in _db.Projects on a.UserId equals d.StudentId
                            into project
                          from proj in project.DefaultIfEmpty()
                          select new UserDTO
@@ -69,7 +69,7 @@ namespace ShortPaper_API.Services.Users
                             join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                             into userPaper
                             from paper in userPaper.DefaultIfEmpty()
-                            join d in _db.Projects on a.UserId equals d.UserId
+                            join d in _db.Projects on a.UserId equals d.StudentId
                            into project
                             from proj in project.DefaultIfEmpty()
                             where a.Role.Contains("student")
@@ -112,7 +112,7 @@ namespace ShortPaper_API.Services.Users
                            join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                            into userPaper
                            from paper in userPaper.DefaultIfEmpty()
-                           join d in _db.Projects on a.UserId equals d.UserId
+                           join d in _db.Projects on a.UserId equals d.StudentId
                            into project
                            from proj in project.DefaultIfEmpty()
                            where a.UserId == id && a.Role.Contains("student")
@@ -156,7 +156,7 @@ namespace ShortPaper_API.Services.Users
                         join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                         into userPaper
                         from paper in userPaper.DefaultIfEmpty()
-                        join d in _db.Projects on a.UserId equals d.UserId
+                        join d in _db.Projects on a.UserId equals d.StudentId
                            into project
                         from proj in project.DefaultIfEmpty()
                         where a.UserId == id
@@ -233,7 +233,7 @@ namespace ShortPaper_API.Services.Users
             updateUser.PhoneNumber = user.PhoneNumber;
 
             var checkProject = (from b in _db.Projects
-                                where b.UserId == user.UserId
+                                where b.StudentId == user.UserId
                                 select b).FirstOrDefault();
 
             if (checkProject == null)
@@ -241,7 +241,7 @@ namespace ShortPaper_API.Services.Users
                 var newProject = new Project
                 {
                     Topic = user.ProjectName,
-                    UserId = user.UserId,
+                    StudentId = user.UserId,
                 };
 
                 _db.Projects.Add(newProject);

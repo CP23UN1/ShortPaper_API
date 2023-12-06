@@ -11749,19 +11749,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\jajah\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+      "projectUniqueName": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
       "projectName": "ShortPaper_API",
-      "projectPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\obj\\",
+      "projectPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+      "packagesPath": "C:\\Users\\jajah\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\Jajah\\ShortPaper-Project\\ShortPaper_API\\ShortPaper_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\jajah\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11863,7 +11863,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   },

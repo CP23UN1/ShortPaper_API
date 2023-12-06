@@ -25,6 +25,8 @@ public partial class User
 
     public int? ShortpaperSubjectid { get; set; }
 
+    public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+
     public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
 
     public virtual Subject? RegisteredSubject { get; set; }

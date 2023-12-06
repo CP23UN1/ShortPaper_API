@@ -15,9 +15,9 @@ public partial class Project
 
     public int? CommitteeThird { get; set; }
 
-    public int UserId { get; set; }
+    public int StudentId { get; set; }
 
     public virtual ICollection<File> Files { get; set; } = new List<File>();
 
-    public virtual User User { get; set; } = null!;
+    public virtual User Student { get; set; } = null!;
 }

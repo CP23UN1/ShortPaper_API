@@ -15,6 +15,8 @@ public partial class ShortpaperDbContext : DbContext
     {
     }
 
+    public virtual DbSet<Announcement> Announcements { get; set; }
+
     public virtual DbSet<Comment> Comments { get; set; }
 
     public virtual DbSet<File> Files { get; set; }
@@ -29,10 +31,48 @@ public partial class ShortpaperDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Arm@2020;database=shortpaper_db");
+        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Jajah36674!;database=shortpaper_db");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Announcement>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("announcements");
+
+            entity.HasIndex(e => e.FileId, "fk_announcements_files1_idx");
+
+            entity.HasIndex(e => e.AuthorId, "fk_announcements_users1_idx");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.AuthorId).HasColumnName("author_id");
+            entity.Property(e => e.Content).HasColumnName("content");
+            entity.Property(e => e.CreatedDatetime)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("created_datetime");
+            entity.Property(e => e.FileId).HasColumnName("file_id");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("'draft'")
+                .HasColumnType("enum('published','draft','archived')")
+                .HasColumnName("status");
+            entity.Property(e => e.Title)
+                .HasMaxLength(500)
+                .HasColumnName("title");
+
+            entity.HasOne(d => d.Author).WithMany(p => p.Announcements)
+                .HasForeignKey(d => d.AuthorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_announcements_users1");
+
+            entity.HasOne(d => d.File).WithMany(p => p.Announcements)
+                .HasForeignKey(d => d.FileId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_announcements_files1");
+        });
+
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -44,9 +84,7 @@ public partial class ShortpaperDbContext : DbContext
             entity.HasIndex(e => e.FileId, "fk_comments_files1_idx");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Comments)
-                .HasMaxLength(500)
-                .HasColumnName("comments");
+            entity.Property(e => e.Comments).HasColumnName("comments");
             entity.Property(e => e.CreatedDatetime)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasComment("\n")
@@ -152,21 +190,21 @@ public partial class ShortpaperDbContext : DbContext
         {
             entity.HasKey(e => e.ProjectId).HasName("PRIMARY");
 
-            entity.ToTable("project");
+            entity.ToTable("projects");
 
-            entity.HasIndex(e => e.UserId, "fk_project_users1_idx");
+            entity.HasIndex(e => e.StudentId, "fk_project_users1_idx");
 
             entity.Property(e => e.ProjectId).HasColumnName("project_id");
             entity.Property(e => e.CommitteeFirst).HasColumnName("committee_first");
             entity.Property(e => e.CommitteeSecond).HasColumnName("committee_second");
             entity.Property(e => e.CommitteeThird).HasColumnName("committee_third");
+            entity.Property(e => e.StudentId).HasColumnName("student_id");
             entity.Property(e => e.Topic)
                 .HasMaxLength(200)
                 .HasColumnName("topic");
-            entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Projects)
-                .HasForeignKey(d => d.UserId)
+            entity.HasOne(d => d.Student).WithMany(p => p.Projects)
+                .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_project_users1");
         });

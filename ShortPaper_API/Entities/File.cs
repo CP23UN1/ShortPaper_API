@@ -25,6 +25,8 @@ public partial class File
 
     public int ProjectId { get; set; }
 
+    public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual Project Project { get; set; } = null!;
