@@ -24,7 +24,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("/subjects")]
-        public List<Subject> GetUsers()
+        public List<Subject> GetSubjects()
         {
             var subjects = _subjectService.GetSubjects();
             return subjects;
@@ -32,7 +32,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("/subject/{id}")]
-        public Subject GetUserById(int id)
+        public Subject GetSubjectById(int id)
         {
             var subject = _subjectService.GetSubject(id);
             return subject;
