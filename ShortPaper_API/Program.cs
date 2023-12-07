@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.Controllers;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Services.Announcements;
 using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Subjects;
 using ShortPaper_API.Services.Users;
@@ -38,6 +39,7 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var app = builder.Build();
 

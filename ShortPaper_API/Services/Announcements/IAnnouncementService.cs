@@ -1,9 +1,13 @@
-﻿using ShortPaper_API.Entities;
+﻿using ShortPaper_API.DTO;
+using ShortPaper_API.Entities;
 
 namespace ShortPaper_API.Services.Announcements
 {
     public interface IAnnouncementService
     {
-        List<Announcement> GetAnnouncements();
+        List<AnnouncementDTO> GetAnnouncements();
+        AnnouncementDTO CreateAnnouncement(AnnouncementDTO announcement);
+        AnnouncementDTO UpdateAnnouncement(AnnouncementDTO announcement);
+        Announcement DeleteAnnouncement(int id);
     }
 }

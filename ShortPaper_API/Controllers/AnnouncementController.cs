@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Repositories;
 using ShortPaper_API.Services.Announcements;
@@ -17,7 +18,7 @@ namespace ShortPaper_API.Controllers
         private readonly IAnnouncementService _announcementService;
 
         public AnnouncementController(ShortpaperDbContext dbContext, IAnnouncementService announcementService)
-        
+
         {
             _dbContext = dbContext;
             _announcementService = announcementService;
@@ -25,10 +26,34 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("/announcements")]
-        public List<Announcement> GetAnnouncement()
+        public List<AnnouncementDTO> GetAnnouncement()
         {
             var announcements = _announcementService.GetAnnouncements();
             return announcements;
+        }
+
+        [HttpPost]
+        [Route("/announcement/create")]
+        public AnnouncementDTO CreateAnnouncement(AnnouncementDTO announcement)
+        {
+            var createAnnouncement = _announcementService.CreateAnnouncement(announcement);
+            return createAnnouncement;
+        }
+
+        [HttpPut]
+        [Route("/announcement/update")]
+        public AnnouncementDTO UpdateAnnouncement(AnnouncementDTO announcement)
+        {
+            var updateAnnouncement = _announcementService.UpdateAnnouncement(announcement);
+            return updateAnnouncement;
+        }
+
+        [HttpDelete]
+        [Route("/announcement/delete")]
+        public Announcement DeleteAnnouncement(int id)
+        {
+            var deleteAnnouncement = _announcementService.DeleteAnnouncement(id);
+            return deleteAnnouncement;
         }
     }
 }
