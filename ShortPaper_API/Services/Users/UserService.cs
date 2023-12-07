@@ -70,8 +70,14 @@ namespace ShortPaper_API.Services.Users
                             into userPaper
                             from paper in userPaper.DefaultIfEmpty()
                             join d in _db.Projects on a.UserId equals d.StudentId
-                           into project
+                            into project
                             from proj in project.DefaultIfEmpty()
+                            join e in _db.Files on proj.ProjectId equals e.ProjectId
+                            into files
+                            from file in files.DefaultIfEmpty()
+                            join f in _db.FileStatuses on file.StatusId equals f.StatusId
+                            into fileStatus
+                            from status in fileStatus.DefaultIfEmpty()
                             where a.Role.Contains("student")
                             select new UserDTO
                             {
@@ -97,7 +103,20 @@ namespace ShortPaper_API.Services.Users
                                  SubjectId = paper.SubjectId,
                                  SubjectName = paper.SubjectName
                              } : null,
-                                ProjectName = proj.Topic
+                                ProjectName = proj != null ? proj.Topic : null,
+                                FileStatus = status != null
+                            ? new FileStatus
+                            {
+                                StatusId = status.StatusId,
+                                BOne = status.BOne,
+                                PaperOne = status.PaperOne,
+                                PaperTwo = status.PaperTwo,
+                                Article = status.Article,
+                                Plagiarism = status.Plagiarism,
+                                Copyright = status.Copyright,
+                                Robbery = status.Robbery,
+                                Final = status.Final
+                            } : null
                             }).ToList();
 
             return students;

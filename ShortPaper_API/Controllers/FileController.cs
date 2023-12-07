@@ -19,7 +19,8 @@ namespace ShortPaper_API.Controllers
             _fileService = fileService;
         }
 
-        [HttpPost("/upload")]
+        [HttpPost]
+        [Route("/upload")]
         public async Task<IActionResult> UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
         {
             try
@@ -41,7 +42,8 @@ namespace ShortPaper_API.Controllers
             }
         }
 
-        [HttpGet("/download")]
+        [HttpGet]
+        [Route("/download")]
         public async Task<IActionResult> DownloadFile(int fileId)
         {
             try

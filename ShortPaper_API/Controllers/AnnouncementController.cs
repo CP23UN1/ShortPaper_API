@@ -24,7 +24,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/subjects")]
+        [Route("/announcements")]
         public List<Announcement> GetAnnouncement()
         {
             var announcements = _announcementService.GetAnnouncements();
