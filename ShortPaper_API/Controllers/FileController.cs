@@ -21,25 +21,10 @@ namespace ShortPaper_API.Controllers
 
         [HttpPost]
         [Route("/upload")]
-        public async Task<IActionResult> UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
+        public IActionResult UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
         {
-            try
-            {
-                var uploadedFile = await _fileService.UploadFile(file, projectId, explanationVideo, statusId);
-                return Ok(uploadedFile);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new
-                {
-                    message = ex.Message
-                });
-            }
-            catch (DbUpdateException ex)
-            {
-                // Handle database update exceptions
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Internal Server Error" });
-            }
+            var uploadedFile = _fileService.UploadFile(file, projectId, explanationVideo, statusId);
+            return uploadedFile;
         }
 
         [HttpGet]

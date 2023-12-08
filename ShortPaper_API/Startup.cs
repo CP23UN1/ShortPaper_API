@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Users;
+using Microsoft.Extensions.Logging;
 
 namespace ShortPaper_API
 {
@@ -46,13 +48,28 @@ namespace ShortPaper_API
             //services.AddScoped<IFileService, FileService>();
 
             // In ConfigureServices method
-            services.AddCors();
+            // Add Cors Config
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            services.AddScoped<IFileService, FileService>();
+            services.AddLogging(loggingBuilder =>
+            {
+                // Add any specific logging configuration here
+                loggingBuilder.AddConsole();  // Example: Log to the console
+            });
 
             //services.AddHttpsRedirection(options =>
             //{
             //    options.HttpsPort = 443;
             //});
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +97,6 @@ namespace ShortPaper_API
             });
 
             //app.UseHttpsRedirection();
-
-
         }
     }
 }

@@ -1,11 +1,29 @@
 {
   "Version": 1,
-  "Hash": "BU9kEm2zTRojaR60K9i1Yn9pY+GQmbEe70FrS4OXpX8=",
+  "Hash": "bF/wM02apaeeJVUlXv5IblpOKXawvinqOlv5Igxasqw=",
   "Source": "ShortPaper_API",
   "BasePath": "_content/ShortPaper_API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\jajah\\.nuget\\packages\\quick.aspnetcore.components.web.extensions\\6.0.2\\staticwebassets\\headManager.js",
+      "SourceId": "Quick.AspNetCore.Components.Web.Extensions",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\jajah\\.nuget\\packages\\quick.aspnetcore.components.web.extensions\\6.0.2\\staticwebassets\\",
+      "BasePath": "_content/Quick.AspNetCore.Components.Web.Extensions",
+      "RelativePath": "headManager.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\jajah\\.nuget\\packages\\quick.aspnetcore.components.web.extensions\\6.0.2\\staticwebassets\\headManager.js"
+    }
+  ]
 }

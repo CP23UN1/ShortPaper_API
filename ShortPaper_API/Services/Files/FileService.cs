@@ -11,52 +11,53 @@ namespace ShortPaper_API.Services.Files
     public class FileService : IFileService
     {
         private readonly ShortpaperDbContext _db;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
+        private readonly ILogger _logger;
 
-        public FileService(ShortpaperDbContext db) { _db = db; }
-
-       // public Entities.File UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
-        public async Task<Entities.File> UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
+        public FileService(ShortpaperDbContext db, IConfiguration config, ILogger logger)
         {
-            if (file == null || file.Length <= 0)
+            _db = db;
+            _config = config;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+            // public Entities.File UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
+            public IActionResult UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
+        {
+            String defaultUploadPath = _config.GetValue<String>("LocalUpload:UploadPath");
+            
+            try
             {
-                throw new ArgumentException("File is null or empty");
-            }
-
-            // Get file information
-            var fileSize = file.Length; // KB
-            var fileType = file.ContentType;
-            var fileName = Path.GetFileName(file.FileName);
-
-            // Read the file data into a byte array
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                var fileData = memoryStream.ToArray();
-
-                // Create a new File entity
-                var newFile = new Entities.File
+                if(!Directory.Exists(defaultUploadPath))
                 {
-                    Filename = fileName,
-                    Filesize = fileSize.ToString(),
-                    ExplanationVideo = explanationVideo,
-                    Data = fileData,
-                    Filetype = fileType,
-                    //CreatedDatetime = DateTime.Now,
-                    UpdatedDatetime = DateTime.Now,
-                    StatusId = statusId,
-                    ProjectId = projectId,
-                };
+                    Directory.CreateDirectory(defaultUploadPath);
+                }
 
-                // Add the new file to the database
-                _db.Files.Add(newFile);
+                var filePath = Path.Combine(defaultUploadPath, file.FileName);
 
-                // Save changes to the database
-                await _db.SaveChangesAsync();
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    file.CopyTo(fileStream);
 
-                return newFile;
+                    var newFile = new Entities.File
+                    {
+                        Filesize = file.Length.ToString(),
+                        Filename = file.FileName,
+                        ExplanationVideo = explanationVideo,
+                        ProjectId = projectId,
+                        StatusId = statusId
+                    };
+                    _db.Files.Add(newFile);
+                    _db.SaveChanges();
+
+                    return new OkObjectResult(newFile);
+                }
             }
-
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading file: {ErrorMessage}", ex.Message);
+                return new StatusCodeResult(500);
+            }
         }
 
         public async Task<(byte[] fileData, string fileName, string contentType)> GetFileDataWithMetadataByIdAsync(int fileId)

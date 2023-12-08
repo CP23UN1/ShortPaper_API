@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ShortPaper_API.Controllers;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Announcements;
 using ShortPaper_API.Services.Files;
@@ -23,10 +26,10 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 // Configure your DbContext
 builder.Services.AddDbContext<ShortpaperDbContext>(options =>
@@ -35,7 +38,6 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 });
 
 // Add Controller and Services Scoped
-//builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IFileService, FileService>();

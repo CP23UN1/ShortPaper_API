@@ -15,6 +15,7 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.9",
           "MySql.Data": "8.2.0",
           "MySql.EntityFrameworkCore": "7.0.10",
+          "Quick.AspNetCore.Components.Web.Extensions": "6.0.2",
           "Swashbuckle.AspNetCore": "6.5.0",
           "System.Core": "3.5.21022.801",
           "System.Data.Common": "4.3.0",
@@ -611,6 +612,20 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Authorization/6.0.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Metadata": "6.0.2",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Options": "7.0.0"
+        }
+      },
+      "Microsoft.AspNetCore.Components/6.0.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Authorization": "6.0.2",
+          "Microsoft.AspNetCore.Components.Analyzers": "6.0.2"
+        }
+      },
+      "Microsoft.AspNetCore.Components.Analyzers/6.0.2": {},
       "Microsoft.AspNetCore.Cors/2.2.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Http.Extensions": "2.2.0",
@@ -639,6 +654,7 @@
           "Microsoft.Extensions.Primitives": "7.0.0"
         }
       },
+      "Microsoft.AspNetCore.Metadata/6.0.2": {},
       "Microsoft.AspNetCore.OpenApi/7.0.12": {
         "dependencies": {
           "Microsoft.OpenApi": "1.4.3"
@@ -1259,6 +1275,7 @@
         }
       },
       "Microsoft.Extensions.Primitives/7.0.0": {},
+      "Microsoft.JSInterop/6.0.2": {},
       "Microsoft.Net.Http.Headers/2.2.0": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "7.0.0",
@@ -1636,6 +1653,18 @@
           }
         }
       },
+      "Quick.AspNetCore.Components.Web.Extensions/6.0.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "6.0.2",
+          "Microsoft.JSInterop": "6.0.2"
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.AspNetCore.Components.Web.Extensions.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2.0"
+          }
+        }
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.fedora.23-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
       "runtime.fedora.24-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
@@ -1925,7 +1954,14 @@
           "System.Runtime": "4.3.0"
         }
       },
-      "System.Diagnostics.DiagnosticSource/7.0.2": {},
+      "System.Diagnostics.DiagnosticSource/7.0.2": {
+        "runtime": {
+          "lib/net7.0/System.Diagnostics.DiagnosticSource.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.423.11508"
+          }
+        }
+      },
       "System.Diagnostics.Tools/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
@@ -2932,6 +2968,27 @@
       "path": "k4os.hash.xxhash/1.0.8",
       "hashPath": "k4os.hash.xxhash.1.0.8.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Authorization/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AjwO1PjN75weiC0KzznybEZh5rr+VjH3c2wvuRT6Qmd8cv2+/6hBn/peelGkZUzYBY0l7QA22jwmjKKeeNYsIQ==",
+      "path": "microsoft.aspnetcore.authorization/6.0.2",
+      "hashPath": "microsoft.aspnetcore.authorization.6.0.2.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UXojpKtmaJkGRUzGgGY2LcmAqWaubEJ0ewEm/wmchn89hQPuqMG/Zm+Matl1pSMCDIbxuGegYzUs9zIqbS1VNA==",
+      "path": "microsoft.aspnetcore.components/6.0.2",
+      "hashPath": "microsoft.aspnetcore.components.6.0.2.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Components.Analyzers/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jHMdjIrlqm1T6BqBzCpuMAdj1mSpmcEF0wNXIKh7xS6jKAdKOy8aWKTbFI022dW8ZgjC4UNpp9UTuMDVu9/T/w==",
+      "path": "microsoft.aspnetcore.components.analyzers/6.0.2",
+      "hashPath": "microsoft.aspnetcore.components.analyzers.6.0.2.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Cors/2.2.0": {
       "type": "package",
       "serviceable": true,
@@ -2959,6 +3016,13 @@
       "sha512": "sha512-ziFz5zH8f33En4dX81LW84I6XrYXKf9jg6aM39cM+LffN9KJahViKZ61dGMSO2gd3e+qe5yBRwsesvyqlZaSMg==",
       "path": "microsoft.aspnetcore.http.features/2.2.0",
       "hashPath": "microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Metadata/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SE6xWyaY2n9LsfwNwppyqwVIRtS1RcYPaIFoqyTi8HA6l2Zze40lIvdTSTtDQC+EZpdDRmQY3CPQi9ZlCqOwTg==",
+      "path": "microsoft.aspnetcore.metadata/6.0.2",
+      "hashPath": "microsoft.aspnetcore.metadata.6.0.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.OpenApi/7.0.12": {
       "type": "package",
@@ -3212,6 +3276,13 @@
       "path": "microsoft.extensions.primitives/7.0.0",
       "hashPath": "microsoft.extensions.primitives.7.0.0.nupkg.sha512"
     },
+    "Microsoft.JSInterop/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0Fg5C5U+XNS5Mb5jYojUGaCDjQqV5IuzyETXt+9NA0QXRgedbm0uYjNpjbIOcOroPSIgo1E3VIg0EDNtE2CuYQ==",
+      "path": "microsoft.jsinterop/6.0.2",
+      "hashPath": "microsoft.jsinterop.6.0.2.nupkg.sha512"
+    },
     "Microsoft.Net.Http.Headers/2.2.0": {
       "type": "package",
       "serviceable": true,
@@ -3414,6 +3485,13 @@
       "sha512": "sha512-Wm/AOFICTIrCgbVxv9dNWusraTzcggbo5W4ao7hD8NNVq911an9TGwW+uNuYc8I5PkpTeMuSXneV2u6hbi1P4w==",
       "path": "nuget.versioning/6.6.1",
       "hashPath": "nuget.versioning.6.6.1.nupkg.sha512"
+    },
+    "Quick.AspNetCore.Components.Web.Extensions/6.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ppLXEca1BL48Sgq0MZyBsQlH0TJXkqY8uqoXl4xv5mpJDBbft6aa4ACOQNztWXwjX0ry13ebDfQLQIgmfekK2w==",
+      "path": "quick.aspnetcore.components.web.extensions/6.0.2",
+      "hashPath": "quick.aspnetcore.components.web.extensions.6.0.2.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
