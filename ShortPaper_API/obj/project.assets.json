@@ -11749,26 +11749,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "/Users/kantapontantrapornpong/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+      "projectUniqueName": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/ShortPaper_API.csproj",
       "projectName": "ShortPaper_API",
-      "projectPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\ShortPaper Project\\ShortPaper_API\\ShortPaper_API\\obj\\",
+      "projectPath": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/ShortPaper_API.csproj",
+      "packagesPath": "/Users/kantapontantrapornpong/.nuget/packages/",
+      "outputPath": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/kantapontantrapornpong/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "/usr/local/share/dotnet/sdk/7.0.311/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11863,7 +11862,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.311/RuntimeIdentifierGraph.json"
       }
     }
   },
