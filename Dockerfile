@@ -1,10 +1,10 @@
-# Use the official .NET Core SDK image as a base image
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+# Use an image with .NET 7.0 SDK
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the .csproj file and restore dependencies
+# Copy the project file and the rest of the application code
 COPY ./ShortPaper_API/ ./
 
 # Restore dependencies and build the application
@@ -13,11 +13,8 @@ RUN dotnet restore && \
     rm -rf obj/ && \
     rm -rf bin/
 
-# Copy the rest of the application code
-COPY . ./
-
 # Create a runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
