@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 WORKDIR /app
 
 # Copy the .csproj file and restore dependencies
-COPY *.csproj ./
+COPY ./ShortPaper_API/*.csproj ./
 RUN dotnet restore
 
 # Copy the rest of the application code
