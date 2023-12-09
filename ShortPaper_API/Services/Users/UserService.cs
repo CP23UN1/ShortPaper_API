@@ -214,14 +214,14 @@ namespace ShortPaper_API.Services.Users
                                 PhoneNumber = a.PhoneNumber,
                                 Year = a.Year,
                                 RegisteredSubject = regist != null
-                             ? new Subject
+                             ? new SubjectDTO
                              {
                                  Id = regist.Id,
                                  SubjectId = regist.SubjectId,
                                  SubjectName = regist.SubjectName
                              } : null,
                                 ShortpaperSubject = paper != null
-                             ? new Subject
+                             ? new SubjectDTO
                              {
                                  Id = paper.Id,
                                  SubjectId = paper.SubjectId,
