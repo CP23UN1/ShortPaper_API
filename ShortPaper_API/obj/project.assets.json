@@ -11749,25 +11749,26 @@
     ]
   },
   "packageFolders": {
-    "/Users/kantapontantrapornpong/.nuget/packages/": {}
+    "C:\\Users\\jajah\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/ShortPaper_API.csproj",
+      "projectUniqueName": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\GitHub-Repositories\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
       "projectName": "ShortPaper_API",
-      "projectPath": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/ShortPaper_API.csproj",
-      "packagesPath": "/Users/kantapontantrapornpong/.nuget/packages/",
-      "outputPath": "/Users/kantapontantrapornpong/Desktop/ShortpaperProject/ShortPaper_API/ShortPaper_API/obj/",
+      "projectPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\GitHub-Repositories\\ShortPaper_API\\ShortPaper_API\\ShortPaper_API.csproj",
+      "packagesPath": "C:\\Users\\jajah\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jajah\\OneDrive\\เอกสาร\\GitHub-Repositories\\ShortPaper_API\\ShortPaper_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/kantapontantrapornpong/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\jajah\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/sdk/7.0.311/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -11862,7 +11863,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.311/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   },

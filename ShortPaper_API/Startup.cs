@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Users;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace ShortPaper_API
 {
