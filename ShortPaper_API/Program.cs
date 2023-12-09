@@ -5,6 +5,7 @@ using ShortPaper_API.Services.Announcements;
 using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Subjects;
 using ShortPaper_API.Services.Users;
+using ShortPaper_API.Services.Projects;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -40,6 +41,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 var app = builder.Build();
 

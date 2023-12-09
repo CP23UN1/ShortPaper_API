@@ -165,6 +165,111 @@ namespace ShortPaper_API.Services.Users
 
             return student;
         }
+        public List<UserDTO> GetAdvisors()
+        {
+            var students = (from a in _db.Users
+                            join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                            into userRegist
+                            from regist in userRegist.DefaultIfEmpty()
+                            join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                            into userPaper
+                            from paper in userPaper.DefaultIfEmpty()
+                            join d in _db.Projects on a.UserId equals d.StudentId
+                            into project
+                            from proj in project.DefaultIfEmpty()
+                            join e in _db.Files on proj.ProjectId equals e.ProjectId
+                            into files
+                            from file in files.DefaultIfEmpty()
+                            join f in _db.FileStatuses on file.StatusId equals f.StatusId
+                            into fileStatus
+                            from status in fileStatus.DefaultIfEmpty()
+                            where a.Role.Contains("advisor")
+                            select new UserDTO
+                            {
+                                UserId = a.UserId,
+                                StudentId = a.StudentId,
+                                Firstname = a.Firstname,
+                                Lastname = a.Lastname,
+                                Role = a.Role,
+                                Email = a.Email,
+                                PhoneNumber = a.PhoneNumber,
+                                Year = a.Year,
+                                RegisteredSubject = regist != null
+                             ? new Subject
+                             {
+                                 Id = regist.Id,
+                                 SubjectId = regist.SubjectId,
+                                 SubjectName = regist.SubjectName
+                             } : null,
+                                ShortpaperSubject = paper != null
+                             ? new Subject
+                             {
+                                 Id = paper.Id,
+                                 SubjectId = paper.SubjectId,
+                                 SubjectName = paper.SubjectName
+                             } : null,
+                                ProjectName = proj != null ? proj.Topic : null,
+                                FileStatus = status != null
+                            ? new FileStatus
+                            {
+                                StatusId = status.StatusId,
+                                BOne = status.BOne,
+                                PaperOne = status.PaperOne,
+                                PaperTwo = status.PaperTwo,
+                                Article = status.Article,
+                                Plagiarism = status.Plagiarism,
+                                Copyright = status.Copyright,
+                                Robbery = status.Robbery,
+                                Final = status.Final
+                            } : null
+                            }).ToList();
+
+            return students;
+        }
+
+        public UserDTO GetAdvisor(int id)
+        {
+            var student = (from a in _db.Users
+                           join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                            into userRegist
+                           from regist in userRegist.DefaultIfEmpty()
+                           join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                           into userPaper
+                           from paper in userPaper.DefaultIfEmpty()
+                           join d in _db.Projects on a.UserId equals d.StudentId
+                           into project
+                           from proj in project.DefaultIfEmpty()
+                           where a.UserId == id && a.Role.Contains("advisor")
+                           select new UserDTO
+                           {
+                               UserId = a.UserId,
+                               StudentId = a.StudentId,
+                               Firstname = a.Firstname,
+                               Lastname = a.Lastname,
+                               Email = a.Email,
+                               PhoneNumber = a.PhoneNumber,
+                               Year = a.Year,
+                               RegisteredSubjectid = regist.Id,
+                               ShortpaperSubjectid = paper.Id,
+                               ProjectName = proj.Topic
+                               //RegisteredSubject = regist != null
+                               //? new Subject
+                               //{
+                               //    Id = regist.Id,
+                               //    SubjectId = regist.SubjectId,
+                               //    SubjectName = regist.SubjectName
+                               //} : null,
+                               //ShortpaperSubject = paper != null
+                               //? new Subject
+                               //{
+                               //    Id = paper.Id,
+                               //    SubjectId = paper.SubjectId,
+                               //    SubjectName = paper.SubjectName
+                               //} : null,
+                           }).FirstOrDefault();
+
+            return student;
+        }
 
         public UserDTO GetUser(int id)
         {

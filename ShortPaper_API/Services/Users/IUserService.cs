@@ -9,6 +9,8 @@ namespace ShortPaper_API.Services.Users
         List<UserDTO> GetUsers();
         List<UserDTO> GetStudents();
         UserDTO GetStudent(int id);
+        List<UserDTO> GetAdvisors();
+        UserDTO GetAdvisor(int id);
         UserDTO GetUser(int id);
         UserDTO CreateUser(UserDTO user);
         UserDTO UpdateUserForStudent(UserDTO user);

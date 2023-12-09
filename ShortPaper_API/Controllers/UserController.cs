@@ -48,6 +48,22 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
+        [Route("/advisors")]
+        public List<UserDTO> GetAdvisors()
+        {
+            var students = _userService.GetAdvisors();
+            return students;
+        }
+
+        [HttpGet]
+        [Route("/advisor/{id}")]
+        public UserDTO GetAdvisorById(int id)
+        {
+            var student = _userService.GetAdvisor(id);
+            return student;
+        }
+
+        [HttpGet]
         [Route("/user/{id}")]
         public UserDTO GetUserById(int id)
         {
