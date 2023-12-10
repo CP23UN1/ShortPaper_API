@@ -62,6 +62,14 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "/un1/api/{controller=Home}/{action=Index}/{id?}");
+});
+
+
+// app.MapControllers();
 
 app.Run();

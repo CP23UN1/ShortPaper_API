@@ -76,10 +76,17 @@ namespace ShortPaper_API
             app.UseRouting();
             app.UseAuthorization();
 
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllers();
+            // });
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "/un1/api/{controller=Home}/{action=Index}/{id?}");
             });
+
 
             //app.UseHttpsRedirection();
 
