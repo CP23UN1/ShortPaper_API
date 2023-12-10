@@ -186,7 +186,7 @@ namespace ShortPaper_API.Services.Users
         }
         public List<UserDTO> GetAdvisors()
         {
-            var students = (from a in _db.Users
+            var advisors = (from a in _db.Users
                             join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
                             into userRegist
                             from regist in userRegist.DefaultIfEmpty()
@@ -209,46 +209,34 @@ namespace ShortPaper_API.Services.Users
                                 StudentId = a.StudentId,
                                 Firstname = a.Firstname,
                                 Lastname = a.Lastname,
-                                Role = a.Role,
                                 Email = a.Email,
                                 PhoneNumber = a.PhoneNumber,
                                 Year = a.Year,
-                                RegisteredSubject = regist != null
-                             ? new Subject
-                             {
-                                 Id = regist.Id,
-                                 SubjectId = regist.SubjectId,
-                                 SubjectName = regist.SubjectName
-                             } : null,
-                                ShortpaperSubject = paper != null
-                             ? new Subject
-                             {
-                                 Id = paper.Id,
-                                 SubjectId = paper.SubjectId,
-                                 SubjectName = paper.SubjectName
-                             } : null,
-                                ProjectName = proj != null ? proj.Topic : null,
-                                FileStatus = status != null
-                            ? new FileStatus
-                            {
-                                StatusId = status.StatusId,
-                                BOne = status.BOne,
-                                PaperOne = status.PaperOne,
-                                PaperTwo = status.PaperTwo,
-                                Article = status.Article,
-                                Plagiarism = status.Plagiarism,
-                                Copyright = status.Copyright,
-                                Robbery = status.Robbery,
-                                Final = status.Final
-                            } : null
+                                RegisteredSubjectid = regist.Id,
+                                ShortpaperSubjectid = paper.Id,
+                                ProjectName = proj.Topic
+                                //RegisteredSubject = regist != null
+                                //? new Subject
+                                //{
+                                //    Id = regist.Id,
+                                //    SubjectId = regist.SubjectId,
+                                //    SubjectName = regist.SubjectName
+                                //} : null,
+                                //ShortpaperSubject = paper != null
+                                //? new Subject
+                                //{
+                                //    Id = paper.Id,
+                                //    SubjectId = paper.SubjectId,
+                                //    SubjectName = paper.SubjectName
+                                //} : null,
                             }).ToList();
 
-            return students;
+            return advisors;
         }
 
         public UserDTO GetAdvisor(int id)
         {
-            var student = (from a in _db.Users
+            var advisor = (from a in _db.Users
                            join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
                             into userRegist
                            from regist in userRegist.DefaultIfEmpty()
@@ -287,7 +275,7 @@ namespace ShortPaper_API.Services.Users
                                //} : null,
                            }).FirstOrDefault();
 
-            return student;
+            return advisor;
         }
 
         public UserDTO GetUser(int id)
