@@ -10,7 +10,7 @@ using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("un1/api")]
+    [Route("/api")]
     [ApiController]
     public class AnnouncementController : ControllerBase
     {

@@ -7,7 +7,7 @@ using ShortPaper_API.Services.Files;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("un1/api")]
+    [Route("/api")]
     [ApiController]
     public class CommentController : ControllerBase
     {

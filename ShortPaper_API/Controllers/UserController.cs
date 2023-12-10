@@ -9,7 +9,7 @@ using ShortPaper_API.Services.Users;
 namespace ShortPaper_API.Controllers
 {
     //[EnableCors("VueCorsPolicy")]
-    [Route("un1/api")]
+    [Route("/api")]
     [ApiController]
     public class UserController : ControllerBase
     {

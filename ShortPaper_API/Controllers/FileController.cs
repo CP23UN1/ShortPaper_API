@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("un1/api")]
+    [Route("/api")]
     [ApiController]
     public class FileController : ControllerBase
     {
