@@ -5,7 +5,7 @@ using ShortPaper_API.Services.Projects;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("un1/api")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
