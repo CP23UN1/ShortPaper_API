@@ -25,15 +25,15 @@ namespace ShortPaper_API
         public void ConfigureServices(IServiceCollection services)
         {
             //Add Cors Config
-            //services.AddCors(options =>
-            //{
-            //    options.AddDefaultPolicy(builder =>
-            //    {
-            //        builder.AllowAnyOrigin()
-            //               .AllowAnyMethod()
-            //               .AllowAnyHeader();
-            //    });
-            //});
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
 
             // Add DbContext
             services.AddDbContext<ShortpaperDbContext>(options =>
