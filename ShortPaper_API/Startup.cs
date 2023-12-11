@@ -9,6 +9,7 @@ using ShortPaper_API.Services.Files;
 using ShortPaper_API.Services.Users;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ShortPaper_API
 {
@@ -41,6 +42,11 @@ namespace ShortPaper_API
                 options.UseMySQL(Configuration.GetConnectionString("ConnectionString"));
             });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
+
             services.AddControllers();
 
             // Add Services Scoped
@@ -71,6 +77,7 @@ namespace ShortPaper_API
 
             // Use CORS before other middleware
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UsePathBase("/un1");
 
             app.UseHttpsRedirection();
             app.UseRouting();
