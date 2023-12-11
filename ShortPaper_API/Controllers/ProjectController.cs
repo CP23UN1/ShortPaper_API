@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Projects;
 
@@ -18,7 +19,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("projects")]
-        public List<Project> GetSubjects()
+        public List<ProjectDTO> GetProjects()
         {
             var projects = _projectService.GetProjects();
             return projects;
@@ -26,14 +27,14 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("project/{id}")]
-        public Project GetSubjectById(int id)
+        public ProjectDTO GetProjectById(int id)
         {
             var project = _projectService.GetProject(id);
             return project;
         }
 
         [HttpPost]
-        [Route("addCommitteeMember")]
+        [Route("project/committee")]
         public IActionResult AddCommitteeMember(int projectId, int advisorId, int advisorId1, int advisorId2)
         {
             try

@@ -16,7 +16,7 @@ namespace ShortPaper_API.DTO
         public int? ShortpaperSubjectid { get; set; }
         public SubjectDTO? RegisteredSubject { get; set; }
         public SubjectDTO? ShortpaperSubject { get; set; }
-        public string ProjectName { get; set; }
-        public FileStatus FileStatus { get; set; }
+        public string? ProjectName { get; set; }
+        public FileStatus? FileStatus { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace ShortPaper_API.Services.Users
                          into userPaper
                          from paper in userPaper.DefaultIfEmpty()
                          join d in _db.Projects on a.UserId equals d.StudentId
-                           into project
+                         into project
                          from proj in project.DefaultIfEmpty()
                          select new UserDTO
                          {

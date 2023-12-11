@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 
 namespace ShortPaper_API.Services.Projects
@@ -11,41 +12,117 @@ namespace ShortPaper_API.Services.Projects
             _db = db;
         }
 
-        public List<Project> GetProjects()
+        public List<ProjectDTO> GetProjects()
         {
             var projects = (from a in _db.Projects
-                            select a).ToList();
+                            join b in _db.Users on a.StudentId equals b.UserId
+                            into userStudent
+                            from student in userStudent.DefaultIfEmpty()
+                            join c in _db.Users on a.CommitteeFirst equals c.UserId
+                            into userCommitFirst
+                            from committeeFirst in userCommitFirst.DefaultIfEmpty()
+                            join d in _db.Users on a.CommitteeSecond equals d.UserId
+                            into userCommitSecond
+                            from committeeSecond in userCommitSecond.DefaultIfEmpty()
+                            join e in _db.Users on a.CommitteeThird equals e.UserId
+                            into userCommitThird
+                            from committeeThird in userCommitThird.DefaultIfEmpty()
+                            select new ProjectDTO
+                            {
+                                ProjectId = a.ProjectId,
+                                Topic = a.Topic,
+                                Student = new ProjectInfo
+                                {
+                                    UserId = student.UserId,
+                                    StudentId = student.StudentId,
+                                    Firstname = student.Firstname,
+                                    Lastname = student.Lastname
+                                },
+                                CommitteeFirst = committeeFirst != null ? new ProjectInfo
+                                {
+                                    UserId = committeeFirst.UserId,
+                                    Firstname = committeeFirst.Firstname,
+                                    Lastname = committeeFirst.Lastname,
+                                } : null,
+                                CommitteeSecond = committeeSecond != null ? new ProjectInfo
+                                {
+                                    UserId = committeeSecond.UserId,
+                                    Firstname = committeeSecond.Firstname,
+                                    Lastname = committeeSecond.Lastname,
+                                } : null,
+                                CommitteeThird = committeeThird != null ? new ProjectInfo
+                                {
+                                    UserId = committeeThird.UserId,
+                                    Firstname = committeeThird.Firstname,
+                                    Lastname = committeeThird.Lastname,
+                                } : null
+                            }).ToList();
 
             return projects;
         }
 
-        public Project GetProject(int id)
+        public ProjectDTO GetProject(int id)
         {
             var project = (from a in _db.Projects
-                           where a.ProjectId == id
-                           select a).FirstOrDefault();
+                            join b in _db.Users on a.StudentId equals b.UserId
+                            into userStudent
+                            from student in userStudent.DefaultIfEmpty()
+                            join c in _db.Users on a.CommitteeFirst equals c.UserId
+                            into userCommitFirst
+                            from committeeFirst in userCommitFirst.DefaultIfEmpty()
+                            join d in _db.Users on a.CommitteeSecond equals d.UserId
+                            into userCommitSecond
+                            from committeeSecond in userCommitSecond.DefaultIfEmpty()
+                            join e in _db.Users on a.CommitteeThird equals e.UserId
+                            into userCommitThird
+                            from committeeThird in userCommitThird.DefaultIfEmpty()
+                            where a.StudentId == id
+                            select new ProjectDTO
+                            {
+                                ProjectId = a.ProjectId,
+                                Topic = a.Topic,
+                                Student = new ProjectInfo
+                                {
+                                    UserId = student.UserId,
+                                    StudentId = student.StudentId,
+                                    Firstname = student.Firstname,
+                                    Lastname = student.Lastname
+                                },
+                                CommitteeFirst = committeeFirst != null ? new ProjectInfo
+                                {
+                                    UserId = committeeFirst.UserId,
+                                    Firstname = committeeFirst.Firstname,
+                                    Lastname = committeeFirst.Lastname,
+                                } : null,
+                                CommitteeSecond = committeeSecond != null ? new ProjectInfo
+                                {
+                                    UserId = committeeSecond.UserId,
+                                    Firstname = committeeSecond.Firstname,
+                                    Lastname = committeeSecond.Lastname,
+                                } : null,
+                                CommitteeThird = committeeThird != null ? new ProjectInfo
+                                {
+                                    UserId = committeeThird.UserId,
+                                    Firstname = committeeThird.Firstname,
+                                    Lastname = committeeThird.Lastname,
+                                } : null
+                            }).FirstOrDefault();
 
             return project;
         }
 
         public void ChooseCommitteeMembers(int projectId, int advisorId, int advisorId2, int advisorId3)
         {
-            // Fetch the project from the database
             var project = _db.Projects.SingleOrDefault(p => p.ProjectId == projectId);
 
             if (project == null)
             {
-                // Handle the case where the project is not found
-                // You might want to throw an exception or return an error response
                 return;
             }
-
-                // Assign the advisor to the first available committee slot
                     project.CommitteeFirst = advisorId;
                     project.CommitteeSecond = advisorId2;
                     project.CommitteeThird = advisorId3;
 
-                // Save changes to the database
                 _db.SaveChanges();
         }
     }
