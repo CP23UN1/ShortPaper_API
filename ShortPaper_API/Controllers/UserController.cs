@@ -23,70 +23,80 @@ namespace ShortPaper_API.Controllers
             _userService = userService;
         }
 
-        [HttpGet("/users")]
+        [HttpGet]
+        [Route("/users")]
         public List<UserDTO> GetUsers()
         {
             var users = _userService.GetUsers();
             return users;
         }
 
-        [HttpGet("/students")]
+        [HttpGet]
+        [Route("/students")]
         public List<UserDTO> GetStudents()
         {
             var students = _userService.GetStudents();
             return students;
         }
 
-        [HttpGet("/student/{id}")]
+        [HttpGet]
+        [Route("/student/{id}")]
         public UserDTO GetStudentById(int id)
         {
             var student = _userService.GetStudent(id);
             return student;
         }
 
-        [HttpGet("/advisors")]
+        [HttpGet]
+        [Route("/advisors")]
         public List<UserDTO> GetAdvisors()
         {
             var students = _userService.GetAdvisors();
             return students;
         }
 
-        [HttpGet("/advisor/{id}")]
+        [HttpGet]
+        [Route("/advisor/{id}")]
         public UserDTO GetAdvisorById(int id)
         {
             var student = _userService.GetAdvisor(id);
             return student;
         }
 
-        [HttpGet("/user/{id}")]
+        [HttpGet]
+        [Route("/user/{id}")]
         public UserDTO GetUserById(int id)
         {
             var user = _userService.GetUser(id);
             return user;
         }
 
-        [HttpPost("/user/create")]
+        [HttpPost]
+        [Route("/user/create")]
         public UserDTO CreateUser(UserDTO newUser)
         {
             var createUser = _userService.CreateUser(newUser);
             return createUser;
         }
 
-        [HttpPut("/user/update/student/{id}")]
+        [HttpPut]
+        [Route("/user/update/student/{id}")]
         public UserDTO UpdateUserForStudent(UserDTO user)
         {
             var updateUser = _userService.UpdateUserForStudent(user);
             return updateUser;
         }
 
-        [HttpPut("/user/update/admin/{id}")]
+        [HttpPut]
+        [Route("/user/update/admin/{id}")]
         public UserDTO UpdateUserForAdmin(UserDTO user)
         {
             var updateUser = _userService.UpdateUserForAdmin(user);
             return updateUser;
         }
 
-        [HttpDelete("/user/delete/{id}")]
+        [HttpDelete]
+        [Route("/user/delete/{id}")]
         public User DeleteUser(int id)
         {
             var deleteUser = _userService.DeleteUser(id);
