@@ -9,7 +9,7 @@ using ShortPaper_API.Services.Users;
 namespace ShortPaper_API.Controllers
 {
     //[EnableCors("VueCorsPolicy")]
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/users")]
+        [Route("users")]
         public List<UserDTO> GetUsers()
         {
             var users = _userService.GetUsers();
@@ -32,7 +32,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/students")]
+        [Route("students")]
         public List<UserDTO> GetStudents()
         {
             var students = _userService.GetStudents();
@@ -40,7 +40,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/student/{id}")]
+        [Route("student/{id}")]
         public UserDTO GetStudentById(int id)
         {
             var student = _userService.GetStudent(id);
@@ -48,7 +48,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/advisors")]
+        [Route("advisors")]
         public List<UserDTO> GetAdvisors()
         {
             var students = _userService.GetAdvisors();
@@ -56,7 +56,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/advisor/{id}")]
+        [Route("advisor/{id}")]
         public UserDTO GetAdvisorById(int id)
         {
             var student = _userService.GetAdvisor(id);
@@ -64,7 +64,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/user/{id}")]
+        [Route("user/{id}")]
         public UserDTO GetUserById(int id)
         {
             var user = _userService.GetUser(id);
@@ -72,7 +72,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("/user/create")]
+        [Route("user/create")]
         public UserDTO CreateUser(UserDTO newUser)
         {
             var createUser = _userService.CreateUser(newUser);
@@ -80,7 +80,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPut]
-        [Route("/user/update/student/{id}")]
+        [Route("user/update/student/{id}")]
         public UserDTO UpdateUserForStudent(UserDTO user)
         {
             var updateUser = _userService.UpdateUserForStudent(user);
@@ -88,7 +88,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPut]
-        [Route("/user/update/admin/{id}")]
+        [Route("user/update/admin/{id}")]
         public UserDTO UpdateUserForAdmin(UserDTO user)
         {
             var updateUser = _userService.UpdateUserForAdmin(user);
@@ -96,7 +96,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpDelete]
-        [Route("/user/delete/{id}")]
+        [Route("user/delete/{id}")]
         public User DeleteUser(int id)
         {
             var deleteUser = _userService.DeleteUser(id);

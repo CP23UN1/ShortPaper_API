@@ -10,7 +10,7 @@ using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class AnnouncementController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/announcements")]
+        [Route("announcements")]
         public List<AnnouncementDTO> GetAnnouncement()
         {
             var announcements = _announcementService.GetAnnouncements();
@@ -33,7 +33,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("/announcement/create")]
+        [Route("announcement/create")]
         public AnnouncementDTO CreateAnnouncement(AnnouncementDTO announcement)
         {
             var createAnnouncement = _announcementService.CreateAnnouncement(announcement);
@@ -41,7 +41,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPut]
-        [Route("/announcement/update")]
+        [Route("announcement/update/{id}")]
         public AnnouncementDTO UpdateAnnouncement(AnnouncementDTO announcement)
         {
             var updateAnnouncement = _announcementService.UpdateAnnouncement(announcement);
@@ -49,7 +49,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpDelete]
-        [Route("/announcement/delete")]
+        [Route("announcement/delete/{id}")]
         public Announcement DeleteAnnouncement(int id)
         {
             var deleteAnnouncement = _announcementService.DeleteAnnouncement(id);

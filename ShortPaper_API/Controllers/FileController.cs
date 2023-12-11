@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class FileController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("/upload")]
+        [Route("upload")]
         public async Task<IActionResult> UploadFile(IFormFile file, int projectId, string explanationVideo, int statusId)
         {
             try
@@ -43,7 +43,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/download")]
+        [Route("download/{id}")]
         public async Task<IActionResult> DownloadFile(int fileId)
         {
             try

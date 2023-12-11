@@ -31,3 +31,16 @@ ShortPaper_API/bin/Debug/net7.0/ShortPaper_API.dll
 ShortPaper_API/bin/Debug/net7.0/appsettings.json
 .vs/ShortPaper_API/v17/.suo
 .vs/ShortPaper_API/DesignTimeBuild/.dtbcache.v2
+*.dll
+*.pdb
+*.dll
+ShortPaper_API/bin/Debug/net7.0/ShortPaper_API.pdb
+ShortPaper_API/bin/Debug/net7.0/ShortPaper_API.dll
+.vs/ShortPaper_API/v17/HierarchyCache.v1.txt
+.vs/ShortPaper_API/v17/.suo
+.vs/ShortPaper_API/v17/.futdcache.v2
+.vs/ShortPaper_API/FileContentIndex/e758a9dc-d648-41ec-891c-d6546b1ba925.vsidx
+.vs/ShortPaper_API/DesignTimeBuild/.dtbcache.v2
+.vs/ProjectEvaluation/shortpaper_api.projects.v5.2
+.vs/ProjectEvaluation/shortpaper_api.metadata.v5.2
+ShortPaper_API/bin/Debug/net7.0/appsettings.json

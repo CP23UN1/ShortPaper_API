@@ -8,7 +8,7 @@ using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class SubjectController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/subjects")]
+        [Route("subjects")]
         public List<Subject> GetSubjects()
         {
             var subjects = _subjectService.GetSubjects();
@@ -31,7 +31,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/subject/{id}")]
+        [Route("subject/{id}")]
         public Subject GetSubjectById(int id)
         {
             var subject = _subjectService.GetSubject(id);

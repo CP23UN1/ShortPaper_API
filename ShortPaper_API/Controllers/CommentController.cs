@@ -7,7 +7,7 @@ using ShortPaper_API.Services.Files;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class CommentController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/comments")]
+        [Route("comments")]
         public List<CommentDTO> GetComments(int fileId)
         {
             var comments = _commentService.GetCommentsForFile(fileId);
@@ -27,7 +27,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("/comments/comment-on-response")]
+        [Route("comments/comment-on-response")]
         public IActionResult CommentOnResponse([FromBody] CommentDTO commentDto)
         {
             if (commentDto == null)

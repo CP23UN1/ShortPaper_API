@@ -5,7 +5,7 @@ using ShortPaper_API.Services.Projects;
 
 namespace ShortPaper_API.Controllers
 {
-    [Route("/api")]
+    [Route("api")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -17,7 +17,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/projects")]
+        [Route("projects")]
         public List<Project> GetSubjects()
         {
             var projects = _projectService.GetProjects();
@@ -25,7 +25,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("/project/{id}")]
+        [Route("project/{id}")]
         public Project GetSubjectById(int id)
         {
             var project = _projectService.GetProject(id);
@@ -33,7 +33,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("/addCommitteeMember")]
+        [Route("addCommitteeMember")]
         public IActionResult AddCommitteeMember(int projectId, int advisorId, int advisorId1, int advisorId2)
         {
             try
