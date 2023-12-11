@@ -31,26 +31,26 @@ namespace ShortPaper_API.Services.Projects
                             {
                                 ProjectId = a.ProjectId,
                                 Topic = a.Topic,
-                                Student = new ProjectInfo
+                                Student = new ProjectInfoDTO
                                 {
                                     UserId = student.UserId,
                                     StudentId = student.StudentId,
                                     Firstname = student.Firstname,
                                     Lastname = student.Lastname
                                 },
-                                CommitteeFirst = committeeFirst != null ? new ProjectInfo
+                                CommitteeFirst = committeeFirst != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeFirst.UserId,
                                     Firstname = committeeFirst.Firstname,
                                     Lastname = committeeFirst.Lastname,
                                 } : null,
-                                CommitteeSecond = committeeSecond != null ? new ProjectInfo
+                                CommitteeSecond = committeeSecond != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeSecond.UserId,
                                     Firstname = committeeSecond.Firstname,
                                     Lastname = committeeSecond.Lastname,
                                 } : null,
-                                CommitteeThird = committeeThird != null ? new ProjectInfo
+                                CommitteeThird = committeeThird != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeThird.UserId,
                                     Firstname = committeeThird.Firstname,
@@ -81,26 +81,26 @@ namespace ShortPaper_API.Services.Projects
                             {
                                 ProjectId = a.ProjectId,
                                 Topic = a.Topic,
-                                Student = new ProjectInfo
+                                Student = new ProjectInfoDTO
                                 {
                                     UserId = student.UserId,
                                     StudentId = student.StudentId,
                                     Firstname = student.Firstname,
                                     Lastname = student.Lastname
                                 },
-                                CommitteeFirst = committeeFirst != null ? new ProjectInfo
+                                CommitteeFirst = committeeFirst != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeFirst.UserId,
                                     Firstname = committeeFirst.Firstname,
                                     Lastname = committeeFirst.Lastname,
                                 } : null,
-                                CommitteeSecond = committeeSecond != null ? new ProjectInfo
+                                CommitteeSecond = committeeSecond != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeSecond.UserId,
                                     Firstname = committeeSecond.Firstname,
                                     Lastname = committeeSecond.Lastname,
                                 } : null,
-                                CommitteeThird = committeeThird != null ? new ProjectInfo
+                                CommitteeThird = committeeThird != null ? new ProjectInfoDTO
                                 {
                                     UserId = committeeThird.UserId,
                                     Firstname = committeeThird.Firstname,

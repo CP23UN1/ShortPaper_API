@@ -6,12 +6,12 @@ namespace ShortPaper_API.DTO
     {
         public int ProjectId { get; set; }
         public string Topic { get; set; } = null!;
-        public ProjectInfo? CommitteeFirst { get; set; }
-        public ProjectInfo? CommitteeSecond { get; set; }
-        public ProjectInfo? CommitteeThird { get; set; }
-        public ProjectInfo Student { get; set; }
+        public ProjectInfoDTO? CommitteeFirst { get; set; }
+        public ProjectInfoDTO? CommitteeSecond { get; set; }
+        public ProjectInfoDTO? CommitteeThird { get; set; }
+        public ProjectInfoDTO Student { get; set; }
     }
-    public class ProjectInfo
+    public class ProjectInfoDTO
     {
         public int UserId { get; set; }
         public string? StudentId { get; set; }

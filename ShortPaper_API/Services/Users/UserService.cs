@@ -282,13 +282,13 @@ namespace ShortPaper_API.Services.Users
         {
             var user = (from a in _db.Users
                         join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
-                            into userRegist
+                        into userRegist
                         from regist in userRegist.DefaultIfEmpty()
                         join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
                         into userPaper
                         from paper in userPaper.DefaultIfEmpty()
                         join d in _db.Projects on a.UserId equals d.StudentId
-                           into project
+                        into project
                         from proj in project.DefaultIfEmpty()
                         where a.UserId == id
                         select new UserDTO
