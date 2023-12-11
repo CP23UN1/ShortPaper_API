@@ -34,7 +34,7 @@ public partial class ShortpaperDbContext : DbContext
         //local
         //=> optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Jajah36674!;database=shortpaper_db;");
         //server
-        => optionsBuilder.UseMySQL("server=172.31.0.2;port=3306;user=admin;password=cp23un1;database=shortpaper_db;");
+        => optionsBuilder.UseMySQL("server=10.4.85.48;port=3306;user=admin;password=cp23un1;database=shortpaper_db;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
