@@ -176,7 +176,18 @@ namespace ShortPaper_API.Services.Users
                                 Copyright = status.Copyright,
                                 Robbery = status.Robbery,
                                 Final = status.Final
-                            } : null
+                            } : new FileStatus
+                            {
+                                StatusId = 0,
+                                BOne = 0,
+                                PaperOne = 0,
+                                PaperTwo = 0,
+                                Article = 0,
+                                Plagiarism = 0,
+                                Copyright = 0,
+                                Robbery = 0,
+                                Final = 0
+                            }
                             }).ToList();
 
             return students;
@@ -239,7 +250,18 @@ namespace ShortPaper_API.Services.Users
                                 Copyright = status.Copyright,
                                 Robbery = status.Robbery,
                                 Final = status.Final
-                            } : null
+                            } : new FileStatus
+                            {
+                                StatusId = 0,
+                                BOne = 0,
+                                PaperOne = 0,
+                                PaperTwo = 0,
+                                Article = 0,
+                                Plagiarism = 0,
+                                Copyright = 0,
+                                Robbery = 0,
+                                Final = 0
+                            }
                            }).FirstOrDefault();
 
             return student;
