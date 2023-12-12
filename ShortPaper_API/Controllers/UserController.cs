@@ -81,10 +81,10 @@ namespace ShortPaper_API.Controllers
 
         [HttpPut]
         [Route("user/update/student/{id}")]
-        public UserDTO UpdateUserForStudent(UserDTO user)
+        public ServiceResponse<UserDTO> UpdateUserForStudent(UserDTO user)
         {
-            var updateUser = _userService.UpdateUserForStudent(user);
-            return updateUser;
+            var status = _userService.UpdateUserForStudent(user);
+            return status;
         }
 
         [HttpPut]

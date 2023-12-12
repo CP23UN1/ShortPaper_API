@@ -1,4 +1,5 @@
-﻿using ShortPaper_API.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Repositories;
 
@@ -13,7 +14,7 @@ namespace ShortPaper_API.Services.Users
         UserDTO GetAdvisor(int id);
         UserDTO GetUser(int id);
         UserDTO CreateUser(UserDTO user);
-        UserDTO UpdateUserForStudent(UserDTO user);
+        ServiceResponse<UserDTO> UpdateUserForStudent(UserDTO user);
         UserDTO UpdateUserForAdmin(UserDTO user);
         User DeleteUser(int id);
     }

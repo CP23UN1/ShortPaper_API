@@ -70,11 +70,6 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
-
 app.MapControllers();
 
 app.Run();
