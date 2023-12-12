@@ -32,6 +32,14 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
+        [Route("users/{filterText}")]
+        public List<UserDTO> GetUsersByFilter(string filterText)
+        {
+            var users = _userService.GetUsersByFilter(filterText);
+            return users;
+        }
+
+        [HttpGet]
         [Route("students")]
         public List<UserDTO> GetStudents()
         {
@@ -73,10 +81,10 @@ namespace ShortPaper_API.Controllers
 
         [HttpPost]
         [Route("user/create")]
-        public UserDTO CreateUser(UserDTO newUser)
+        public ServiceResponse<UserDTO> CreateUser(UserDTO newUser)
         {
-            var createUser = _userService.CreateUser(newUser);
-            return createUser;
+            var status = _userService.CreateUser(newUser);
+            return status;
         }
 
         [HttpPut]

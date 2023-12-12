@@ -71,6 +71,55 @@ namespace ShortPaper_API.Services.Users
             return users;
         }
 
+        public List<UserDTO> GetUsersByFilter(string searchText)
+        {
+            var users = (from a in _db.Users
+                         join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                         into userRegist
+                         from regist in userRegist.DefaultIfEmpty()
+                         join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                         into userPaper
+                         from paper in userPaper.DefaultIfEmpty()
+                         join d in _db.Projects on a.UserId equals d.StudentId
+                         into project
+                         from proj in project.DefaultIfEmpty()               
+                             // Filter based on name, student ID, or email
+                         where string.IsNullOrEmpty(searchText) ||
+                               a.Firstname.Contains(searchText) ||
+                               a.Lastname.Contains(searchText) ||
+                               a.StudentId.Contains(searchText) ||
+                               a.Email.Contains(searchText)
+                         select new UserDTO
+                         {
+                             UserId = a.UserId,
+                             StudentId = a.StudentId,
+                             Firstname = a.Firstname,
+                             Lastname = a.Lastname,
+                             Role = a.Role,
+                             Email = a.Email,
+                             PhoneNumber = a.PhoneNumber,
+                             Year = a.Year,
+                             RegisteredSubject = regist != null
+                             ? new SubjectDTO
+                             {
+                                 Id = regist.Id,
+                                 SubjectId = regist.SubjectId,
+                                 SubjectName = regist.SubjectName
+                             } : null,
+                             ShortpaperSubject = paper != null
+                             ? new SubjectDTO
+                             {
+                                 Id = paper.Id,
+                                 SubjectId = paper.SubjectId,
+                                 SubjectName = paper.SubjectName
+                             } : null,
+                             ProjectName = proj.Topic
+                         }).ToList();
+
+            return users;
+        }
+
+
         public List<UserDTO> GetStudents()
         {
             var students = (from a in _db.Users
@@ -334,26 +383,72 @@ namespace ShortPaper_API.Services.Users
             return user;
         }
 
-
-        public UserDTO CreateUser(UserDTO newUser)
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status500InternalServerError)]
+        public ServiceResponse<UserDTO> CreateUser(UserDTO newUser)
         {
-            var userEntity = new User
+            var response = new ServiceResponse<UserDTO>();
+
+            try
             {
-                StudentId = newUser.StudentId,
-                Firstname = newUser.Firstname,
-                Lastname = newUser.Lastname,
-                Email = newUser.Email,
-                PhoneNumber = newUser.PhoneNumber,
-                Year = newUser.Year,
-                RegisteredSubjectid = newUser.RegisteredSubjectid,
-                ShortpaperSubjectid = newUser.ShortpaperSubjectid
-            };
+                if (string.IsNullOrEmpty(newUser.Firstname) || string.IsNullOrEmpty(newUser.Lastname) || string.IsNullOrEmpty(newUser.Email) || string.IsNullOrEmpty(newUser.PhoneNumber))
+                {
+                    response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
 
-            _db.Users.Add(userEntity);
+                if (string.IsNullOrEmpty(newUser.ProjectName))
+                {
+                    response.ErrorMessage = "ProjectName is required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
 
-            _db.SaveChanges();
+                if (newUser.PhoneNumber.Length>10)
+                {
+                    response.ErrorMessage = "Invalid phone number";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
 
-            return newUser;
+                if (string.IsNullOrEmpty(newUser.ProjectName))
+                {
+                    response.ErrorMessage = "ProjectName is required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                var userEntity = new User
+                {
+                    StudentId = newUser.StudentId,
+                    Firstname = newUser.Firstname,
+                    Lastname = newUser.Lastname,
+                    Email = newUser.Email,
+                    PhoneNumber = newUser.PhoneNumber,
+                    Year = newUser.Year,
+                    RegisteredSubjectid = newUser.RegisteredSubjectid,
+                    ShortpaperSubjectid = newUser.ShortpaperSubjectid
+                };
+
+                _db.Users.Add(userEntity);
+
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = newUser;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                Console.WriteLine($"Exception: {ex.Message}");
+
+                response.ErrorMessage = "An unexpected error occurred";
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
         }
 
         [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status200OK)]
@@ -368,6 +463,13 @@ namespace ShortPaper_API.Services.Users
                 if (string.IsNullOrEmpty(user.Firstname) || string.IsNullOrEmpty(user.Lastname) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.PhoneNumber))
                 {
                     response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                if (user.PhoneNumber.Length > 10)
+                {
+                    response.ErrorMessage = "Invalid phone number";
                     response.StatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
