@@ -32,10 +32,10 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("users/{filterText}")]
-        public List<UserDTO> GetUsersByFilter(string filterText)
+        [Route("user/student/{filterText}")]
+        public List<UserDTO> GetStudentByFilter(string filterText)
         {
-            var users = _userService.GetUsersByFilter(filterText);
+            var users = _userService.GetStudentByFilter(filterText);
             return users;
         }
 

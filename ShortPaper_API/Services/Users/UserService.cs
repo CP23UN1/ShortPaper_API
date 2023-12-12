@@ -71,52 +71,159 @@ namespace ShortPaper_API.Services.Users
             return users;
         }
 
-        public List<UserDTO> GetUsersByFilter(string searchText)
+        public List<UserDTO> GetStudentByFilter(string searchText)
         {
-            var users = (from a in _db.Users
-                         join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
-                         into userRegist
-                         from regist in userRegist.DefaultIfEmpty()
-                         join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
-                         into userPaper
-                         from paper in userPaper.DefaultIfEmpty()
-                         join d in _db.Projects on a.UserId equals d.StudentId
-                         into project
-                         from proj in project.DefaultIfEmpty()               
-                             // Filter based on name, student ID, or email
-                         where string.IsNullOrEmpty(searchText) ||
-                               a.Firstname.Contains(searchText) ||
-                               a.Lastname.Contains(searchText) ||
-                               a.StudentId.Contains(searchText) ||
-                               a.Email.Contains(searchText)
-                         select new UserDTO
-                         {
-                             UserId = a.UserId,
-                             StudentId = a.StudentId,
-                             Firstname = a.Firstname,
-                             Lastname = a.Lastname,
-                             Role = a.Role,
-                             Email = a.Email,
-                             PhoneNumber = a.PhoneNumber,
-                             Year = a.Year,
-                             RegisteredSubject = regist != null
-                             ? new SubjectDTO
-                             {
-                                 Id = regist.Id,
-                                 SubjectId = regist.SubjectId,
-                                 SubjectName = regist.SubjectName
-                             } : null,
-                             ShortpaperSubject = paper != null
-                             ? new SubjectDTO
-                             {
-                                 Id = paper.Id,
-                                 SubjectId = paper.SubjectId,
-                                 SubjectName = paper.SubjectName
-                             } : null,
-                             ProjectName = proj.Topic
-                         }).ToList();
+            var students = new List<UserDTO>();
 
-            return users;
+            if (searchText == ""|| searchText == null)
+            {
+                students = (from a in _db.Users
+                                join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                                into userRegist
+                                from regist in userRegist.DefaultIfEmpty()
+                                join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                                into userPaper
+                                from paper in userPaper.DefaultIfEmpty()
+                                join d in _db.Projects on a.UserId equals d.StudentId
+                                into project
+                                from proj in project.DefaultIfEmpty()
+                                join e in _db.Files on proj.ProjectId equals e.ProjectId
+                                into files
+                                from file in files.DefaultIfEmpty()
+                                join f in _db.FileStatuses on file.StatusId equals f.StatusId
+                                into fileStatus
+                                from status in fileStatus.DefaultIfEmpty()
+                                where a.Role.Contains("student")
+                                select new UserDTO
+                                {
+                                    UserId = a.UserId,
+                                    StudentId = a.StudentId,
+                                    Firstname = a.Firstname,
+                                    Lastname = a.Lastname,
+                                    Role = a.Role,
+                                    Email = a.Email,
+                                    PhoneNumber = a.PhoneNumber,
+                                    Year = a.Year,
+                                    RegisteredSubject = regist != null
+                                 ? new SubjectDTO
+                                 {
+                                     Id = regist.Id,
+                                     SubjectId = regist.SubjectId,
+                                     SubjectName = regist.SubjectName
+                                 } : null,
+                                    ShortpaperSubject = paper != null
+                                 ? new SubjectDTO
+                                 {
+                                     Id = paper.Id,
+                                     SubjectId = paper.SubjectId,
+                                     SubjectName = paper.SubjectName
+                                 } : null,
+                                    ProjectName = proj != null ? proj.Topic : null,
+                                    FileStatus = status != null
+                                ? new FileStatus
+                                {
+                                    StatusId = status.StatusId,
+                                    BOne = status.BOne,
+                                    PaperOne = status.PaperOne,
+                                    PaperTwo = status.PaperTwo,
+                                    Article = status.Article,
+                                    Plagiarism = status.Plagiarism,
+                                    Copyright = status.Copyright,
+                                    Robbery = status.Robbery,
+                                    Final = status.Final
+                                } : new FileStatus
+                                {
+                                    StatusId = 0,
+                                    BOne = 0,
+                                    PaperOne = 0,
+                                    PaperTwo = 0,
+                                    Article = 0,
+                                    Plagiarism = 0,
+                                    Copyright = 0,
+                                    Robbery = 0,
+                                    Final = 0
+                                }
+                                }).ToList();
+            }
+            else
+            {
+                students = (from a in _db.Users
+                                join b in _db.Subjects on a.RegisteredSubjectid equals b.Id
+                                into userRegist
+                                from regist in userRegist.DefaultIfEmpty()
+                                join c in _db.Subjects on a.ShortpaperSubjectid equals c.Id
+                                into userPaper
+                                from paper in userPaper.DefaultIfEmpty()
+                                join d in _db.Projects on a.UserId equals d.StudentId
+                                into project
+
+                                from proj in project.DefaultIfEmpty()
+                                join e in _db.Files on proj.ProjectId equals e.ProjectId
+                                into files
+                                from file in files.DefaultIfEmpty()
+                                join f in _db.FileStatuses on file.StatusId equals f.StatusId
+                                into fileStatus
+                                from status in fileStatus.DefaultIfEmpty()
+
+                                    // Filter based on name, student ID, or email
+                                where (string.IsNullOrEmpty(searchText) ||
+                                      a.Firstname.Contains(searchText) ||
+                                      a.Lastname.Contains(searchText) ||
+                                      a.StudentId.Contains(searchText) ||
+                                      a.Email.Contains(searchText)) && a.Role.Contains("student")
+                                select new UserDTO
+                                {
+                                    UserId = a.UserId,
+                                    StudentId = a.StudentId,
+                                    Firstname = a.Firstname,
+                                    Lastname = a.Lastname,
+                                    Role = a.Role,
+                                    Email = a.Email,
+                                    PhoneNumber = a.PhoneNumber,
+                                    Year = a.Year,
+                                    RegisteredSubject = regist != null
+                                    ? new SubjectDTO
+                                    {
+                                        Id = regist.Id,
+                                        SubjectId = regist.SubjectId,
+                                        SubjectName = regist.SubjectName
+                                    } : null,
+                                    ShortpaperSubject = paper != null
+                                    ? new SubjectDTO
+                                    {
+                                        Id = paper.Id,
+                                        SubjectId = paper.SubjectId,
+                                        SubjectName = paper.SubjectName
+                                    } : null,
+                                    ProjectName = proj != null ? proj.Topic : null,
+                                    FileStatus = status != null
+                                   ? new FileStatus
+                                   {
+                                       StatusId = status.StatusId,
+                                       BOne = status.BOne,
+                                       PaperOne = status.PaperOne,
+                                       PaperTwo = status.PaperTwo,
+                                       Article = status.Article,
+                                       Plagiarism = status.Plagiarism,
+                                       Copyright = status.Copyright,
+                                       Robbery = status.Robbery,
+                                       Final = status.Final
+                                   } : new FileStatus
+                                   {
+                                       StatusId = 0,
+                                       BOne = 0,
+                                       PaperOne = 0,
+                                       PaperTwo = 0,
+                                       Article = 0,
+                                       Plagiarism = 0,
+                                       Copyright = 0,
+                                       Robbery = 0,
+                                       Final = 0
+                                   }
+                                }).ToList();
+            }
+            
+            return students;
         }
 
 

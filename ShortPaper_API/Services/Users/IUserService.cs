@@ -8,7 +8,7 @@ namespace ShortPaper_API.Services.Users
     public interface IUserService
     {
         List<UserDTO> GetUsers();
-        List<UserDTO> GetUsersByFilter(string searchText);
+        List<UserDTO> GetStudentByFilter(string searchText);
         List<UserDTO> GetStudents();
         UserDTO GetStudent(int id);
         List<UserDTO> GetAdvisors();
