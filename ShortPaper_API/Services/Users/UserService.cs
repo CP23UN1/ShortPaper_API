@@ -6,9 +6,20 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Http.HttpResults;
 using ShortPaper_API.Repositories;
 using ShortPaper_API.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ShortPaper_API.Services.Users
 {
+    public class ServiceResponse<T>
+    {
+        public bool IsSuccess { get; set; }
+        public T Data { get; set; }
+        public string ErrorMessage { get; set; }
+        public int StatusCode { get; set; } = StatusCodes.Status200OK; // Default to 200 OK
+
+        // Other properties or methods as needed
+    }
+
     public class UserService : IUserService
     {
         private readonly ShortpaperDbContext _db;
@@ -345,60 +356,93 @@ namespace ShortPaper_API.Services.Users
             return newUser;
         }
 
-        public UserDTO UpdateUserForStudent(UserDTO user)
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ServiceResponse<UserDTO>), StatusCodes.Status500InternalServerError)]
+        public ServiceResponse<UserDTO> UpdateUserForStudent(UserDTO user)
         {
+            var response = new ServiceResponse<UserDTO>();
 
-            if (!IsValidEmail(user.Email))
+            try
             {
-                // Handle invalid email address (throw exception, return an error code, etc.)
-                throw new ArgumentException("Invalid email address");
-            }
-
-            var updateUser = (from a in _db.Users
-                              where a.UserId == user.UserId && a.Role.Contains("student")
-                              select a).FirstOrDefault();
-
-            updateUser.Firstname = user.Firstname;
-            updateUser.Lastname = user.Lastname;
-            updateUser.Email = user.Email;
-            updateUser.PhoneNumber = user.PhoneNumber;
-
-            var checkProject = (from b in _db.Projects
-                                where b.StudentId == user.UserId
-                                select b).FirstOrDefault();
-
-            if (checkProject == null)
-            {
-                var newProject = new Project
+                if (string.IsNullOrEmpty(user.Firstname) || string.IsNullOrEmpty(user.Lastname) || string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.PhoneNumber))
                 {
-                    Topic = user.ProjectName,
-                    StudentId = user.UserId,
-                };
+                    response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
 
-                _db.Projects.Add(newProject);
+                if (!IsValidEmail(user.Email))
+                {
+                    response.ErrorMessage = "Invalid email address";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                if (string.IsNullOrEmpty(user.ProjectName))
+                {
+                    response.ErrorMessage = "ProjectName is required.";
+                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                var updateUser = (from a in _db.Users
+                                  where a.UserId == user.UserId && a.Role.Contains("student")
+                                  select a).FirstOrDefault();
+
+                updateUser.Firstname = user.Firstname;
+                updateUser.Lastname = user.Lastname;
+                updateUser.Email = user.Email;
+                updateUser.PhoneNumber = user.PhoneNumber;
+
+                var checkProject = (from b in _db.Projects
+                                    where b.StudentId == user.UserId
+                                    select b).FirstOrDefault();
+
+                if (checkProject == null)
+                {
+                    var newProject = new Project
+                    {
+                        Topic = user.ProjectName,
+                        StudentId = user.UserId,
+                    };
+
+                    _db.Projects.Add(newProject);
+                }
+                else
+                {
+                    checkProject.Topic = user.ProjectName;
+                }
+
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = user;
             }
-            else
+            catch (Exception ex)
             {
-                checkProject.Topic = user.ProjectName;
+                // Log the exception for debugging purposes
+                Console.WriteLine($"Exception: {ex.Message}");
+
+                response.ErrorMessage = "An unexpected error occurred";
+                response.StatusCode = StatusCodes.Status500InternalServerError;
             }
 
-            _db.SaveChanges();
-
-            return user;
+            return response;
         }
 
-        private bool IsValidEmail(string email)
-    {
-        try
-        {
-            var mailAddress = new MailAddress(email);
-            return true;
+
+        private bool IsValidEmail(string email){
+            try
+            {
+                var mailAddress = new MailAddress(email);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
-        catch (FormatException)
-        {
-            return false;
-        }
-    }
 
         public UserDTO UpdateUserForAdmin(UserDTO user)
         {
