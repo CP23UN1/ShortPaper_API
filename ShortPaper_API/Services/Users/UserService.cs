@@ -4,7 +4,6 @@ using System.Net.Mail;
 using System.Linq;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Http.HttpResults;
-using ShortPaper_API.Repositories;
 using ShortPaper_API.DTO;
 using Microsoft.AspNetCore.Mvc;
 

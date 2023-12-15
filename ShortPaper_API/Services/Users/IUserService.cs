@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
-using ShortPaper_API.Repositories;
 
 namespace ShortPaper_API.Services.Users
 {

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
-using ShortPaper_API.Repositories;
 using ShortPaper_API.Services.Users;
 
 namespace ShortPaper_API.Controllers
