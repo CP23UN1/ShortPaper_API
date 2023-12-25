@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShortPaper_API.Controllers;
-using ShortPaper_API.Entities;
-using ShortPaper_API.Services.Announcements;
-using ShortPaper_API.Services.Files;
-using ShortPaper_API.Services.Subjects;
-using ShortPaper_API.Services.Users;
-using ShortPaper_API.Services.Projects;
 using Microsoft.AspNetCore.HttpOverrides;
+using ShortPaper_API.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -38,11 +32,9 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 
 // Add Controller and Services Scoped
 //builder.Services.AddControllers();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ISubjectService, SubjectService>();
-builder.Services.AddScoped<IFileService, FileService>();
-builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
+
+//builder.Services.AddScoped<IAdminService, AdminService>();
+
 
 var app = builder.Build();
 

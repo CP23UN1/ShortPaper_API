@@ -4,12 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ShortPaper_API.Entities;
-using ShortPaper_API.Services.Files;
-using ShortPaper_API.Services.Users;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Microsoft.AspNetCore.HttpOverrides;
+using ShortPaper_API.Entities;
 
 namespace ShortPaper_API
 {
