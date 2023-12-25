@@ -5,7 +5,7 @@ namespace ShortPaper_API.Entities;
 
 public partial class Student
 {
-    public int StudentId { get; set; }
+    public string StudentId { get; set; } = null!;
 
     public string Firstname { get; set; } = null!;
 

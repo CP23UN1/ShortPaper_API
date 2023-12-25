@@ -9,7 +9,7 @@ public partial class Shortpaper
 
     public string? ShortpaperTopic { get; set; }
 
-    public int StudentId { get; set; }
+    public string StudentId { get; set; } = null!;
 
     public string SubjectId { get; set; } = null!;
 

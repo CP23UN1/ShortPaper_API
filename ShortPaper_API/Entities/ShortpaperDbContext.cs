@@ -98,7 +98,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasIndex(e => e.AnnouncementId, "fk_announcement_files_announcements1_idx");
 
-            entity.Property(e => e.AnnouncementFileId).HasColumnName("announcement_file_id");
+            entity.Property(e => e.AnnouncementFileId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("announcement_file_id");
             entity.Property(e => e.AnnouncementId).HasColumnName("announcement_id");
             entity.Property(e => e.CreatedDatetime)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -131,7 +133,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasIndex(e => e.FileId, "fk_comments_files1_idx");
 
-            entity.Property(e => e.CommentId).HasColumnName("comment_id");
+            entity.Property(e => e.CommentId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("comment_id");
             entity.Property(e => e.FileId).HasColumnName("file_id");
             entity.Property(e => e.CommentContent)
                 .HasMaxLength(100)
@@ -187,8 +191,12 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasIndex(e => e.SubjectId, "fk_shortpapers_subjects1_idx");
 
-            entity.Property(e => e.ShortpaperId).HasColumnName("shortpaper_id");
-            entity.Property(e => e.StudentId).HasColumnName("student_id");
+            entity.Property(e => e.ShortpaperId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("shortpaper_id");
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(11)
+                .HasColumnName("student_id");
             entity.Property(e => e.SubjectId)
                 .HasMaxLength(6)
                 .HasColumnName("subject_id");
@@ -217,7 +225,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasIndex(e => e.ShortpaperId, "fk_files_shortpapers1_idx");
 
-            entity.Property(e => e.ShortpaperFileId).HasColumnName("shortpaper_file_id");
+            entity.Property(e => e.ShortpaperFileId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("shortpaper_file_id");
             entity.Property(e => e.ShortpaperId).HasColumnName("shortpaper_id");
             entity.Property(e => e.ShortpaperFileTypeId).HasColumnName("shortpaper_file_type_id");
             entity.Property(e => e.CreatedDatetime)
@@ -297,7 +307,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.ToTable("students");
 
-            entity.Property(e => e.StudentId).HasColumnName("student_id");
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(11)
+                .HasColumnName("student_id");
             entity.Property(e => e.AlternativeEmail)
                 .HasMaxLength(50)
                 .HasColumnName("alternative_email");
