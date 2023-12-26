@@ -1,6 +1,7 @@
 ﻿using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
+using System.Globalization;
 
 namespace ShortPaper_API.Services.Announcements
 {
@@ -27,6 +28,9 @@ namespace ShortPaper_API.Services.Announcements
                                          ExpiredDatetime = a.ExpiredDatetime,
                                          ImageUrl = a.ImageUrl
                                      }).ToList();
+
+                // Convert date and time to Thai format
+                var thaiCulture = new CultureInfo("th-TH");
 
                 var result = new ServiceResponse<List<AnnouncementDTO>>()
                 {

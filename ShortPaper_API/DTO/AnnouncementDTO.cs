@@ -1,4 +1,5 @@
 ﻿using ShortPaper_API.Entities;
+using System.Globalization;
 
 namespace ShortPaper_API.DTO
 {
@@ -16,6 +17,8 @@ namespace ShortPaper_API.DTO
 
         public DateTime? ExpiredDatetime { get; set; }
 
+        public string CreatedDatetimeThai => CreatedDatetime.ToString("D", CultureInfo.GetCultureInfo("th-TH"));
+        public string ExpiredDatetimeThai => ExpiredDatetime?.ToString("D", CultureInfo.GetCultureInfo("th-TH"));
         //public List<AnnouncementFile>? AnnouncementFiles { get; set; }
     }
 }

@@ -75,6 +75,112 @@ namespace ShortPaper_API.Services.Students
             }
         }
 
+        public ServiceResponse<List<StudentDTO>> GetStudentByFilter(string searchText)
+        {
+            try
+            {
+                var students = new List<StudentDTO>();
+
+                if (searchText == "" || searchText == null)
+                {
+                    students = (from student in _db.Students
+                                join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
+                                into studentShortpaper
+                                from studentShort in studentShortpaper.DefaultIfEmpty()
+                                join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                                into shortperHasCommittee
+                                from shc in shortperHasCommittee.DefaultIfEmpty()
+                                join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                                into shortperCommittee
+                                from sc in shortperCommittee.DefaultIfEmpty()
+                                select new StudentDTO
+                                {
+                                    StudentId = student.StudentId,
+                                    Firstname = student.Firstname,
+                                    Lastname = student.Lastname,
+                                    Email = student.Email,
+                                    AlternativeEmail = student.AlternativeEmail,
+                                    Phonenumber = student.Phonenumber,
+                                    Shortpaper = studentShort != null ? new ShortpaperDTO
+                                    {
+                                        ShortpaperId = studentShort.ShortpaperId,
+                                        ShortpaperTopic = studentShort.ShortpaperTopic,
+                                    } : null,
+                                    Committee = sc != null
+                                    ? new CommitteeDTO
+                                    {
+                                        CommitteeId = sc.CommitteeId,
+                                        Firstname = sc.Firstname,
+                                        Lastname = sc.Lastname,
+                                        Email = sc.Email,
+                                        AlternativeEmail = sc.AlternativeEmail,
+                                        Phonenumber = sc.Phonenumber
+                                    } : null,
+                                }).ToList();
+                }
+                else
+                {
+                    students = (from student in _db.Students
+                                join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
+                                into studentShortpaper
+                                from studentShort in studentShortpaper.DefaultIfEmpty()
+                                join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                                into shortperHasCommittee
+                                from shc in shortperHasCommittee.DefaultIfEmpty()
+                                join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                                into shortperCommittee
+                                from sc in shortperCommittee.DefaultIfEmpty()
+                                where (string.IsNullOrEmpty(searchText) ||
+                                      student.Firstname.Contains(searchText) ||
+                                      student.Lastname.Contains(searchText) ||
+                                      student.StudentId.Contains(searchText) ||
+                                      student.Email.Contains(searchText))
+                                select new StudentDTO
+                                {
+                                    StudentId = student.StudentId,
+                                    Firstname = student.Firstname,
+                                    Lastname = student.Lastname,
+                                    Email = student.Email,
+                                    AlternativeEmail = student.AlternativeEmail,
+                                    Phonenumber = student.Phonenumber,
+                                    Shortpaper = studentShort != null ? new ShortpaperDTO
+                                    {
+                                        ShortpaperId = studentShort.ShortpaperId,
+                                        ShortpaperTopic = studentShort.ShortpaperTopic,
+                                    } : null,
+                                    Committee = sc != null
+                                    ? new CommitteeDTO
+                                    {
+                                        CommitteeId = sc.CommitteeId,
+                                        Firstname = sc.Firstname,
+                                        Lastname = sc.Lastname,
+                                        Email = sc.Email,
+                                        AlternativeEmail = sc.AlternativeEmail,
+                                        Phonenumber = sc.Phonenumber
+                                    } : null,
+                                }).ToList();
+                }
+                    var result = new ServiceResponse<List<StudentDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status200OK,
+                    Data = students
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                var result = new ServiceResponse<List<StudentDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
         public ServiceResponse<StudentDTO> GetStudent(string id)
         {
             try { 

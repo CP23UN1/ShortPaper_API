@@ -30,6 +30,14 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
+        [Route("students/{filterText}")]
+        public ServiceResponse<List<StudentDTO>> GetStudentByFilter(string filterText)
+        {
+            var students = _studentService.GetStudentByFilter(filterText);
+            return students;
+        }
+
+        [HttpGet]
         [Route("student/{id}")]
         public ServiceResponse<StudentDTO> GetStudentById(string id)
         {
