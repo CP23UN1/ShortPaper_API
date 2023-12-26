@@ -6,15 +6,6 @@ using System.Net.Mail;
 
 namespace ShortPaper_API.Services.Students
 {
-    public class ServiceResponse<T>
-    {
-        public bool IsSuccess { get; set; }
-        public T Data { get; set; }
-        public string ErrorMessage { get; set; }
-        public int StatusCode { get; set; } = StatusCodes.Status200OK; // Default to 200 OK
-
-        // Other properties or methods as needed
-    }
     public class StudentService : IStudentService
     {
         private readonly ShortpaperDbContext _db;
@@ -65,7 +56,7 @@ namespace ShortPaper_API.Services.Students
 
                 var result = new ServiceResponse<List<StudentDTO>>()
                 {
-                    StatusCode = StatusCodes.Status200OK,
+                    httpStatusCode = StatusCodes.Status200OK,
                     Data = students
                 };
 
@@ -76,7 +67,7 @@ namespace ShortPaper_API.Services.Students
 
                 var result = new ServiceResponse<List<StudentDTO>>()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    httpStatusCode = StatusCodes.Status400BadRequest,
                     ErrorMessage = ex.Message
                 };
 
@@ -125,7 +116,7 @@ namespace ShortPaper_API.Services.Students
 
                 var result = new ServiceResponse<StudentDTO>()
                 {
-                    StatusCode = StatusCodes.Status200OK,
+                    httpStatusCode = StatusCodes.Status200OK,
                     Data = student
                 };
 
@@ -136,7 +127,7 @@ namespace ShortPaper_API.Services.Students
 
                 var result = new ServiceResponse<StudentDTO>()
                 {
-                    StatusCode = StatusCodes.Status400BadRequest,
+                    httpStatusCode = StatusCodes.Status400BadRequest,
                     ErrorMessage = ex.Message
                 };
 
@@ -153,21 +144,21 @@ namespace ShortPaper_API.Services.Students
                 if (string.IsNullOrEmpty(newStudent.Firstname) || string.IsNullOrEmpty(newStudent.Lastname) || string.IsNullOrEmpty(newStudent.Email) || string.IsNullOrEmpty(newStudent.Phonenumber))
                 {
                     response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
                 if (!IsValidEmail(newStudent.Email))
                 {
                     response.ErrorMessage = "Invalid email format";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
                 if (newStudent.Phonenumber.Length > 10)
                 {
                     response.ErrorMessage = "Invalid phone number";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
@@ -194,7 +185,7 @@ namespace ShortPaper_API.Services.Students
                 Console.WriteLine($"Exception: {ex.Message}");
 
                 response.ErrorMessage = "An unexpected error occurred";
-                response.StatusCode = StatusCodes.Status500InternalServerError;
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
             }
 
             return response;
@@ -212,21 +203,21 @@ namespace ShortPaper_API.Services.Students
                 if (string.IsNullOrEmpty(student.Firstname) || string.IsNullOrEmpty(student.Lastname) || string.IsNullOrEmpty(student.Email) || string.IsNullOrEmpty(student.Phonenumber))
                 {
                     response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
                 if(!IsValidEmail(student.Email))
                 {
                     response.ErrorMessage = "Invalid email format";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
                 if (student.Phonenumber.Length > 10)
                 {
                     response.ErrorMessage = "Invalid phone number";
-                    response.StatusCode = StatusCodes.Status400BadRequest;
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
 
@@ -252,7 +243,7 @@ namespace ShortPaper_API.Services.Students
                 Console.WriteLine($"Exception: {ex.Message}");
 
                 response.ErrorMessage = "An unexpected error occurred";
-                response.StatusCode = StatusCodes.Status500InternalServerError;
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
             }
 
             return response;
