@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Helper;
 using ShortPaper_API.Services.Students;
 
 namespace ShortPaper_API.Controllers
@@ -22,7 +23,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("students")]
-        public List<StudentDTO> GetStudents()
+        public ServiceResponse<List<StudentDTO>> GetStudents()
         {
             var students = _studentService.GetStudents();
             return students;
@@ -30,7 +31,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("student/{id}")]
-        public StudentDTO GetStudentById(string id)
+        public ServiceResponse<StudentDTO> GetStudentById(string id)
         {
             var student = _studentService.GetStudent(id);
             return student;

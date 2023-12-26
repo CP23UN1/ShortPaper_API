@@ -181,8 +181,6 @@ namespace ShortPaper_API.Services.Students
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging purposes
-                Console.WriteLine($"Exception: {ex.Message}");
 
                 response.ErrorMessage = "An unexpected error occurred";
                 response.httpStatusCode = StatusCodes.Status500InternalServerError;
@@ -239,8 +237,6 @@ namespace ShortPaper_API.Services.Students
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging purposes
-                Console.WriteLine($"Exception: {ex.Message}");
 
                 response.ErrorMessage = "An unexpected error occurred";
                 response.httpStatusCode = StatusCodes.Status500InternalServerError;
