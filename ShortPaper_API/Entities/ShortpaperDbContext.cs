@@ -106,9 +106,9 @@ public partial class ShortpaperDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_datetime");
-            entity.Property(e => e.FileLink)
-                .HasMaxLength(100)
-                .HasColumnName("file_link");
+            entity.Property(e => e.FileData)
+                .HasColumnType("blob")
+                .HasColumnName("file_data");
             entity.Property(e => e.FileName)
                 .HasMaxLength(100)
                 .HasColumnName("file_name");
@@ -237,9 +237,9 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.ExplanationVideo)
                 .HasMaxLength(100)
                 .HasColumnName("explanation_video");
-            entity.Property(e => e.FileLink)
-                .HasMaxLength(100)
-                .HasColumnName("file_link");
+            entity.Property(e => e.FileData)
+                .HasColumnType("blob")
+                .HasColumnName("file_data");
             entity.Property(e => e.FileName)
                 .HasMaxLength(100)
                 .HasColumnName("file_name");

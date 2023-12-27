@@ -13,7 +13,7 @@ public partial class AnnouncementFile
 
     public string FileType { get; set; } = null!;
 
-    public string FileLink { get; set; } = null!;
+    public byte[] FileData { get; set; } = null!;
 
     public DateTime CreatedDatetime { get; set; }
 
