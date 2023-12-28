@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Files;
 using ShortPaper_API.DTO;
+using ShortPaper_API.Helper;
 
 namespace ShortPaper_API.Controllers
 {
@@ -90,5 +91,14 @@ namespace ShortPaper_API.Controllers
             // Return the file as a response
             return File(fileBytes, file.FileType, file.FileName);
         }
+
+        [HttpGet]
+        [Route("filetype")]
+        public ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType()
+        {
+            var getFileType = _fileService.GetFileType();
+            return getFileType;
+        }
+
     }
 }

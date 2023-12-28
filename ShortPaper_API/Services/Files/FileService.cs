@@ -1,5 +1,7 @@
 ﻿using ShortPaper_API.Entities;
 using Microsoft.AspNetCore.Hosting;
+using ShortPaper_API.Helper;
+using ShortPaper_API.DTO;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -66,23 +68,55 @@ namespace ShortPaper_API.Services.Files
         }
 
         public byte[] DownloadFile(int fileId)
-    {
-        // Retrieve the file from the database
-        var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
-
-        if (file == null)
         {
-            // File not found
-            return null;
+            // Retrieve the file from the database
+            var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+
+            if (file == null)
+            {
+                // File not found
+                return null;
+            }
+
+            // Construct the file path
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
+
+            // Read the file into a byte array
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return fileBytes;
         }
 
-        // Construct the file path
-        var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
+        public ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType()
+        {
+            try
+            {
+                var filetype = (from a in _db.ShortpaperFileTypes
+                                select new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = a.TypeId,
+                                    TypeName = a.TypeName
+                                }).ToList();
 
-        // Read the file into a byte array
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
+                var result = new ServiceResponse<List<ShortpaperFileTypeDTO>>
+                {
+                    Data = filetype,
+                    httpStatusCode = StatusCodes.Status200OK
+                };
 
-        return fileBytes;
-    }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ShortpaperFileTypeDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+
+        }
     }
 }
