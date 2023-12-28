@@ -1,4 +1,5 @@
-﻿using ShortPaper_API.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using ShortPaper_API.Entities;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -62,6 +63,64 @@ namespace ShortPaper_API.Services.Files
             _db.SaveChanges();
 
             return newFile;
+        }
+
+        public byte[] GetFileDataById(int fileId)
+        {
+            // Assuming you have a method to retrieve file data from the database
+            var fileData = _db.ShortpaperFiles
+                .Where(f => f.ShortpaperFileId == fileId)
+                .Select(f => f.FileData)
+                .FirstOrDefault();
+
+            return fileData;
+        }
+
+        public byte[] GetFileDataByName(string fileName)
+        {
+            // Assuming you have a method to retrieve file data from the database
+            var fileData = _db.ShortpaperFiles
+                .Where(f => f.FileName == fileName)
+                .Select(f => f.FileData)
+                .FirstOrDefault();
+
+            return fileData;
+        }
+
+        public FileResult DownloadFileById(int fileId)
+        {
+            var fileData = GetFileDataById(fileId);
+
+            if (fileData != null && fileData.Length > 0)
+            {
+                // Assuming your file has a known content type, replace "application/octet-stream" with the correct content type.
+                return new FileContentResult(fileData, "application/octet-stream")
+                {
+                    FileDownloadName = "your_filename.extension" // Replace with the actual file name and extension
+                };
+            }
+
+            // If file data is null or empty, you may want to return an appropriate response (e.g., NotFound).
+            // For simplicity, returning null in this example.
+            return null;
+        }
+
+        public FileResult DownloadFileByName(string fileName)
+        {
+            var fileData = GetFileDataByName(fileName);
+
+            if (fileData != null && fileData.Length > 0)
+            {
+                // Assuming your file has a known content type, replace "application/octet-stream" with the correct content type.
+                return new FileContentResult(fileData, "application/octet-stream")
+                {
+                    FileDownloadName = fileName // Use the actual file name from the database
+                };
+            }
+
+            // If file data is null or empty, you may want to return an appropriate response (e.g., NotFound).
+            // For simplicity, returning null in this example.
+            return null;
         }
     }
 }

@@ -69,6 +69,34 @@ namespace ShortPaper_API.Controllers
                 return BadRequest("File upload failed.");
             }
         }
+
+        [HttpGet]
+        [Route("download/{fileId}")]
+        public IActionResult DownloadFileById(int fileId)
+        {
+            var fileResult = _fileService.DownloadFileById(fileId);
+
+            if (fileResult != null)
+            {
+                return fileResult;
+            }
+
+            return NotFound(); // Return 404 if the file is not found or empty
+        }
+
+        [HttpGet]
+        [Route("downloadByName/{fileName}")]
+        public IActionResult DownloadFileByName(string fileName)
+        {
+            var fileResult = _fileService.DownloadFileByName(fileName);
+
+            if (fileResult != null)
+            {
+                return fileResult;
+            }
+
+            return NotFound(); // Return 404 if the file is not found or empty
+        }
     }
     public class FileUploadModel
     {
