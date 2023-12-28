@@ -237,9 +237,7 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.ExplanationVideo)
                 .HasMaxLength(100)
                 .HasColumnName("explanation_video");
-            entity.Property(e => e.FileData)
-                .HasColumnType("blob")
-                .HasColumnName("file_data");
+            entity.Property(e => e.FileData).HasColumnName("file_data");
             entity.Property(e => e.FileName)
                 .HasMaxLength(100)
                 .HasColumnName("file_name");
@@ -328,6 +326,9 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(10)
                 .HasColumnName("phonenumber");
+            entity.Property(e => e.Year)
+                .HasMaxLength(6)
+                .HasColumnName("year");
         });
 
         modelBuilder.Entity<Subject>(entity =>
