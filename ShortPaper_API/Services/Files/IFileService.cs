@@ -7,10 +7,7 @@ namespace ShortPaper_API.Services.Files
     {
         IEnumerable<ShortpaperFile> ListFiles(int shortpaperId);
         ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId);
-        byte[] GetFileDataById(int fileId);
-        byte[] GetFileDataByName(string fileName);
-        FileResult DownloadFileById(int fileId);
-        FileResult DownloadFileByName(string fileName);
+        byte[] DownloadFile(int fileId);
 
 //        Task<Stream> DownloadFile(int fileId);
     }

@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ShortPaper_API.Entities;
+﻿using ShortPaper_API.Entities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ShortPaper_API.Services.Files
 {
     public class FileService : IFileService
     {
         private readonly ShortpaperDbContext _db;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public FileService(ShortpaperDbContext db)
+        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment)
         {
             _db = db;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IEnumerable<ShortpaperFile> ListFiles(int shortpaperId)
@@ -64,62 +66,24 @@ namespace ShortPaper_API.Services.Files
             return newFile;
         }
 
-        public byte[] GetFileDataById(int fileId)
+        public byte[] DownloadFile(int fileId)
+    {
+        // Retrieve the file from the database
+        var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+
+        if (file == null)
         {
-            // Assuming you have a method to retrieve file data from the database
-            var fileData = _db.ShortpaperFiles
-                .Where(f => f.ShortpaperFileId == fileId)
-                .Select(f => f.FileData)
-                .FirstOrDefault();
-
-            return fileData;
-        }
-
-        public byte[] GetFileDataByName(string fileName)
-        {
-            // Assuming you have a method to retrieve file data from the database
-            var fileData = _db.ShortpaperFiles
-                .Where(f => f.FileName == fileName)
-                .Select(f => f.FileData)
-                .FirstOrDefault();
-
-            return fileData;
-        }
-
-        public FileResult DownloadFileById(int fileId)
-        {
-            var fileData = GetFileDataById(fileId);
-
-            if (fileData != null && fileData.Length > 0)
-            {
-                // Assuming your file has a known content type, replace "application/octet-stream" with the correct content type.
-                return new FileContentResult(fileData, "application/octet-stream")
-                {
-                    FileDownloadName = "your_filename.extension" // Replace with the actual file name and extension
-                };
-            }
-
-            // If file data is null or empty, you may want to return an appropriate response (e.g., NotFound).
-            // For simplicity, returning null in this example.
+            // File not found
             return null;
         }
 
-        public FileResult DownloadFileByName(string fileName)
-        {
-            var fileData = GetFileDataByName(fileName);
+        // Construct the file path
+        var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
 
-            if (fileData != null && fileData.Length > 0)
-            {
-                // Assuming your file has a known content type, replace "application/octet-stream" with the correct content type.
-                return new FileContentResult(fileData, "application/octet-stream")
-                {
-                    FileDownloadName = fileName // Use the actual file name from the database
-                };
-            }
+        // Read the file into a byte array
+        var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-            // If file data is null or empty, you may want to return an appropriate response (e.g., NotFound).
-            // For simplicity, returning null in this example.
-            return null;
-        }
+        return fileBytes;
+    }
     }
 }

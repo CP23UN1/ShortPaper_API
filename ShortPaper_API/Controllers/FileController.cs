@@ -13,10 +13,12 @@ namespace ShortPaper_API.Controllers
     public class FileController : ControllerBase
     {
         private readonly IFileService _fileService;
+        private readonly ShortpaperDbContext _dbContext;
 
-        public FileController(IFileService fileService)
+        public FileController(IFileService fileService, ShortpaperDbContext dbContext)
         {
             _fileService = fileService;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
@@ -71,30 +73,22 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("download/{fileId}")]
-        public IActionResult DownloadFileById(int fileId)
+        public IActionResult DownloadFile(int fileId)
         {
-            var fileResult = _fileService.DownloadFileById(fileId);
+            // Call the DownloadFile method from the FileService
+            var fileBytes = _fileService.DownloadFile(fileId);
 
-            if (fileResult != null)
+            if (fileBytes == null)
             {
-                return fileResult;
+                // File not found
+                return NotFound();
             }
 
-            return NotFound(); // Return 404 if the file is not found or empty
-        }
+            // Retrieve the file information from the database
+            var file = _dbContext.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
 
-        [HttpGet]
-        [Route("downloadByName/{fileName}")]
-        public IActionResult DownloadFileByName(string fileName)
-        {
-            var fileResult = _fileService.DownloadFileByName(fileName);
-
-            if (fileResult != null)
-            {
-                return fileResult;
-            }
-
-            return NotFound(); // Return 404 if the file is not found or empty
+            // Return the file as a response
+            return File(fileBytes, file.FileType, file.FileName);
         }
     }
 }
