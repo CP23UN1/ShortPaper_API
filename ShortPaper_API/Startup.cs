@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using Microsoft.AspNetCore.HttpOverrides;
 using ShortPaper_API.Entities;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace ShortPaper_API
 {
@@ -32,6 +34,16 @@ namespace ShortPaper_API
                            .AllowAnyMethod()
                            .AllowAnyHeader();
                 });
+            });
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = long.MaxValue; // Set to the maximum value or an appropriate limit
+            });
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(5); // Set an appropriate timeout
             });
 
             // Add DbContext

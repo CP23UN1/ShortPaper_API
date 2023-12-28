@@ -18,7 +18,11 @@ namespace ShortPaper_API.DTO
 
         public string? Phonenumber { get; set; }
 
-        public ShortpaperDTO Shortpaper { get; set; }
+        public string Year { get; set; } = null!;
+
+        public ShortpaperForStudentDTO Shortpaper { get; set; }
+
+        public SubjectDTO Subject { get; set; }
 
         public ShortpaperFileDTO ShortpaperFile { get; set; }
 

@@ -5,6 +5,9 @@ using ShortPaper_API.Services.Announcements;
 using ShortPaper_API.Services.Students;
 using ShortPaper_API.Services.Committees;
 using ShortPaper_API.Services.Files;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using ShortPaper_API.Services.Shortpapers;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -19,6 +22,16 @@ builder.Services.AddCors(options =>
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                       });
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = long.MaxValue; // Set to the maximum value or an appropriate limit
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(5); // Set an appropriate timeout
 });
 
 // Add services to the container.
@@ -41,6 +54,7 @@ builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ICommitteeService, CommitteeService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IShortpaperService, ShortpaperService>();
 
 var app = builder.Build();
 

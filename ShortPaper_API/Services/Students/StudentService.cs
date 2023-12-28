@@ -32,6 +32,9 @@ namespace ShortPaper_API.Services.Students
                             join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
                             into shortpaperFile
                             from spf in shortpaperFile.DefaultIfEmpty()
+                            join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                            into shortpaperSubjects
+                            from sps in shortpaperSubjects.DefaultIfEmpty()
                             select new StudentDTO
                             {
                                 StudentId = student.StudentId,
@@ -40,10 +43,16 @@ namespace ShortPaper_API.Services.Students
                                 Email = student.Email,
                                 AlternativeEmail = student.AlternativeEmail,
                                 Phonenumber = student.Phonenumber,
-                                Shortpaper = studentShort != null ? new ShortpaperDTO
+                                Year = student.Year,
+                                Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                 {
                                     ShortpaperId = studentShort.ShortpaperId,
                                     ShortpaperTopic = studentShort.ShortpaperTopic,
+                                } : null,
+                                Subject = sps != null ? new SubjectDTO
+                                {
+                                    SubjectId = sps.SubjectId,
+                                    SubjectName = sps.SubjectName,
                                 } : null,
                                 ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                 {
@@ -105,6 +114,9 @@ namespace ShortPaper_API.Services.Students
                                 join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
                                 into shortpaperFile
                                 from spf in shortpaperFile.DefaultIfEmpty()
+                                join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                                into shortpaperSubjects
+                                from sps in shortpaperSubjects.DefaultIfEmpty()
                                 select new StudentDTO
                                 {
                                     StudentId = student.StudentId,
@@ -113,10 +125,15 @@ namespace ShortPaper_API.Services.Students
                                     Email = student.Email,
                                     AlternativeEmail = student.AlternativeEmail,
                                     Phonenumber = student.Phonenumber,
-                                    Shortpaper = studentShort != null ? new ShortpaperDTO
+                                    Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                     {
                                         ShortpaperId = studentShort.ShortpaperId,
                                         ShortpaperTopic = studentShort.ShortpaperTopic,
+                                    } : null,
+                                    Subject = sps != null ? new SubjectDTO
+                                    {
+                                        SubjectId = sps.SubjectId,
+                                        SubjectName = sps.SubjectName,
                                     } : null,
                                     ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                     {
@@ -148,6 +165,12 @@ namespace ShortPaper_API.Services.Students
                                 join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                                 into shortperCommittee
                                 from sc in shortperCommittee.DefaultIfEmpty()
+                                join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                                into shortpaperFile
+                                from spf in shortpaperFile.DefaultIfEmpty()
+                                join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                                into shortpaperSubjects
+                                from sps in shortpaperSubjects.DefaultIfEmpty()
                                 where (string.IsNullOrEmpty(searchText) ||
                                       student.Firstname.Contains(searchText) ||
                                       student.Lastname.Contains(searchText) ||
@@ -161,10 +184,21 @@ namespace ShortPaper_API.Services.Students
                                     Email = student.Email,
                                     AlternativeEmail = student.AlternativeEmail,
                                     Phonenumber = student.Phonenumber,
-                                    Shortpaper = studentShort != null ? new ShortpaperDTO
+                                    Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                     {
                                         ShortpaperId = studentShort.ShortpaperId,
                                         ShortpaperTopic = studentShort.ShortpaperTopic,
+                                    } : null,
+                                    Subject = sps != null ? new SubjectDTO
+                                    {
+                                        SubjectId = sps.SubjectId,
+                                        SubjectName = sps.SubjectName,
+                                    } : null,
+                                    ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                                    {
+                                        ShortpaperFileId = spf.ShortpaperFileId,
+                                        FileName = spf.FileName,
+                                        Status = spf.Status,
                                     } : null,
                                     Committee = sc != null
                                     ? new CommitteeDTO
@@ -212,6 +246,12 @@ namespace ShortPaper_API.Services.Students
                            join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                            into shortperCommittee
                            from sc in shortperCommittee.DefaultIfEmpty()
+                           join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                           into shortpaperFile
+                           from spf in shortpaperFile.DefaultIfEmpty()
+                           join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                           into shortpaperSubjects
+                           from sps in shortpaperSubjects.DefaultIfEmpty()
                            where s.StudentId == id
                            select new StudentDTO
                            {
@@ -221,10 +261,21 @@ namespace ShortPaper_API.Services.Students
                                Email = s.Email,
                                AlternativeEmail = s.AlternativeEmail,
                                Phonenumber = s.Phonenumber,
-                               Shortpaper = studentShort != null ? new ShortpaperDTO
+                               Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                {
                                    ShortpaperId = studentShort.ShortpaperId,
                                    ShortpaperTopic = studentShort.ShortpaperTopic,
+                               } : null,
+                               Subject = sps != null ? new SubjectDTO
+                               {
+                                   SubjectId = sps.SubjectId,
+                                   SubjectName = sps.SubjectName,
+                               } : null,
+                               ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                               {
+                                   ShortpaperFileId = spf.ShortpaperFileId,
+                                   FileName = spf.FileName,
+                                   Status = spf.Status,
                                } : null,
                                Committee = sc != null
                                ? new CommitteeDTO
@@ -294,6 +345,7 @@ namespace ShortPaper_API.Services.Students
                     Email = newStudent.Email,
                     AlternativeEmail = newStudent.AlternativeEmail,
                     Phonenumber = newStudent.Phonenumber,
+                    Year = newStudent.Year
                 };
 
                 _db.Students.Add(userEntity);

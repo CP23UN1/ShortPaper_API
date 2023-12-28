@@ -19,7 +19,7 @@ namespace ShortPaper_API.Services.Files
                 .ToList();
         }
 
-        public ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string fileType, string explanationVideo, string status, string remark, int fileTypeId)
+        public ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId)
         {
             if (file == null || file.Length == 0)
             {
@@ -48,11 +48,10 @@ namespace ShortPaper_API.Services.Files
             {
                 FileName = uniqueFileName,
                 FileSize = file.Length.ToString(),
-                FileType = fileType,
+                FileType = file.ContentType,
                 FileData = fileData, // Save the raw binary data
                 ExplanationVideo = explanationVideo,
                 ShortpaperFileTypeId = fileTypeId,
-                Status = status,
                 Remark = remark,
                 CreatedDatetime = DateTime.Now,
                 UpdatedDatetime = DateTime.Now,

@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Files;
+using ShortPaper_API.DTO;
 
 namespace ShortPaper_API.Controllers
 {
@@ -36,7 +37,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpPost]
         [Route("upload")]
-        public IActionResult UploadFile([FromForm] FileUploadModel model)
+        public IActionResult UploadFile([FromForm] FileUploadDTO model)
         {
             // Check if the model is valid
             if (!ModelState.IsValid)
@@ -51,9 +52,7 @@ namespace ShortPaper_API.Controllers
             var uploadedFile = _fileService.UploadFile(
                 shortpaperId,
                 model.File,
-                model.FileType,
                 model.ExplanationVideo,
-                model.Status,
                 model.Remark,
                 model.FileTypeId
             );
@@ -97,15 +96,5 @@ namespace ShortPaper_API.Controllers
 
             return NotFound(); // Return 404 if the file is not found or empty
         }
-    }
-    public class FileUploadModel
-    {
-        public int ShortpaperId { get; set; }
-        public IFormFile File { get; set; }
-        public string FileType { get; set; }
-        public int FileTypeId { get; set; }
-        public string ExplanationVideo { get; set; }
-        public string Status { get; set; }
-        public string Remark { get; set; }
     }
 }

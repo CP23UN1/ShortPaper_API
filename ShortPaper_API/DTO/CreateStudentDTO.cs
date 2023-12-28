@@ -16,6 +16,8 @@
 
         public string? Phonenumber { get; set; }
 
+        public string Year { get; set; } = null!;
+
         //public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
     }
 }
