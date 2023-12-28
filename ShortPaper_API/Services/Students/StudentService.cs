@@ -29,6 +29,9 @@ namespace ShortPaper_API.Services.Students
                             join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                             into shortperCommittee
                             from sc in shortperCommittee.DefaultIfEmpty()
+                            join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                            into shortpaperFile
+                            from spf in shortpaperFile.DefaultIfEmpty()
                             select new StudentDTO
                             {
                                 StudentId = student.StudentId,
@@ -41,6 +44,12 @@ namespace ShortPaper_API.Services.Students
                                 {
                                     ShortpaperId = studentShort.ShortpaperId,
                                     ShortpaperTopic = studentShort.ShortpaperTopic,
+                                } : null,
+                                ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                                {
+                                    ShortpaperFileId = spf.ShortpaperFileId,
+                                    FileName = spf.FileName,
+                                    Status = spf.Status,
                                 } : null,
                                 Committee = sc != null
                                 ? new CommitteeDTO
@@ -93,6 +102,9 @@ namespace ShortPaper_API.Services.Students
                                 join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                                 into shortperCommittee
                                 from sc in shortperCommittee.DefaultIfEmpty()
+                                join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                                into shortpaperFile
+                                from spf in shortpaperFile.DefaultIfEmpty()
                                 select new StudentDTO
                                 {
                                     StudentId = student.StudentId,
@@ -105,6 +117,12 @@ namespace ShortPaper_API.Services.Students
                                     {
                                         ShortpaperId = studentShort.ShortpaperId,
                                         ShortpaperTopic = studentShort.ShortpaperTopic,
+                                    } : null,
+                                    ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                                    {
+                                        ShortpaperFileId = spf.ShortpaperFileId,
+                                        FileName = spf.FileName,
+                                        Status = spf.Status,
                                     } : null,
                                     Committee = sc != null
                                     ? new CommitteeDTO

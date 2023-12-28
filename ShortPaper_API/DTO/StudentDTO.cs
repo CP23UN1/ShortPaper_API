@@ -1,4 +1,6 @@
-﻿namespace ShortPaper_API.DTO
+﻿using ShortPaper_API.Entities;
+
+namespace ShortPaper_API.DTO
 {
     public class StudentDTO
     {
@@ -17,6 +19,8 @@
         public string? Phonenumber { get; set; }
 
         public ShortpaperDTO Shortpaper { get; set; }
+
+        public ShortpaperFileDTO ShortpaperFile { get; set; }
 
         public CommitteeDTO Committee { get; set; }
 
