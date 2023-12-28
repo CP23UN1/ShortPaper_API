@@ -22,7 +22,7 @@ namespace ShortPaper_API.Services.Announcements
                                      select new AnnouncementDTO
                                      {
                                          AnnouncementId = a.AnnouncementId,
-                                         Topic = a.Topic,
+                                         Schedule = a.Schedule,
                                          Content = a.Content,
                                          CreatedDatetime = a.CreatedDatetime,
                                          ExpiredDatetime = a.ExpiredDatetime,
@@ -62,7 +62,7 @@ namespace ShortPaper_API.Services.Announcements
             {
                 var newAnnounce = new Announcement
                 {
-                    Topic = newAnnouncement.Topic,
+                    Schedule = newAnnouncement.Schedule,
                     Content = newAnnouncement.Content,
                     CreatedDatetime = DateTime.Now,
                     ExpiredDatetime = newAnnouncement.ExpiredDatetime,
@@ -101,7 +101,7 @@ namespace ShortPaper_API.Services.Announcements
                                    where a.AnnouncementId == id
                                    select a).FirstOrDefault();
 
-                oldAnnounce.Topic = updatedAnnouncement.Topic;
+                oldAnnounce.Schedule = updatedAnnouncement.Schedule;
                 oldAnnounce.Content = updatedAnnouncement.Content;
                 oldAnnounce.ExpiredDatetime = updatedAnnouncement.ExpiredDatetime;
                 oldAnnounce.ImageUrl = updatedAnnouncement.ImageUrl;

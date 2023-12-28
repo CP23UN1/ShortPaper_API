@@ -51,7 +51,6 @@ namespace ShortPaper_API.Services.Files
                 FileName = uniqueFileName,
                 FileSize = file.Length.ToString(),
                 FileType = file.ContentType,
-                FileData = fileData, // Save the raw binary data
                 ExplanationVideo = explanationVideo,
                 ShortpaperFileTypeId = fileTypeId,
                 Remark = remark,

@@ -13,8 +13,6 @@ public partial class AnnouncementFile
 
     public string FileType { get; set; } = null!;
 
-    public byte[] FileData { get; set; } = null!;
-
     public DateTime CreatedDatetime { get; set; }
 
     public int AnnouncementId { get; set; }

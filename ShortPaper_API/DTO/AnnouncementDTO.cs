@@ -7,7 +7,7 @@ namespace ShortPaper_API.DTO
     {
         public int AnnouncementId { get; set; }
 
-        public string Topic { get; set; } = null!;
+        public string Schedule { get; set; } = null!;
 
         public string Content { get; set; } = null!;
 

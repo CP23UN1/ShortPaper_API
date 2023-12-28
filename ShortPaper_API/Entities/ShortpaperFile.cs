@@ -13,8 +13,6 @@ public partial class ShortpaperFile
 
     public string FileType { get; set; } = null!;
 
-    public byte[] FileData { get; set; } = null!;
-
     public string? ExplanationVideo { get; set; }
 
     public string Status { get; set; } = null!;
