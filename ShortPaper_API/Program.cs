@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Services.Announcements;
+using ShortPaper_API.Services.Students;
+using ShortPaper_API.Services.Committees;
+using ShortPaper_API.Services.Files;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -35,6 +38,9 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 //builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICommitteeService, CommitteeService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();
 
