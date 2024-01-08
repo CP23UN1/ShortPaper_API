@@ -100,5 +100,13 @@ namespace ShortPaper_API.Controllers
             return getFileType;
         }
 
+        [HttpGet]
+        [Route("files")]
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFiles()
+        {
+            var getFiles = _fileService.GetFiles();
+            return getFiles;
+        }
+
     }
 }

@@ -27,7 +27,6 @@ namespace ShortPaper_API.Services.Files
         {
             if (file == null || file.Length == 0)
             {
-                // Handle the case where no file is provided
                 return null;
             }
 
@@ -36,11 +35,9 @@ namespace ShortPaper_API.Services.Files
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                // Save the file to the specified path
                 file.CopyTo(stream);
             }
 
-            // Read file data into a byte array
             byte[] fileData;
             using (var memoryStream = new MemoryStream())
             {
@@ -69,19 +66,15 @@ namespace ShortPaper_API.Services.Files
 
         public byte[] DownloadFile(int fileId)
         {
-            // Retrieve the file from the database
             var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
 
             if (file == null)
             {
-                // File not found
                 return null;
             }
 
-            // Construct the file path
             var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
 
-            // Read the file into a byte array
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
             return fileBytes;
@@ -117,6 +110,50 @@ namespace ShortPaper_API.Services.Files
                 return result;
             }
 
+        }
+
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFiles()
+        {
+            try
+            {
+                var file = (from a in _db.ShortpaperFiles
+
+                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                            into ft
+                            from fileType in ft.DefaultIfEmpty()
+
+                            select new ShortpaperFileDTO
+                            {
+                                ShortpaperFileId = a.ShortpaperFileId,
+                                FileName = a.FileName,
+                                Status = a.Status,
+                                UpdatedDatetime = a.UpdatedDatetime,
+                                ShortpaperFileType = new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = fileType.TypeId,
+                                    TypeName = fileType.TypeName,
+                                }
+
+                            }).ToList();
+
+                var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                {
+                    Data = file,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ShortpaperFileDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
         }
     }
 }

@@ -11,7 +11,8 @@ namespace ShortPaper_API.Services.Files
         ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId);
         byte[] DownloadFile(int fileId);
         ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType();
+        ServiceResponse<List<ShortpaperFileDTO>> GetFiles();
 
-//        Task<Stream> DownloadFile(int fileId);
+        //        Task<Stream> DownloadFile(int fileId);
     }
 }
