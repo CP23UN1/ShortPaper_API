@@ -19,58 +19,118 @@ namespace ShortPaper_API.Services.Students
         {
             try
             {
-                var students = (from student in _db.Students
-                            join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
-                            into studentShortpaper
-                            from studentShort in studentShortpaper.DefaultIfEmpty()
-                            join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
-                            into shortperHasCommittee
-                            from shc in shortperHasCommittee.DefaultIfEmpty()
-                            join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                            into shortperCommittee
-                            from sc in shortperCommittee.DefaultIfEmpty()
-                            join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
-                            into shortpaperFile
-                            from spf in shortpaperFile.DefaultIfEmpty()
-                            join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
-                            into shortpaperSubjects
-                            from sps in shortpaperSubjects.DefaultIfEmpty()
-                            select new StudentDTO
-                            {
-                                StudentId = student.StudentId,
-                                Firstname = student.Firstname,
-                                Lastname = student.Lastname,
-                                Email = student.Email,
-                                AlternativeEmail = student.AlternativeEmail,
-                                Phonenumber = student.Phonenumber,
-                                Year = student.Year,
-                                Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                //var students = (from student in _db.Students
+                //            join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
+                //            into studentShortpaper
+                //            from studentShort in studentShortpaper.DefaultIfEmpty()
+                //            join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                //            into shortperHasCommittee
+                //            from shc in shortperHasCommittee.DefaultIfEmpty()
+                //            join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                //            into shortperCommittee
+                //            from sc in shortperCommittee.DefaultIfEmpty()
+                //            join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                //            into shortpaperFile
+                //            from spf in shortpaperFile.DefaultIfEmpty()
+                //            join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                //            into shortpaperSubjects
+                //            from sps in shortpaperSubjects.DefaultIfEmpty()
+                //            select new StudentDTO
+                //            {
+                //                StudentId = student.StudentId,
+                //                Firstname = student.Firstname,
+                //                Lastname = student.Lastname,
+                //                Email = student.Email,
+                //                AlternativeEmail = student.AlternativeEmail,
+                //                Phonenumber = student.Phonenumber,
+                //                Year = student.Year,
+                //                Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                //                {
+                //                    ShortpaperId = studentShort.ShortpaperId,
+                //                    ShortpaperTopic = studentShort.ShortpaperTopic,
+                //                } : null,
+                //                Subject = sps != null ? new SubjectDTO
+                //                {
+                //                    SubjectId = sps.SubjectId,
+                //                    SubjectName = sps.SubjectName,
+                //                } : null,
+                //                ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                //                {
+                //                    ShortpaperFileId = spf.ShortpaperFileId,
+                //                    FileName = spf.FileName,
+                //                    Status = spf.Status,
+                //                } : null,
+                //                Committee = sc != null
+                //                ? new CommitteeDTO
+                //                {
+                //                    CommitteeId = sc.CommitteeId,
+                //                    Firstname = sc.Firstname,
+                //                    Lastname = sc.Lastname,
+                //                    Email = sc.Email,
+                //                    AlternativeEmail = sc.AlternativeEmail, 
+                //                    Phonenumber = sc.Phonenumber
+                //                } : null,
+                //            }).ToList();
+
+                var students = (from a in _db.Students
+                                join b in _db.Shortpapers on a.StudentId equals b.StudentId
+                                into studentShort
+                                from sts in studentShort.DefaultIfEmpty()
+                                join c in _db.ShortpapersHasCommittees on sts.ShortpaperId equals c.ShortpaperId
+                                into shortperHasCommittee
+                                from shc in shortperHasCommittee.DefaultIfEmpty()
+                                join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                                into shortperCommittee
+                                from sc in shortperCommittee.DefaultIfEmpty()
+                                join e in _db.ShortpaperFiles on sts.ShortpaperId equals e.ShortpaperId
+                                into shortpaperFile
+                                from spf in shortpaperFile.DefaultIfEmpty()
+                                join f in _db.Subjects on sts.SubjectId equals f.SubjectId
+                                into shortpaperSubjects
+                                from sps in shortpaperSubjects.DefaultIfEmpty()
+                                select new StudentDTO
                                 {
-                                    ShortpaperId = studentShort.ShortpaperId,
-                                    ShortpaperTopic = studentShort.ShortpaperTopic,
-                                } : null,
-                                Subject = sps != null ? new SubjectDTO
-                                {
-                                    SubjectId = sps.SubjectId,
-                                    SubjectName = sps.SubjectName,
-                                } : null,
-                                ShortpaperFile = spf != null ? new ShortpaperFileDTO
-                                {
-                                    ShortpaperFileId = spf.ShortpaperFileId,
-                                    FileName = spf.FileName,
-                                    Status = spf.Status,
-                                } : null,
-                                Committee = sc != null
-                                ? new CommitteeDTO
-                                {
-                                    CommitteeId = sc.CommitteeId,
-                                    Firstname = sc.Firstname,
-                                    Lastname = sc.Lastname,
-                                    Email = sc.Email,
-                                    AlternativeEmail = sc.AlternativeEmail, 
-                                    Phonenumber = sc.Phonenumber
-                                } : null,
-                            }).ToList();
+                                    StudentId = a.StudentId,
+                                    Firstname = a.Firstname,
+                                    Lastname = a.Lastname,
+                                    Email = a.Email,
+                                    AlternativeEmail = a.AlternativeEmail,
+                                    Phonenumber = a.Phonenumber,
+                                    Year = a.Year,
+                                    Shortpaper = sts != null ? new ShortpaperForStudentDTO
+                                    {
+                                        ShortpaperId = sts.ShortpaperId,
+                                        ShortpaperTopic = sts.ShortpaperTopic,
+                                    } : null,
+                                    Subject = sps != null ? new SubjectDTO
+                                    {
+                                        SubjectId = sps.SubjectId,
+                                        SubjectName = sps.SubjectName,
+                                    } : null,
+                                    ShortpaperFile = spf != null ? new List<ShortpaperFileDTO>
+                                    {
+                                        new ShortpaperFileDTO
+                                        {
+                                            ShortpaperFileId = spf.ShortpaperFileId,
+                                            FileName = spf.FileName,
+                                            Status = spf.Status,
+                                        }
+                                    } : null,
+                                    Committee = sc != null
+                                    ? new List<CommitteeDTO> {
+                                        new CommitteeDTO
+                                        {
+                                            CommitteeId = sc.CommitteeId,
+                                            Firstname = sc.Firstname,
+                                            Lastname = sc.Lastname,
+                                            Email = sc.Email,
+                                            AlternativeEmail = sc.AlternativeEmail,
+                                            Phonenumber = sc.Phonenumber
+                                        }
+                                    } : null,
+                                }).ToList();
+
+
 
                 var result = new ServiceResponse<List<StudentDTO>>()
                 {
@@ -101,118 +161,238 @@ namespace ShortPaper_API.Services.Students
 
                 if (searchText == "" || searchText == null)
                 {
-                    students = (from student in _db.Students
-                                join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
-                                into studentShortpaper
-                                from studentShort in studentShortpaper.DefaultIfEmpty()
-                                join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                    //students = (from student in _db.Students
+                    //            join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
+                    //            into studentShortpaper
+                    //            from studentShort in studentShortpaper.DefaultIfEmpty()
+                    //            join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                    //            into shortperHasCommittee
+                    //            from shc in shortperHasCommittee.DefaultIfEmpty()
+                    //            join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                    //            into shortperCommittee
+                    //            from sc in shortperCommittee.DefaultIfEmpty()
+                    //            join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                    //            into shortpaperFile
+                    //            from spf in shortpaperFile.DefaultIfEmpty()
+                    //            join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                    //            into shortpaperSubjects
+                    //            from sps in shortpaperSubjects.DefaultIfEmpty()
+                    //            select new StudentDTO
+                    //            {
+                    //                StudentId = student.StudentId,
+                    //                Firstname = student.Firstname,
+                    //                Lastname = student.Lastname,
+                    //                Email = student.Email,
+                    //                AlternativeEmail = student.AlternativeEmail,
+                    //                Phonenumber = student.Phonenumber,
+                    //                Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                    //                {
+                    //                    ShortpaperId = studentShort.ShortpaperId,
+                    //                    ShortpaperTopic = studentShort.ShortpaperTopic,
+                    //                } : null,
+                    //                Subject = sps != null ? new SubjectDTO
+                    //                {
+                    //                    SubjectId = sps.SubjectId,
+                    //                    SubjectName = sps.SubjectName,
+                    //                } : null,
+                    //                ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                    //                {
+                    //                    ShortpaperFileId = spf.ShortpaperFileId,
+                    //                    FileName = spf.FileName,
+                    //                    Status = spf.Status,
+                    //                } : null,
+                    //                Committee = sc != null
+                    //                ? new CommitteeDTO
+                    //                {
+                    //                    CommitteeId = sc.CommitteeId,
+                    //                    Firstname = sc.Firstname,
+                    //                    Lastname = sc.Lastname,
+                    //                    Email = sc.Email,
+                    //                    AlternativeEmail = sc.AlternativeEmail,
+                    //                    Phonenumber = sc.Phonenumber
+                    //                } : null,
+                    //            }).ToList();
+                    students = (from a in _db.Students
+                                join b in _db.Shortpapers on a.StudentId equals b.StudentId
+                                into studentShort
+                                from sts in studentShort.DefaultIfEmpty()
+                                join c in _db.ShortpapersHasCommittees on sts.ShortpaperId equals c.ShortpaperId
                                 into shortperHasCommittee
                                 from shc in shortperHasCommittee.DefaultIfEmpty()
                                 join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                                 into shortperCommittee
                                 from sc in shortperCommittee.DefaultIfEmpty()
-                                join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                                join e in _db.ShortpaperFiles on sts.ShortpaperId equals e.ShortpaperId
                                 into shortpaperFile
                                 from spf in shortpaperFile.DefaultIfEmpty()
-                                join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                                join f in _db.Subjects on sts.SubjectId equals f.SubjectId
                                 into shortpaperSubjects
                                 from sps in shortpaperSubjects.DefaultIfEmpty()
                                 select new StudentDTO
                                 {
-                                    StudentId = student.StudentId,
-                                    Firstname = student.Firstname,
-                                    Lastname = student.Lastname,
-                                    Email = student.Email,
-                                    AlternativeEmail = student.AlternativeEmail,
-                                    Phonenumber = student.Phonenumber,
-                                    Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                                    StudentId = a.StudentId,
+                                    Firstname = a.Firstname,
+                                    Lastname = a.Lastname,
+                                    Email = a.Email,
+                                    AlternativeEmail = a.AlternativeEmail,
+                                    Phonenumber = a.Phonenumber,
+                                    Year = a.Year,
+                                    Shortpaper = sts != null ? new ShortpaperForStudentDTO
                                     {
-                                        ShortpaperId = studentShort.ShortpaperId,
-                                        ShortpaperTopic = studentShort.ShortpaperTopic,
+                                        ShortpaperId = sts.ShortpaperId,
+                                        ShortpaperTopic = sts.ShortpaperTopic,
                                     } : null,
                                     Subject = sps != null ? new SubjectDTO
                                     {
                                         SubjectId = sps.SubjectId,
                                         SubjectName = sps.SubjectName,
                                     } : null,
-                                    ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                                    ShortpaperFile = spf != null ? new List<ShortpaperFileDTO>
                                     {
-                                        ShortpaperFileId = spf.ShortpaperFileId,
-                                        FileName = spf.FileName,
-                                        Status = spf.Status,
+                                        new ShortpaperFileDTO
+                                        {
+                                            ShortpaperFileId = spf.ShortpaperFileId,
+                                            FileName = spf.FileName,
+                                            Status = spf.Status,
+                                        }
                                     } : null,
                                     Committee = sc != null
-                                    ? new CommitteeDTO
-                                    {
-                                        CommitteeId = sc.CommitteeId,
-                                        Firstname = sc.Firstname,
-                                        Lastname = sc.Lastname,
-                                        Email = sc.Email,
-                                        AlternativeEmail = sc.AlternativeEmail,
-                                        Phonenumber = sc.Phonenumber
+                                    ? new List<CommitteeDTO> {
+                                        new CommitteeDTO
+                                        {
+                                            CommitteeId = sc.CommitteeId,
+                                            Firstname = sc.Firstname,
+                                            Lastname = sc.Lastname,
+                                            Email = sc.Email,
+                                            AlternativeEmail = sc.AlternativeEmail,
+                                            Phonenumber = sc.Phonenumber
+                                        }
                                     } : null,
                                 }).ToList();
                 }
                 else
                 {
-                    students = (from student in _db.Students
-                                join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
-                                into studentShortpaper
-                                from studentShort in studentShortpaper.DefaultIfEmpty()
-                                join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                    //students = (from student in _db.Students
+                    //            join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
+                    //            into studentShortpaper
+                    //            from studentShort in studentShortpaper.DefaultIfEmpty()
+                    //            join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                    //            into shortperHasCommittee
+                    //            from shc in shortperHasCommittee.DefaultIfEmpty()
+                    //            join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                    //            into shortperCommittee
+                    //            from sc in shortperCommittee.DefaultIfEmpty()
+                    //            join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                    //            into shortpaperFile
+                    //            from spf in shortpaperFile.DefaultIfEmpty()
+                    //            join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                    //            into shortpaperSubjects
+                    //            from sps in shortpaperSubjects.DefaultIfEmpty()
+                    //            where (string.IsNullOrEmpty(searchText) ||
+                    //                  student.Firstname.Contains(searchText) ||
+                    //                  student.Lastname.Contains(searchText) ||
+                    //                  student.StudentId.Contains(searchText) ||
+                    //                  student.Email.Contains(searchText))
+                    //            select new StudentDTO
+                    //            {
+                    //                StudentId = student.StudentId,
+                    //                Firstname = student.Firstname,
+                    //                Lastname = student.Lastname,
+                    //                Email = student.Email,
+                    //                AlternativeEmail = student.AlternativeEmail,
+                    //                Phonenumber = student.Phonenumber,
+                    //                Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                    //                {
+                    //                    ShortpaperId = studentShort.ShortpaperId,
+                    //                    ShortpaperTopic = studentShort.ShortpaperTopic,
+                    //                } : null,
+                    //                Subject = sps != null ? new SubjectDTO
+                    //                {
+                    //                    SubjectId = sps.SubjectId,
+                    //                    SubjectName = sps.SubjectName,
+                    //                } : null,
+                    //                ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                    //                {
+                    //                    ShortpaperFileId = spf.ShortpaperFileId,
+                    //                    FileName = spf.FileName,
+                    //                    Status = spf.Status,
+                    //                } : null,
+                    //                Committee = sc != null
+                    //                ? new CommitteeDTO
+                    //                {
+                    //                    CommitteeId = sc.CommitteeId,
+                    //                    Firstname = sc.Firstname,
+                    //                    Lastname = sc.Lastname,
+                    //                    Email = sc.Email,
+                    //                    AlternativeEmail = sc.AlternativeEmail,
+                    //                    Phonenumber = sc.Phonenumber
+                    //                } : null,
+                    //            }).ToList();
+
+                    students = (from a in _db.Students
+                                join b in _db.Shortpapers on a.StudentId equals b.StudentId
+                                into studentShort
+                                from sts in studentShort.DefaultIfEmpty()
+                                join c in _db.ShortpapersHasCommittees on sts.ShortpaperId equals c.ShortpaperId
                                 into shortperHasCommittee
                                 from shc in shortperHasCommittee.DefaultIfEmpty()
                                 join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
                                 into shortperCommittee
                                 from sc in shortperCommittee.DefaultIfEmpty()
-                                join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                                join e in _db.ShortpaperFiles on sts.ShortpaperId equals e.ShortpaperId
                                 into shortpaperFile
                                 from spf in shortpaperFile.DefaultIfEmpty()
-                                join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                                join f in _db.Subjects on sts.SubjectId equals f.SubjectId
                                 into shortpaperSubjects
                                 from sps in shortpaperSubjects.DefaultIfEmpty()
                                 where (string.IsNullOrEmpty(searchText) ||
-                                      student.Firstname.Contains(searchText) ||
-                                      student.Lastname.Contains(searchText) ||
-                                      student.StudentId.Contains(searchText) ||
-                                      student.Email.Contains(searchText))
+                                      a.Firstname.Contains(searchText) ||
+                                      a.Lastname.Contains(searchText) ||
+                                      a.StudentId.Contains(searchText) ||
+                                      a.Email.Contains(searchText))
                                 select new StudentDTO
                                 {
-                                    StudentId = student.StudentId,
-                                    Firstname = student.Firstname,
-                                    Lastname = student.Lastname,
-                                    Email = student.Email,
-                                    AlternativeEmail = student.AlternativeEmail,
-                                    Phonenumber = student.Phonenumber,
-                                    Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                                    StudentId = a.StudentId,
+                                    Firstname = a.Firstname,
+                                    Lastname = a.Lastname,
+                                    Email = a.Email,
+                                    AlternativeEmail = a.AlternativeEmail,
+                                    Phonenumber = a.Phonenumber,
+                                    Year = a.Year,
+                                    Shortpaper = sts != null ? new ShortpaperForStudentDTO
                                     {
-                                        ShortpaperId = studentShort.ShortpaperId,
-                                        ShortpaperTopic = studentShort.ShortpaperTopic,
+                                        ShortpaperId = sts.ShortpaperId,
+                                        ShortpaperTopic = sts.ShortpaperTopic,
                                     } : null,
                                     Subject = sps != null ? new SubjectDTO
                                     {
                                         SubjectId = sps.SubjectId,
                                         SubjectName = sps.SubjectName,
                                     } : null,
-                                    ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                                    ShortpaperFile = spf != null ? new List<ShortpaperFileDTO>
                                     {
-                                        ShortpaperFileId = spf.ShortpaperFileId,
-                                        FileName = spf.FileName,
-                                        Status = spf.Status,
+                                        new ShortpaperFileDTO
+                                        {
+                                            ShortpaperFileId = spf.ShortpaperFileId,
+                                            FileName = spf.FileName,
+                                            Status = spf.Status,
+                                        }
                                     } : null,
                                     Committee = sc != null
-                                    ? new CommitteeDTO
-                                    {
-                                        CommitteeId = sc.CommitteeId,
-                                        Firstname = sc.Firstname,
-                                        Lastname = sc.Lastname,
-                                        Email = sc.Email,
-                                        AlternativeEmail = sc.AlternativeEmail,
-                                        Phonenumber = sc.Phonenumber
+                                    ? new List<CommitteeDTO> {
+                                        new CommitteeDTO
+                                        {
+                                            CommitteeId = sc.CommitteeId,
+                                            Firstname = sc.Firstname,
+                                            Lastname = sc.Lastname,
+                                            Email = sc.Email,
+                                            AlternativeEmail = sc.AlternativeEmail,
+                                            Phonenumber = sc.Phonenumber
+                                        }
                                     } : null,
                                 }).ToList();
                 }
-                    var result = new ServiceResponse<List<StudentDTO>>()
+                var result = new ServiceResponse<List<StudentDTO>>()
                 {
                     httpStatusCode = StatusCodes.Status200OK,
                     Data = students
@@ -235,59 +415,119 @@ namespace ShortPaper_API.Services.Students
 
         public ServiceResponse<StudentDTO> GetStudent(string id)
         {
-            try { 
-            var student = (from s in _db.Students
-                           join shortpaper in _db.Shortpapers on s.StudentId equals shortpaper.StudentId
-                           into studentShortpaper
-                           from studentShort in studentShortpaper.DefaultIfEmpty()
-                           join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
-                           into shortperHasCommittee
-                           from shc in shortperHasCommittee.DefaultIfEmpty()
-                           join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                           into shortperCommittee
-                           from sc in shortperCommittee.DefaultIfEmpty()
-                           join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
-                           into shortpaperFile
-                           from spf in shortpaperFile.DefaultIfEmpty()
-                           join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
-                           into shortpaperSubjects
-                           from sps in shortpaperSubjects.DefaultIfEmpty()
-                           where s.StudentId == id
-                           select new StudentDTO
-                           {
-                               StudentId = s.StudentId,
-                               Firstname = s.Firstname,
-                               Lastname = s.Lastname,
-                               Email = s.Email,
-                               AlternativeEmail = s.AlternativeEmail,
-                               Phonenumber = s.Phonenumber,
-                               Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
-                               {
-                                   ShortpaperId = studentShort.ShortpaperId,
-                                   ShortpaperTopic = studentShort.ShortpaperTopic,
-                               } : null,
-                               Subject = sps != null ? new SubjectDTO
-                               {
-                                   SubjectId = sps.SubjectId,
-                                   SubjectName = sps.SubjectName,
-                               } : null,
-                               ShortpaperFile = spf != null ? new ShortpaperFileDTO
-                               {
-                                   ShortpaperFileId = spf.ShortpaperFileId,
-                                   FileName = spf.FileName,
-                                   Status = spf.Status,
-                               } : null,
-                               Committee = sc != null
-                               ? new CommitteeDTO
-                               {
-                                   CommitteeId = sc.CommitteeId,
-                                   Firstname = sc.Firstname,
-                                   Lastname = sc.Lastname,
-                                   Email = sc.Email,
-                                   AlternativeEmail = sc.AlternativeEmail,
-                                   Phonenumber = sc.Phonenumber
-                               } : null,
-                           }).FirstOrDefault();
+            try
+            {
+                //var student = (from s in _db.Students
+                //               join shortpaper in _db.Shortpapers on s.StudentId equals shortpaper.StudentId
+                //               into studentShortpaper
+                //               from studentShort in studentShortpaper.DefaultIfEmpty()
+                //               join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                //               into shortperHasCommittee
+                //               from shc in shortperHasCommittee.DefaultIfEmpty()
+                //               join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                //               into shortperCommittee
+                //               from sc in shortperCommittee.DefaultIfEmpty()
+                //               join e in _db.ShortpaperFiles on studentShort.ShortpaperId equals e.ShortpaperId
+                //               into shortpaperFile
+                //               from spf in shortpaperFile.DefaultIfEmpty()
+                //               join f in _db.Subjects on studentShort.SubjectId equals f.SubjectId
+                //               into shortpaperSubjects
+                //               from sps in shortpaperSubjects.DefaultIfEmpty()
+                //               where s.StudentId == id
+                //               select new StudentDTO
+                //               {
+                //                   StudentId = s.StudentId,
+                //                   Firstname = s.Firstname,
+                //                   Lastname = s.Lastname,
+                //                   Email = s.Email,
+                //                   AlternativeEmail = s.AlternativeEmail,
+                //                   Phonenumber = s.Phonenumber,
+                //                   Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
+                //                   {
+                //                       ShortpaperId = studentShort.ShortpaperId,
+                //                       ShortpaperTopic = studentShort.ShortpaperTopic,
+                //                   } : null,
+                //                   Subject = sps != null ? new SubjectDTO
+                //                   {
+                //                       SubjectId = sps.SubjectId,
+                //                       SubjectName = sps.SubjectName,
+                //                   } : null,
+                //                   ShortpaperFile = spf != null ? new ShortpaperFileDTO
+                //                   {
+                //                       ShortpaperFileId = spf.ShortpaperFileId,
+                //                       FileName = spf.FileName,
+                //                       Status = spf.Status,
+                //                   } : null,
+                //                   Committee = sc != null
+                //                   ? new CommitteeDTO
+                //                   {
+                //                       CommitteeId = sc.CommitteeId,
+                //                       Firstname = sc.Firstname,
+                //                       Lastname = sc.Lastname,
+                //                       Email = sc.Email,
+                //                       AlternativeEmail = sc.AlternativeEmail,
+                //                       Phonenumber = sc.Phonenumber
+                //                   } : null,
+                //               }).FirstOrDefault();
+
+                var student = (from a in _db.Students
+                               join b in _db.Shortpapers on a.StudentId equals b.StudentId
+                               into studentShort
+                               from sts in studentShort.DefaultIfEmpty()
+                               join c in _db.ShortpapersHasCommittees on sts.ShortpaperId equals c.ShortpaperId
+                               into shortperHasCommittee
+                               from shc in shortperHasCommittee.DefaultIfEmpty()
+                               join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
+                               into shortperCommittee
+                               from sc in shortperCommittee.DefaultIfEmpty()
+                               join e in _db.ShortpaperFiles on sts.ShortpaperId equals e.ShortpaperId
+                               into shortpaperFile
+                               from spf in shortpaperFile.DefaultIfEmpty()
+                               join f in _db.Subjects on sts.SubjectId equals f.SubjectId
+                               into shortpaperSubjects
+                               from sps in shortpaperSubjects.DefaultIfEmpty()
+                               where a.StudentId == id
+                               select new StudentDTO
+                                       {
+                                           StudentId = a.StudentId,
+                                           Firstname = a.Firstname,
+                                           Lastname = a.Lastname,
+                                           Email = a.Email,
+                                           AlternativeEmail = a.AlternativeEmail,
+                                           Phonenumber = a.Phonenumber,
+                                           Year = a.Year,
+                                           Shortpaper = sts != null ? new ShortpaperForStudentDTO
+                                           {
+                                               ShortpaperId = sts.ShortpaperId,
+                                               ShortpaperTopic = sts.ShortpaperTopic,
+                                           } : null,
+                                           Subject = sps != null ? new SubjectDTO
+                                           {
+                                               SubjectId = sps.SubjectId,
+                                               SubjectName = sps.SubjectName,
+                                           } : null,
+                                           ShortpaperFile = spf != null ? new List<ShortpaperFileDTO>
+                                    {
+                                        new ShortpaperFileDTO
+                                        {
+                                            ShortpaperFileId = spf.ShortpaperFileId,
+                                            FileName = spf.FileName,
+                                            Status = spf.Status,
+                                        }
+                                    } : null,
+                                           Committee = sc != null
+                                           ? new List<CommitteeDTO> {
+                                        new CommitteeDTO
+                                        {
+                                            CommitteeId = sc.CommitteeId,
+                                            Firstname = sc.Firstname,
+                                            Lastname = sc.Lastname,
+                                            Email = sc.Email,
+                                            AlternativeEmail = sc.AlternativeEmail,
+                                            Phonenumber = sc.Phonenumber
+                                        }
+                                           } : null,
+                                       }).FirstOrDefault();
 
                 var result = new ServiceResponse<StudentDTO>()
                 {
@@ -381,7 +621,7 @@ namespace ShortPaper_API.Services.Students
                     return response;
                 }
 
-                if(!IsValidEmail(student.Email))
+                if (!IsValidEmail(student.Email))
                 {
                     response.ErrorMessage = "Invalid email format";
                     response.httpStatusCode = StatusCodes.Status400BadRequest;
@@ -397,8 +637,8 @@ namespace ShortPaper_API.Services.Students
 
 
                 var updateStudent = (from a in _db.Students
-                                  where a.StudentId == student.StudentId
-                                  select a).FirstOrDefault();
+                                     where a.StudentId == student.StudentId
+                                     select a).FirstOrDefault();
 
                 updateStudent.Firstname = student.Firstname;
                 updateStudent.Lastname = student.Lastname;

@@ -20,13 +20,13 @@ namespace ShortPaper_API.DTO
 
         public string Year { get; set; } = null!;
 
-        public ShortpaperForStudentDTO Shortpaper { get; set; }
+        public ShortpaperForStudentDTO? Shortpaper { get; set; }
 
-        public SubjectDTO Subject { get; set; }
+        public SubjectDTO? Subject { get; set; }
 
-        public ShortpaperFileDTO ShortpaperFile { get; set; }
+        public List<ShortpaperFileDTO>? ShortpaperFile { get; set; }
 
-        public CommitteeDTO Committee { get; set; }
+        public List<CommitteeDTO>? Committee { get; set; }
 
         //public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
     }
