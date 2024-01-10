@@ -51,21 +51,21 @@ namespace ShortPaper_API.Services.Students
                                             ShortpaperId = studentShort.ShortpaperId,
                                             ShortpaperTopic = studentShort.ShortpaperTopic,
                                         } : null,
-                                        Subjects = new List<SubjectDTO> { sps != null ? new SubjectDTO
-                                        {
+                                    },
+                                    Subject = sps != null ? new SubjectDTO
+                                    {
                                         SubjectId = sps.SubjectId,
                                         SubjectName = sps.SubjectName,
-                                        } : null },
-                                        Committees = new List<CommitteeDTO> { sc != null ? new CommitteeDTO
-                                        {
+                                    } : null,
+                                    Committee = sc != null ? new CommitteeDTO
+                                    {
                                         CommitteeId = sc.CommitteeId,
                                         Firstname = sc.Firstname,
                                         Lastname = sc.Lastname,
                                         Email = sc.Email,
                                         AlternativeEmail = sc.AlternativeEmail,
                                         Phonenumber = sc.Phonenumber
-                                        } : null },
-                                    },
+                                    } : null,
                                     ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                     {
                                         ShortpaperFileId = spf.ShortpaperFileId,
@@ -154,21 +154,21 @@ namespace ShortPaper_API.Services.Students
                                                  ShortpaperId = studentShort.ShortpaperId,
                                                  ShortpaperTopic = studentShort.ShortpaperTopic,
                                              } : null,
-                                             Subjects = new List<SubjectDTO> { sps != null ? new SubjectDTO
-                                        {
-                                        SubjectId = sps.SubjectId,
-                                        SubjectName = sps.SubjectName,
-                                        } : null },
-                                             Committees = new List<CommitteeDTO> { sc != null ? new CommitteeDTO
-                                        {
-                                        CommitteeId = sc.CommitteeId,
-                                        Firstname = sc.Firstname,
-                                        Lastname = sc.Lastname,
-                                        Email = sc.Email,
-                                        AlternativeEmail = sc.AlternativeEmail,
-                                        Phonenumber = sc.Phonenumber
-                                        } : null },
                                          },
+                                         Subject = sps != null ? new SubjectDTO
+                                         {
+                                             SubjectId = sps.SubjectId,
+                                             SubjectName = sps.SubjectName,
+                                         } : null,
+                                         Committee = sc != null ? new CommitteeDTO
+                                         {
+                                             CommitteeId = sc.CommitteeId,
+                                             Firstname = sc.Firstname,
+                                             Lastname = sc.Lastname,
+                                             Email = sc.Email,
+                                             AlternativeEmail = sc.AlternativeEmail,
+                                             Phonenumber = sc.Phonenumber
+                                         } : null,
                                          ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                          {
                                              ShortpaperFileId = spf.ShortpaperFileId,
@@ -230,21 +230,21 @@ namespace ShortPaper_API.Services.Students
                                                  ShortpaperId = studentShort.ShortpaperId,
                                                  ShortpaperTopic = studentShort.ShortpaperTopic,
                                              } : null,
-                                             Subjects = new List<SubjectDTO> { sps != null ? new SubjectDTO
-                                        {
-                                        SubjectId = sps.SubjectId,
-                                        SubjectName = sps.SubjectName,
-                                        } : null },
-                                             Committees = new List<CommitteeDTO> { sc != null ? new CommitteeDTO
-                                        {
-                                        CommitteeId = sc.CommitteeId,
-                                        Firstname = sc.Firstname,
-                                        Lastname = sc.Lastname,
-                                        Email = sc.Email,
-                                        AlternativeEmail = sc.AlternativeEmail,
-                                        Phonenumber = sc.Phonenumber
-                                        } : null },
                                          },
+                                         Subject = sps != null ? new SubjectDTO
+                                         {
+                                             SubjectId = sps.SubjectId,
+                                             SubjectName = sps.SubjectName,
+                                         } : null,
+                                         Committee = sc != null ? new CommitteeDTO
+                                         {
+                                             CommitteeId = sc.CommitteeId,
+                                             Firstname = sc.Firstname,
+                                             Lastname = sc.Lastname,
+                                             Email = sc.Email,
+                                             AlternativeEmail = sc.AlternativeEmail,
+                                             Phonenumber = sc.Phonenumber
+                                         } : null,
                                          ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                          {
                                              ShortpaperFileId = spf.ShortpaperFileId,
@@ -328,21 +328,21 @@ namespace ShortPaper_API.Services.Students
                                            ShortpaperId = studentShort.ShortpaperId,
                                            ShortpaperTopic = studentShort.ShortpaperTopic,
                                        } : null,
-                                       Subjects = new List<SubjectDTO> { sps != null ? new SubjectDTO
-                                        {
-                                        SubjectId = sps.SubjectId,
-                                        SubjectName = sps.SubjectName,
-                                        } : null },
-                                       Committees = new List<CommitteeDTO> { sc != null ? new CommitteeDTO
-                                        {
-                                        CommitteeId = sc.CommitteeId,
-                                        Firstname = sc.Firstname,
-                                        Lastname = sc.Lastname,
-                                        Email = sc.Email,
-                                        AlternativeEmail = sc.AlternativeEmail,
-                                        Phonenumber = sc.Phonenumber
-                                        } : null },
                                    },
+                                   Subject = sps != null ? new SubjectDTO
+                                   {
+                                       SubjectId = sps.SubjectId,
+                                       SubjectName = sps.SubjectName,
+                                   } : null,
+                                   Committee = sc != null ? new CommitteeDTO
+                                   {
+                                       CommitteeId = sc.CommitteeId,
+                                       Firstname = sc.Firstname,
+                                       Lastname = sc.Lastname,
+                                       Email = sc.Email,
+                                       AlternativeEmail = sc.AlternativeEmail,
+                                       Phonenumber = sc.Phonenumber
+                                   } : null,
                                    ShortpaperFile = spf != null ? new ShortpaperFileDTO
                                    {
                                        ShortpaperFileId = spf.ShortpaperFileId,
