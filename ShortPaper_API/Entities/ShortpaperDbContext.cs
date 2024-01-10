@@ -85,9 +85,9 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(200)
                 .HasColumnName("image_url");
-            entity.Property(e => e.Topic)
+            entity.Property(e => e.Schedule)
                 .HasMaxLength(100)
-                .HasColumnName("topic");
+                .HasColumnName("schedule");
         });
 
         modelBuilder.Entity<AnnouncementFile>(entity =>
@@ -106,9 +106,6 @@ public partial class ShortpaperDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_datetime");
-            entity.Property(e => e.FileData)
-                .HasColumnType("blob")
-                .HasColumnName("file_data");
             entity.Property(e => e.FileName)
                 .HasMaxLength(100)
                 .HasColumnName("file_name");
@@ -237,7 +234,6 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.ExplanationVideo)
                 .HasMaxLength(100)
                 .HasColumnName("explanation_video");
-            entity.Property(e => e.FileData).HasColumnName("file_data");
             entity.Property(e => e.FileName)
                 .HasMaxLength(100)
                 .HasColumnName("file_name");
