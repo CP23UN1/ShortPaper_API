@@ -15,8 +15,6 @@ public partial class ShortpaperFile
 
     public string? ExplanationVideo { get; set; }
 
-    public string Status { get; set; } = null!;
-
     public DateTime? UpdatedStatusDatetime { get; set; }
 
     public string? Remark { get; set; }

@@ -9,5 +9,7 @@ public partial class ShortpaperFileType
 
     public string TypeName { get; set; } = null!;
 
+    public string Status { get; set; } = null!;
+
     public virtual ICollection<ShortpaperFile> ShortpaperFiles { get; set; } = new List<ShortpaperFile>();
 }
