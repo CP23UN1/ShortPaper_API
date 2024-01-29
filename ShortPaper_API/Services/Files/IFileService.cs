@@ -13,6 +13,8 @@ namespace ShortPaper_API.Services.Files
         ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType();
         ServiceResponse<List<ShortpaperFileDTO>> GetFiles();
 
+        ServiceResponse<List<ShortpaperFileDTO>> GetFileVByStudent(string id);
+
         //        Task<Stream> DownloadFile(int fileId);
     }
 }

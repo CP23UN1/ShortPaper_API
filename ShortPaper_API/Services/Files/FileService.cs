@@ -154,5 +154,84 @@ namespace ShortPaper_API.Services.Files
                 return result;
             }
         }
+
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileVByStudent(string id)
+        {
+            try
+            {
+                var file = new List<ShortpaperFileDTO>();
+
+                if (id == "" || id == null)
+                {
+                    file = (from a in _db.ShortpaperFiles
+
+                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                            into ft
+                            from fileType in ft.DefaultIfEmpty()
+                            select new ShortpaperFileDTO
+                            {
+                                ShortpaperFileId = a.ShortpaperFileId,
+                                FileName = a.FileName,
+                                UpdatedDatetime = a.UpdatedDatetime,
+                                ShortpaperFileType = new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = fileType.TypeId,
+                                    TypeName = fileType.TypeName,
+                                }
+
+                            }).ToList();
+
+                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                    {
+                        Data = file,
+                        httpStatusCode = StatusCodes.Status200OK,
+                    };
+
+                    return result;
+                }
+                else
+                {
+                    file = (from a in _db.ShortpaperFiles
+
+                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                            into ft
+                            from fileType in ft.DefaultIfEmpty()
+                            join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
+                            into ft2
+                            from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
+                            where shortpaperFileAndStudent.StudentId.Contains(id)
+                            select new ShortpaperFileDTO
+                            {
+                                ShortpaperFileId = a.ShortpaperFileId,
+                                FileName = a.FileName,
+                                UpdatedDatetime = a.UpdatedDatetime,
+                                ShortpaperFileType = new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = fileType.TypeId,
+                                    TypeName = fileType.TypeName,
+                                }
+
+                            }).ToList();
+
+                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                    {
+                        Data = file,
+                        httpStatusCode = StatusCodes.Status200OK,
+                    };
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ShortpaperFileDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
     }
 }

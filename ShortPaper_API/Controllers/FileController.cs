@@ -108,5 +108,13 @@ namespace ShortPaper_API.Controllers
             return getFiles;
         }
 
+        [HttpGet]
+        [Route("filebystudentid")]
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByStudentId(string studentId)
+        {
+            var getFile = _fileService.GetFileVByStudent(studentId);
+            return getFile;
+        }
+
     }
 }
