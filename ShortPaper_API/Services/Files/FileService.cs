@@ -126,7 +126,6 @@ namespace ShortPaper_API.Services.Files
                             {
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
-                                Status = a.Status,
                                 UpdatedDatetime = a.UpdatedDatetime,
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {

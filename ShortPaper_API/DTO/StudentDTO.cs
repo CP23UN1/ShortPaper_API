@@ -22,11 +22,9 @@ namespace ShortPaper_API.DTO
 
         public ShortpaperForStudentDTO? Shortpaper { get; set; }
 
-        public SubjectDTO? Subject { get; set; }
+        public List<SubjectDTO> Subjects { get; set; } = new List<SubjectDTO>();
 
-        public List<ShortpaperFileDTO>? ShortpaperFile { get; set; }
-
-        public List<CommitteeDTO>? Committee { get; set; }
+        public List<CommitteeDTO>? Committees { get; set; }
 
         public List<ShortpaperFileDTO> ShortpaperFiles { get; set; }
 

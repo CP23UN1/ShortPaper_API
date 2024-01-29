@@ -6,7 +6,6 @@ namespace ShortPaper_API.DTO
     {
         public int ShortpaperFileId { get; set; }
         public string FileName { get; set; } = null!;
-        public string Status { get; set; } = null!;
 
         //Jajah add to make getFiles
         public ShortpaperFileTypeDTO? ShortpaperFileType { get; set; }
