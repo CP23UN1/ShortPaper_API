@@ -88,7 +88,8 @@ namespace ShortPaper_API.Services.Files
                                 select new ShortpaperFileTypeDTO
                                 {
                                     TypeId = a.TypeId,
-                                    TypeName = a.TypeName
+                                    TypeName = a.TypeName,
+                                    Status = a.Status,
                                 }).ToList();
 
                 var result = new ServiceResponse<List<ShortpaperFileTypeDTO>>
@@ -131,7 +132,9 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                }
+                                    Status = "approved"
+                                },
+                                Status = "approved"
 
                             }).ToList();
 
@@ -177,7 +180,9 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                }
+                                    Status = "approved"
+                                },
+                                Status = "approved"
 
                             }).ToList();
 
