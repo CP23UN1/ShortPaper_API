@@ -132,9 +132,9 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                    Status = "approved"
+                                    Status = fileType.Status
                                 },
-                                Status = "approved"
+                                Status = fileType.Status
 
                             }).ToList();
 
@@ -180,9 +180,9 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                    Status = "approved"
+                                    Status = fileType.Status
                                 },
-                                Status = "approved"
+                                Status = fileType.Status
 
                             }).ToList();
 
