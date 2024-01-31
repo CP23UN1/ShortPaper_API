@@ -7,5 +7,6 @@ namespace ShortPaper_API.Services.Committees
     {
         Task<ServiceResponse<List<CommitteeDTO>>> GetCommitteesAsync();
         Task<ServiceResponse<List<AddCommitteeDTO>>> AddCommitteesFromCsvAsync(IFormFile csvFile);
+        Task<ServiceResponse<List<AddCommitteeForStudentDTO>>> AddCommitteesForStudentsFromCsvAsync(IFormFile csvFile);
     }
 }

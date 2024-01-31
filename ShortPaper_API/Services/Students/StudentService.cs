@@ -23,12 +23,12 @@ namespace ShortPaper_API.Services.Students
                                 join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
                                 into studentShortpaper
                                 from studentShort in studentShortpaper.DefaultIfEmpty()
-                                join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                                join h in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals h.ShortpaperId
                                 into shortperHasCommittee
                                 from shc in shortperHasCommittee.DefaultIfEmpty()
-                                join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                                into shortperCommittee
-                                from sc in shortperCommittee.DefaultIfEmpty()
+                                join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
+                                into committees
+                                from c in committees.DefaultIfEmpty()
                                 select new
                                 {
                                     Student = new StudentDTO
@@ -53,17 +53,15 @@ namespace ShortPaper_API.Services.Students
                                                     SubjectId = sps.SubjectId,
                                                     SubjectName = sps.SubjectName,
                                                 }).ToList(),
-                                    Committees = (from sc2 in _db.Committees
-                                                  where sc2.CommitteeId == shc.CommitteeId
-                                                  select new CommitteeDTO
-                                                  {
-                                                      CommitteeId = sc.CommitteeId,
-                                                      Firstname = sc.Firstname,
-                                                      Lastname = sc.Lastname,
-                                                      Email = sc.Email,
-                                                      AlternativeEmail = sc.AlternativeEmail,
-                                                      Phonenumber = sc.Phonenumber
-                                                  }).ToList(),
+                                    Committee = new CommitteeDTO
+                                    {
+                                        CommitteeId = c.CommitteeId,
+                                        Firstname = c.Firstname,
+                                        Lastname = c.Lastname,
+                                        Email = c.Email,
+                                        AlternativeEmail = c.AlternativeEmail,
+                                        Phonenumber = c.Phonenumber
+                                    },
                                     ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                        where spf.ShortpaperId == studentShort.ShortpaperId
                                                        select new ShortpaperFileDTO
@@ -85,7 +83,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     Subjects = group.First().Subjects,
-                    Committees = group.First().Committees,
+                    Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
                 .ToList();
@@ -124,12 +122,12 @@ namespace ShortPaper_API.Services.Students
                                      join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
                                      into studentShortpaper
                                      from studentShort in studentShortpaper.DefaultIfEmpty()
-                                     join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                                     join h in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals h.ShortpaperId
                                      into shortperHasCommittee
                                      from shc in shortperHasCommittee.DefaultIfEmpty()
-                                     join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                                     into shortperCommittee
-                                     from sc in shortperCommittee.DefaultIfEmpty()
+                                     join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
+                                     into committees
+                                     from c in committees.DefaultIfEmpty()
                                      select new
                                      {
                                          Student = new StudentDTO
@@ -154,17 +152,15 @@ namespace ShortPaper_API.Services.Students
                                                          SubjectId = sps.SubjectId,
                                                          SubjectName = sps.SubjectName,
                                                      }).ToList(),
-                                         Committees = (from sc2 in _db.Committees
-                                                       where sc2.CommitteeId == shc.CommitteeId
-                                                       select new CommitteeDTO
-                                                       {
-                                                           CommitteeId = sc.CommitteeId,
-                                                           Firstname = sc.Firstname,
-                                                           Lastname = sc.Lastname,
-                                                           Email = sc.Email,
-                                                           AlternativeEmail = sc.AlternativeEmail,
-                                                           Phonenumber = sc.Phonenumber
-                                                       }).ToList(),
+                                         Committee = new CommitteeDTO
+                                         {
+                                             CommitteeId = c.CommitteeId,
+                                             Firstname = c.Firstname,
+                                             Lastname = c.Lastname,
+                                             Email = c.Email,
+                                             AlternativeEmail = c.AlternativeEmail,
+                                             Phonenumber = c.Phonenumber
+                                         },
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
@@ -186,7 +182,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     Subjects = group.First().Subjects,
-                    Committees = group.First().Committees,
+                    Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
                 .ToList();
@@ -198,12 +194,12 @@ namespace ShortPaper_API.Services.Students
                                      join shortpaper in _db.Shortpapers on student.StudentId equals shortpaper.StudentId
                                      into studentShortpaper
                                      from studentShort in studentShortpaper.DefaultIfEmpty()
-                                     join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                                     join h in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals h.ShortpaperId
                                      into shortperHasCommittee
                                      from shc in shortperHasCommittee.DefaultIfEmpty()
-                                     join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                                     into shortperCommittee
-                                     from sc in shortperCommittee.DefaultIfEmpty()
+                                     join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
+                                     into committees
+                                     from c in committees.DefaultIfEmpty()
                                      where (string.IsNullOrEmpty(searchText) ||
                                       student.Firstname.Contains(searchText) ||
                                       student.Lastname.Contains(searchText) ||
@@ -233,17 +229,15 @@ namespace ShortPaper_API.Services.Students
                                                          SubjectId = sps.SubjectId,
                                                          SubjectName = sps.SubjectName,
                                                      }).ToList(),
-                                         Committees = (from sc2 in _db.Committees
-                                                       where sc2.CommitteeId == shc.CommitteeId
-                                                       select new CommitteeDTO
-                                                       {
-                                                           CommitteeId = sc.CommitteeId,
-                                                           Firstname = sc.Firstname,
-                                                           Lastname = sc.Lastname,
-                                                           Email = sc.Email,
-                                                           AlternativeEmail = sc.AlternativeEmail,
-                                                           Phonenumber = sc.Phonenumber
-                                                       }).ToList(),
+                                         Committee = new CommitteeDTO
+                                         {
+                                             CommitteeId = c.CommitteeId,
+                                             Firstname = c.Firstname,
+                                             Lastname = c.Lastname,
+                                             Email = c.Email,
+                                             AlternativeEmail = c.AlternativeEmail,
+                                             Phonenumber = c.Phonenumber
+                                         },
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
@@ -265,7 +259,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     Subjects = group.First().Subjects,
-                    Committees = group.First().Committees,
+                    Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
                 .ToList();
@@ -299,12 +293,12 @@ namespace ShortPaper_API.Services.Students
                                join shortpaper in _db.Shortpapers on s.StudentId equals shortpaper.StudentId
                                into studentShortpaper
                                from studentShort in studentShortpaper.DefaultIfEmpty()
-                               join c in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals c.ShortpaperId
+                               join h in _db.ShortpapersHasCommittees on studentShort.ShortpaperId equals h.ShortpaperId
                                into shortperHasCommittee
                                from shc in shortperHasCommittee.DefaultIfEmpty()
-                               join d in _db.Committees on shc.CommitteeId equals d.CommitteeId
-                               into shortperCommittee
-                               from sc in shortperCommittee.DefaultIfEmpty()
+                               join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
+                               into committees
+                               from c in committees.DefaultIfEmpty()
                                where s.StudentId == id
                                select new
                                {
@@ -330,17 +324,15 @@ namespace ShortPaper_API.Services.Students
                                                    SubjectId = sps.SubjectId,
                                                    SubjectName = sps.SubjectName,
                                                }).ToList(),
-                                   Committees = (from sc2 in _db.Committees
-                                                 where sc2.CommitteeId == shc.CommitteeId
-                                                 select new CommitteeDTO
-                                                 {
-                                                     CommitteeId = sc.CommitteeId,
-                                                     Firstname = sc.Firstname,
-                                                     Lastname = sc.Lastname,
-                                                     Email = sc.Email,
-                                                     AlternativeEmail = sc.AlternativeEmail,
-                                                     Phonenumber = sc.Phonenumber
-                                                 }).ToList(),
+                                   Committee = new CommitteeDTO
+                                   {
+                                       CommitteeId = c.CommitteeId,
+                                       Firstname = c.Firstname,
+                                       Lastname = c.Lastname,
+                                       Email = c.Email,
+                                       AlternativeEmail = c.AlternativeEmail,
+                                       Phonenumber = c.Phonenumber
+                                   },
                                    ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                       where spf.ShortpaperId == studentShort.ShortpaperId
                                                       select new ShortpaperFileDTO
@@ -362,7 +354,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     Subjects = group.First().Subjects,
-                    Committees = group.First().Committees,
+                    Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
                 .FirstOrDefault();
