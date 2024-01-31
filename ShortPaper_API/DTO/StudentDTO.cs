@@ -24,9 +24,9 @@ namespace ShortPaper_API.DTO
 
         public List<SubjectDTO> Subjects { get; set; } = new List<SubjectDTO>();
 
-        public List<CommitteeDTO>? Committees { get; set; }
+        public List<CommitteeDTO>? Committees { get; set; } = new List<CommitteeDTO>();
 
-        public List<ShortpaperFileDTO> ShortpaperFiles { get; set; }
+        public List<ShortpaperFileDTO> ShortpaperFiles { get; set; } = new List<ShortpaperFileDTO>();
 
         //public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
     }

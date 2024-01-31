@@ -41,5 +41,19 @@ namespace ShortPaper_API.Controllers
 
             return BadRequest(result.ErrorMessage);
         }
+
+        [HttpPost]
+        [Route("assign-from-csv-for-student")]
+        public async Task<IActionResult> AddCommitteesForStudentFromCsv(IFormFile csvFile)
+        {
+            var result = await _committeeService.AddCommitteesForStudentsFromCsvAsync(csvFile);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }

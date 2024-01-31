@@ -104,5 +104,89 @@ namespace ShortPaper_API.Services.Committees
             return response;
         }
 
+        public async Task<ServiceResponse<List<AddCommitteeForStudentDTO>>> AddCommitteesForStudentsFromCsvAsync(IFormFile csvFile)
+        {
+            var response = new ServiceResponse<List<AddCommitteeForStudentDTO>>();
+
+            try
+            {
+                // AddCommitteesForStudentsFromCsvAsync method
+
+                using (var reader = new StreamReader(csvFile.OpenReadStream()))
+                {
+                    var studentCommitteeMappings = new List<(string StudentId, int CommitteeId)>();
+
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(','); // Consider supporting different delimiters
+
+                        if (values.Length >= 2) // Assuming CSV format: StudentId,CommitteeId
+                        {
+                            var studentId = values[0].Trim();
+                            var committeeIdStr = values[1].Trim();
+
+                            if (int.TryParse(committeeIdStr, out int committeeId))
+                            {
+                                studentCommitteeMappings.Add((studentId, committeeId));
+                            }
+                        }
+                    }
+
+                    foreach (var mapping in studentCommitteeMappings)
+                    {
+                        var student = await _db.Students.FirstOrDefaultAsync(s => s.StudentId == mapping.StudentId);
+                        var committee = await _db.Committees.FirstOrDefaultAsync(c => c.CommitteeId == mapping.CommitteeId);
+
+                        if (student == null || committee == null)
+                        {
+                            // Log or handle the case where the student or committee ID is not found
+                            continue;
+                        }
+
+                        try
+                        {
+                            var shortpaperId = student.Shortpapers.FirstOrDefault()?.ShortpaperId;
+                            if (shortpaperId != null)
+                            {
+                                var shortpaperHasCommittee = new ShortpapersHasCommittee
+                                {
+                                    ShortpaperId = shortpaperId.Value,
+                                    CommitteeId = committee.CommitteeId
+                                };
+
+                                _db.ShortpapersHasCommittees.Add(shortpaperHasCommittee);
+                            }
+                            else
+                            {
+                                // Log or handle the case where the student has no shortpaper
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log the exception or handle it as needed
+                        }
+                    }
+
+                    await _db.SaveChangesAsync();
+
+                    response.IsSuccess = true;
+                    response.Data = studentCommitteeMappings.Select(mapping => new AddCommitteeForStudentDTO
+                    {
+                        StudentId = mapping.StudentId,
+                        CommitteeId = mapping.CommitteeId
+                    }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.ErrorMessage = "An unexpected error occurred while adding committees for students from CSV.";
+                // Log the exception or handle it as needed
+            }
+
+            return response;
+
+        }
     }
 }
