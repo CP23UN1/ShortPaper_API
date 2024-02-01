@@ -63,11 +63,15 @@ namespace ShortPaper_API.Services.Students
                                         Phonenumber = c.Phonenumber
                                     } : null,
                                     ShortpaperFiles = (from spf in _db.ShortpaperFiles
+                                                       join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
+                                                       into shortpaperFileDetail
+                                                       from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                        where spf.ShortpaperId == studentShort.ShortpaperId
                                                        select new ShortpaperFileDTO
                                                        {
                                                            ShortpaperFileId = spf.ShortpaperFileId,
                                                            FileName = spf.FileName,
+                                                           Status = spfd.Status,
                                                            ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                        }).ToList()
                                 })
@@ -163,11 +167,15 @@ namespace ShortPaper_API.Services.Students
                                              Phonenumber = c.Phonenumber
                                          } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
+                                                            join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
+                                                            into shortpaperFileDetail
+                                                            from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
+                                                                Status = spfd.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
@@ -241,11 +249,15 @@ namespace ShortPaper_API.Services.Students
                                              Phonenumber = c.Phonenumber
                                          } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
+                                                            join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
+                                                            into shortpaperFileDetail
+                                                            from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
+                                                                Status = spfd.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
@@ -337,11 +349,15 @@ namespace ShortPaper_API.Services.Students
                                        Phonenumber = c.Phonenumber
                                    } : null,
                                    ShortpaperFiles = (from spf in _db.ShortpaperFiles
+                                                      join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
+                                                      into shortpaperFileDetail
+                                                      from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                       where spf.ShortpaperId == studentShort.ShortpaperId
                                                       select new ShortpaperFileDTO
                                                       {
                                                           ShortpaperFileId = spf.ShortpaperFileId,
                                                           FileName = spf.FileName,
+                                                          Status = spfd.Status,
                                                           ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                       }).ToList()
                                })

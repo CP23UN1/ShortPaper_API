@@ -26,7 +26,7 @@ namespace ShortPaper_API.DTO
 
         public List<CommitteeDTO>? Committees { get; set; }
 
-        public List<ShortpaperFileDTO> ShortpaperFiles { get; set; }
+        public List<ShortpaperFileForStudent> ShortpaperFiles { get; set; }
 
         //public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
     }
