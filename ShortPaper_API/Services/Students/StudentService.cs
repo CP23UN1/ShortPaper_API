@@ -53,7 +53,7 @@ namespace ShortPaper_API.Services.Students
                                                     SubjectId = sps.SubjectId,
                                                     SubjectName = sps.SubjectName,
                                                 }).ToList(),
-                                    Committee = new CommitteeDTO
+                                    Committee = c != null ? new CommitteeDTO
                                     {
                                         CommitteeId = c.CommitteeId,
                                         Firstname = c.Firstname,
@@ -61,13 +61,14 @@ namespace ShortPaper_API.Services.Students
                                         Email = c.Email,
                                         AlternativeEmail = c.AlternativeEmail,
                                         Phonenumber = c.Phonenumber
-                                    },
+                                    } : null,
                                     ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                        where spf.ShortpaperId == studentShort.ShortpaperId
                                                        select new ShortpaperFileDTO
                                                        {
                                                            ShortpaperFileId = spf.ShortpaperFileId,
                                                            FileName = spf.FileName,
+                                                           ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                        }).ToList()
                                 })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -150,9 +151,9 @@ namespace ShortPaper_API.Services.Students
                                                      select new SubjectDTO
                                                      {
                                                          SubjectId = sps.SubjectId,
-                                                         SubjectName = sps.SubjectName,
+                                                         SubjectName = sps.SubjectName,                                                      
                                                      }).ToList(),
-                                         Committee = new CommitteeDTO
+                                         Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
                                              Firstname = c.Firstname,
@@ -160,13 +161,14 @@ namespace ShortPaper_API.Services.Students
                                              Email = c.Email,
                                              AlternativeEmail = c.AlternativeEmail,
                                              Phonenumber = c.Phonenumber
-                                         },
+                                         } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
+                                                                ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -229,7 +231,7 @@ namespace ShortPaper_API.Services.Students
                                                          SubjectId = sps.SubjectId,
                                                          SubjectName = sps.SubjectName,
                                                      }).ToList(),
-                                         Committee = new CommitteeDTO
+                                         Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
                                              Firstname = c.Firstname,
@@ -237,13 +239,14 @@ namespace ShortPaper_API.Services.Students
                                              Email = c.Email,
                                              AlternativeEmail = c.AlternativeEmail,
                                              Phonenumber = c.Phonenumber
-                                         },
+                                         } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
                                                             select new ShortpaperFileDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
+                                                                ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -324,7 +327,7 @@ namespace ShortPaper_API.Services.Students
                                                    SubjectId = sps.SubjectId,
                                                    SubjectName = sps.SubjectName,
                                                }).ToList(),
-                                   Committee = new CommitteeDTO
+                                   Committee = c != null ? new CommitteeDTO
                                    {
                                        CommitteeId = c.CommitteeId,
                                        Firstname = c.Firstname,
@@ -332,13 +335,14 @@ namespace ShortPaper_API.Services.Students
                                        Email = c.Email,
                                        AlternativeEmail = c.AlternativeEmail,
                                        Phonenumber = c.Phonenumber
-                                   },
+                                   } : null,
                                    ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                       where spf.ShortpaperId == studentShort.ShortpaperId
                                                       select new ShortpaperFileDTO
                                                       {
                                                           ShortpaperFileId = spf.ShortpaperFileId,
                                                           FileName = spf.FileName,
+                                                          ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                       }).ToList()
                                })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId

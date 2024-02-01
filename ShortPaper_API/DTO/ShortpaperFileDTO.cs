@@ -9,6 +9,9 @@ namespace ShortPaper_API.DTO
 
         //Jajah add to make getFiles
         public ShortpaperFileTypeDTO? ShortpaperFileType { get; set; }
+
+        public int ShortpaperFileTypeId { get; set; }
+
         public string Status { get; set; }
         public DateTime UpdatedDatetime { get; set; }
     }
