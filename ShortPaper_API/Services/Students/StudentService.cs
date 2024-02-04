@@ -67,7 +67,7 @@ namespace ShortPaper_API.Services.Students
                                                        into shortpaperFileDetail
                                                        from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                        where spf.ShortpaperId == studentShort.ShortpaperId
-                                                       select new ShortpaperFileDTO
+                                                       select new ShortpaperFileForStudentDTO
                                                        {
                                                            ShortpaperFileId = spf.ShortpaperFileId,
                                                            FileName = spf.FileName,
@@ -171,7 +171,7 @@ namespace ShortPaper_API.Services.Students
                                                             into shortpaperFileDetail
                                                             from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
-                                                            select new ShortpaperFileDTO
+                                                            select new ShortpaperFileForStudentDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
@@ -253,7 +253,7 @@ namespace ShortPaper_API.Services.Students
                                                             into shortpaperFileDetail
                                                             from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                             where spf.ShortpaperId == studentShort.ShortpaperId
-                                                            select new ShortpaperFileDTO
+                                                            select new ShortpaperFileForStudentDTO
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
@@ -353,7 +353,7 @@ namespace ShortPaper_API.Services.Students
                                                       into shortpaperFileDetail
                                                       from spfd in shortpaperFileDetail.DefaultIfEmpty()
                                                       where spf.ShortpaperId == studentShort.ShortpaperId
-                                                      select new ShortpaperFileDTO
+                                                      select new ShortpaperFileForStudentDTO
                                                       {
                                                           ShortpaperFileId = spf.ShortpaperFileId,
                                                           FileName = spf.FileName,

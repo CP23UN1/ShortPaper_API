@@ -1,6 +1,6 @@
 ﻿namespace ShortPaper_API.DTO
 {
-    public class ShortpaperFileForStudent
+    public class ShortpaperFileForStudentDTO
     {
         public int ShortpaperFileId { get; set; }
         public string FileName { get; set; } = null!;
