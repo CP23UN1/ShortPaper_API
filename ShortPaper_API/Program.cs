@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using ShortPaper_API.Services.Shortpapers;
 using ShortPaper_API.Services.Subjects;
+using ShortPaper_API.Services.Comments;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -57,6 +58,7 @@ builder.Services.AddScoped<ICommitteeService, CommitteeService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IShortpaperService, ShortpaperService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 var app = builder.Build();
 
