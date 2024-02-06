@@ -8,10 +8,10 @@ namespace ShortPaper_API.DTO
 
         public string? ShortpaperTopic { get; set; }
 
+        public StudentForShortpaperDTO? Student { get; set; }
+
         public List<SubjectDTO> Subjects { get; set; } = new List<SubjectDTO>();
 
-        public List<StudentForShortpaperDTO>? Student { get; set;}
-
-        public List<CommitteeForShortpaperDTO>? Committees { get; set;}
+        public List<CommitteeDTO>? Committees { get; set; }
     }
 }
