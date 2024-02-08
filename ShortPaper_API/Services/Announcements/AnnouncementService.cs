@@ -2,6 +2,8 @@
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 
 namespace ShortPaper_API.Services.Announcements
 {
@@ -72,6 +74,9 @@ namespace ShortPaper_API.Services.Announcements
                 _db.Announcements.Add(newAnnounce);
 
                 _db.SaveChanges();
+
+                // Notify all students about the new announcement via email
+                NotifyAllStudentsByEmail(newAnnouncement);
 
                 var result = new ServiceResponse<AnnouncementDTO>()
                 {
@@ -157,6 +162,56 @@ namespace ShortPaper_API.Services.Announcements
                 };
 
                 return result;
+            }
+        }
+
+        private List<Student> GetAllStudents()
+        {
+            // Implement the logic to retrieve all students from your database.
+            // Replace this with your actual logic.
+            return _db.Students.ToList();
+        }
+
+        private void NotifyAllStudentsByEmail(AnnouncementDTO announcement)
+        {
+            var allStudents = GetAllStudents();
+
+            foreach (var student in allStudents)
+            {
+                SendEmailToStudent(student, announcement);
+            }
+        }
+
+
+        private void SendEmailToStudent(Student student, AnnouncementDTO announcement)
+        {
+            // Replace these values with your SMTP server credentials and email content.
+            string smtpServer = "smtp.gmail.com";
+            int smtpPort = 587; // Update with your SMTP port
+            string smtpUsername = "oasipssi4@gmail.com";
+            string smtpPassword = "nxrpstsxvpyhbkpi";
+
+            string senderEmail = "oasipssi4@gmail.com";
+            string subject = "New Announcement";
+            string body = $"Dear {student.Firstname},\n\nA new announcement has been created: {announcement.Content}\n\nThank you.";
+
+            try
+            {
+                using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+
+                    MailMessage mailMessage = new MailMessage(senderEmail, student.Email, subject, body);
+                    mailMessage.IsBodyHtml = false;
+
+                    smtpClient.Send(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here, such as logging the error
+                Console.WriteLine($"Failed to send email to {student.Firstname}: {ex.Message}");
             }
         }
     }
