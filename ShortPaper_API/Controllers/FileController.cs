@@ -23,7 +23,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("list/{shortpaperId}")]
+        [Route("files/{shortpaperId}")]
         public IActionResult ListFiles(int shortpaperId)
         {
             try
@@ -109,7 +109,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("filebystudentid")]
+        [Route("files/{studentId}")]
         public ServiceResponse<List<ShortpaperFileDTO>> GetFileByStudentId(string studentId)
         {
             var getFile = _fileService.GetFileVByStudent(studentId);
