@@ -76,7 +76,7 @@ builder.Services.AddDbContext<ShortpaperDbContext>(options =>
 // Add Swagger generation
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShortPaper API", Version = "v1" });
 
     // Configure JWT Bearer authentication
     var jwtSecurityScheme = new OpenApiSecurityScheme
