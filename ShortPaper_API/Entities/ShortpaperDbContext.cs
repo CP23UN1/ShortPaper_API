@@ -58,7 +58,7 @@ public partial class ShortpaperDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("email");
             entity.Property(e => e.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .HasColumnName("password");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
@@ -171,7 +171,7 @@ public partial class ShortpaperDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
             entity.Property(e => e.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .HasColumnName("password");
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(10)
@@ -317,7 +317,7 @@ public partial class ShortpaperDbContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
             entity.Property(e => e.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(100)
                 .HasColumnName("password");
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(10)
