@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Konscious.Security.Cryptography;
+using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using System.Net.Mail;
+using System.Text;
 
 namespace ShortPaper_API.Services.Students
 {
@@ -407,9 +409,9 @@ namespace ShortPaper_API.Services.Students
 
             try
             {
-                if (string.IsNullOrEmpty(newStudent.Firstname) || string.IsNullOrEmpty(newStudent.Lastname) || string.IsNullOrEmpty(newStudent.Email) || string.IsNullOrEmpty(newStudent.Phonenumber))
+                if (string.IsNullOrEmpty(newStudent.Firstname) || string.IsNullOrEmpty(newStudent.Lastname) || string.IsNullOrEmpty(newStudent.Email) || string.IsNullOrEmpty(newStudent.Phonenumber) || string.IsNullOrEmpty(newStudent.Password))
                 {
-                    response.ErrorMessage = "Firstname, Lastname, Email, and PhoneNumber are required.";
+                    response.ErrorMessage = "Firstname, Lastname, Email, Password, and PhoneNumber are required.";
                     response.httpStatusCode = StatusCodes.Status400BadRequest;
                     return response;
                 }
@@ -428,6 +430,9 @@ namespace ShortPaper_API.Services.Students
                     return response;
                 }
 
+                // Encode the password
+                var encodedPassword = EncodePassword(newStudent.StudentId, newStudent.Password);
+
                 var userEntity = new Student
                 {
                     StudentId = newStudent.StudentId,
@@ -436,7 +441,8 @@ namespace ShortPaper_API.Services.Students
                     Email = newStudent.Email,
                     AlternativeEmail = newStudent.AlternativeEmail,
                     Phonenumber = newStudent.Phonenumber,
-                    Year = newStudent.Year
+                    Year = newStudent.Year,
+                    Password = encodedPassword // Store the encoded password
                 };
 
                 _db.Students.Add(userEntity);
@@ -448,12 +454,20 @@ namespace ShortPaper_API.Services.Students
             }
             catch (Exception ex)
             {
-
                 response.ErrorMessage = "An unexpected error occurred";
                 response.httpStatusCode = StatusCodes.Status500InternalServerError;
             }
 
             return response;
+        }
+
+        public static string EncodePassword(string userId, string password)
+        {
+            // Combine user ID and password
+            string combinedString = $"{userId}:{password}";
+
+            // Encode the combined string using Base64
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedString));
         }
 
         [ProducesResponseType(typeof(ServiceResponse<UpdateStudentDTO>), StatusCodes.Status200OK)]
