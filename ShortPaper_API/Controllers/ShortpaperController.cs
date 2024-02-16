@@ -31,7 +31,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("shortpapers/{filterText}")]
+        [Route("shortpaper-by-filter/{filterText}")]
         public ServiceResponse<List<ShortpaperDTO>> GetStudentByFilter(string filterText)
         {
             var shortpaper = _shortpaperService.GetShortpaperByFilter(filterText);

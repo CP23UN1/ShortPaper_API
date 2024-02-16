@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
@@ -7,6 +9,7 @@ using ShortPaper_API.Services.Students;
 
 namespace ShortPaper_API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api")]
     [ApiController]
     public class StudentController : ControllerBase
@@ -30,7 +33,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("students/{filterText}")]
+        [Route("students-by-filter/{filterText}")]
         public ServiceResponse<List<StudentDTO>> GetStudentByFilter(string filterText)
         {
             var students = _studentService.GetStudentByFilter(filterText);
@@ -38,7 +41,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("student/{id}")]
+        [Route("student-by-id/{id}")]
         public ServiceResponse<StudentDTO> GetStudentById(string id)
         {
             var student = _studentService.GetStudent(id);

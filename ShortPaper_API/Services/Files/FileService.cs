@@ -158,7 +158,7 @@ namespace ShortPaper_API.Services.Files
             }
         }
 
-        public ServiceResponse<List<ShortpaperFileDTO>> GetFileVByStudent(string id)
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByStudent(string id)
         {
             try
             {
@@ -205,6 +205,86 @@ namespace ShortPaper_API.Services.Files
                             into ft2
                             from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
                             where shortpaperFileAndStudent.StudentId.Contains(id)
+                            select new ShortpaperFileDTO
+                            {
+                                ShortpaperFileId = a.ShortpaperFileId,
+                                FileName = a.FileName,
+                                UpdatedDatetime = a.UpdatedDatetime,
+                                ShortpaperFileType = new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = fileType.TypeId,
+                                    TypeName = fileType.TypeName,
+                                }
+
+                            }).ToList();
+
+                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                    {
+                        Data = file,
+                        httpStatusCode = StatusCodes.Status200OK,
+                    };
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ShortpaperFileDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByIdAndStudent(int fileId, string studentId)
+        {
+            try
+            {
+                var file = new List<ShortpaperFileDTO>();
+
+                if (fileId == null || studentId == "" || studentId == null)
+                {
+                    file = (from a in _db.ShortpaperFiles
+
+                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                            into ft
+                            from fileType in ft.DefaultIfEmpty()
+                            select new ShortpaperFileDTO
+                            {
+                                ShortpaperFileId = a.ShortpaperFileId,
+                                FileName = a.FileName,
+                                UpdatedDatetime = a.UpdatedDatetime,
+                                ShortpaperFileType = new ShortpaperFileTypeDTO
+                                {
+                                    TypeId = fileType.TypeId,
+                                    TypeName = fileType.TypeName,
+                                    Status = fileType.Status
+                                },
+                                Status = fileType.Status
+
+                            }).ToList();
+
+                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                    {
+                        Data = file,
+                        httpStatusCode = StatusCodes.Status200OK,
+                    };
+
+                    return result;
+                }
+                else
+                {
+                    file = (from a in _db.ShortpaperFiles
+                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                            into ft
+                            from fileType in ft.DefaultIfEmpty()
+                            join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
+                            into ft2
+                            from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
+                            where (shortpaperFileAndStudent.StudentId.Contains(studentId) && a.ShortpaperFileId.Equals(fileId))
                             select new ShortpaperFileDTO
                             {
                                 ShortpaperFileId = a.ShortpaperFileId,

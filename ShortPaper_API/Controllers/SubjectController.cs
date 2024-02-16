@@ -31,7 +31,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("subjectsbyfilter")]
+        [Route("subjects-by-filter/{searchText}")]
         public ServiceResponse<List<SubjectDTO>> GetSubjectByFilter(string searchText)
         {
             var subjects = _subjectService.GetSubjectByFilter(searchText);
