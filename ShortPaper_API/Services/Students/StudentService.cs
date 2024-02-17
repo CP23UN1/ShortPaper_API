@@ -54,7 +54,7 @@ namespace ShortPaper_API.Services.Students
                                                 {
                                                     SubjectId = sps.SubjectId,
                                                     SubjectName = sps.SubjectName,
-                                                }).ToList(),
+                                                }).FirstOrDefault(),
                                     Committee = c != null ? new CommitteeDTO
                                     {
                                         CommitteeId = c.CommitteeId,
@@ -158,7 +158,7 @@ namespace ShortPaper_API.Services.Students
                                                      {
                                                          SubjectId = sps.SubjectId,
                                                          SubjectName = sps.SubjectName,                                                      
-                                                     }).ToList(),
+                                                     }).FirstOrDefault(),
                                          Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
@@ -240,7 +240,7 @@ namespace ShortPaper_API.Services.Students
                                                      {
                                                          SubjectId = sps.SubjectId,
                                                          SubjectName = sps.SubjectName,
-                                                     }).ToList(),
+                                                     }).FirstOrDefault(),
                                          Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
@@ -340,7 +340,7 @@ namespace ShortPaper_API.Services.Students
                                                {
                                                    SubjectId = sps.SubjectId,
                                                    SubjectName = sps.SubjectName,
-                                               }).ToList(),
+                                               }).FirstOrDefault(),
                                    Committee = c != null ? new CommitteeDTO
                                    {
                                        CommitteeId = c.CommitteeId,
