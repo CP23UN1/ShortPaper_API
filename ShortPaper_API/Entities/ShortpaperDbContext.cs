@@ -246,6 +246,10 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Remark)
                 .HasMaxLength(100)
                 .HasColumnName("remark");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("'not_send'")
+                .HasColumnType("enum('approved','not_approve','not_send')")
+                .HasColumnName("status");
             entity.Property(e => e.UpdatedDatetime)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
@@ -267,10 +271,6 @@ public partial class ShortpaperDbContext : DbContext
             entity.ToTable("shortpaper_file_types");
 
             entity.Property(e => e.TypeId).HasColumnName("type_id");
-            entity.Property(e => e.Status)
-                .HasDefaultValueSql("'not_approve'")
-                .HasColumnType("enum('approved','not_approve')")
-                .HasColumnName("status");
             entity.Property(e => e.TypeName)
                 .HasMaxLength(100)
                 .HasColumnName("type_name");

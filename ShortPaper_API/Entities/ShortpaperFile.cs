@@ -19,6 +19,8 @@ public partial class ShortpaperFile
 
     public string? Remark { get; set; }
 
+    public string Status { get; set; } = null!;
+
     public DateTime CreatedDatetime { get; set; }
 
     public DateTime UpdatedDatetime { get; set; }
