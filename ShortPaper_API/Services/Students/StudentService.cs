@@ -431,7 +431,7 @@ namespace ShortPaper_API.Services.Students
                 }
 
                 // Encode the password
-                var encodedPassword = EncodePassword(newStudent.StudentId, newStudent.Password);
+                var encodedPassword = EncodePassword(newStudent.Email, newStudent.Password);
 
                 var userEntity = new Student
                 {
@@ -461,10 +461,10 @@ namespace ShortPaper_API.Services.Students
             return response;
         }
 
-        public static string EncodePassword(string userId, string password)
+        public static string EncodePassword(string email, string password)
         {
-            // Combine user ID and password
-            string combinedString = $"{userId}:{password}";
+            // Combine email and password
+            string combinedString = $"{email}:{password}";
 
             // Encode the combined string using Base64
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedString));

@@ -22,7 +22,7 @@ namespace ShortPaper_API.Controllers
         [AllowAnonymous] // Allow anonymous access to login endpoint
         public async Task<IActionResult> Login(LoginDTO model)
         {
-            var token = await _authService.AuthenticateAsync(model.UserId, model.Password);
+            var token = await _authService.AuthenticateAsync(model.Email, model.Password);
             if (token == null)
             {
                 return Unauthorized(new { message = "Invalid user ID or password" });

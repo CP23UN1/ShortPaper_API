@@ -9,7 +9,7 @@ using ShortPaper_API.Services.Students;
 
 namespace ShortPaper_API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api")]
     [ApiController]
     public class StudentController : ControllerBase

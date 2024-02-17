@@ -19,27 +19,45 @@ namespace ShortPaper_API.Services.Authentications
             _configuration = configuration;
         }
 
-        public async Task<string?> AuthenticateAsync(string userId, string password)
+        public async Task<string?> AuthenticateAsync(string email, string password)
         {
-            // Retrieve user from the database based on userId
-            var user = await _dbContext.Students.SingleOrDefaultAsync(u => u.StudentId == userId);
+            // Attempt to retrieve a user from the database based on email
+            var student = await _dbContext.Students.SingleOrDefaultAsync(u => u.Email == email);
+            var admin = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Email == email);
+            var committee = await _dbContext.Committees.SingleOrDefaultAsync(c => c.Email == email);
 
-            if (user == null || !VerifyPassword(user.Password, userId, password))
+            // Check if a student, admin, or committee with the given email exists
+            if (student != null && VerifyPassword(student.Password, email, password))
             {
-                return null; // Invalid user ID or password
+                // Generate JWT token for student
+                var token = GenerateJwtToken(student);
+                return token;
             }
-
-            // Generate JWT token
-            var token = GenerateJwtToken(user);
-            return token;
+            else if (admin != null && VerifyPassword(admin.Password, email, password))
+            {
+                // Generate JWT token for admin
+                var token = GenerateJwtToken(admin);
+                return token;
+            }
+            else if (committee != null && VerifyPassword(committee.Password, email, password))
+            {
+                // Generate JWT token for committee
+                var token = GenerateJwtToken(committee);
+                return token;
+            }
+            else
+            {
+                // No matching user found, or password doesn't match
+                return null; // Invalid email or password
+            }
         }
 
-        public static bool VerifyPassword(string encodedPassword, string userId, string password)
+        public static bool VerifyPassword(string encodedPassword, string email, string password)
         {
             try
             {
                 // Decode the encoded password
-                var decodedPassword = DecodePassword(encodedPassword);
+                var decodedPassword = DecodePassword(encodedPassword, email);
 
                 // Compare the decoded password with the provided password
                 return decodedPassword == password;
@@ -51,15 +69,15 @@ namespace ShortPaper_API.Services.Authentications
             }
         }
 
-        public static string DecodePassword(string encodedPassword)
+        public static string DecodePassword(string encodedPassword, string email)
         {
             // Decode the encoded password from Base64
             string decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(encodedPassword));
 
-            // Split the decoded string into user ID and password
+            // Split the decoded string into email and password
             string[] parts = decodedString.Split(':');
 
-            if (parts.Length == 2)
+            if (parts.Length == 2 && parts[0] == email)
             {
                 return parts[1]; // Return the password part
             }
@@ -69,7 +87,7 @@ namespace ShortPaper_API.Services.Authentications
             }
         }
 
-        private string GenerateJwtToken(Student user)
+        private string GenerateJwtToken(Student student)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
@@ -77,8 +95,44 @@ namespace ShortPaper_API.Services.Authentications
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.NameIdentifier, user.StudentId)
+                    new Claim(ClaimTypes.NameIdentifier, student.StudentId)
                     // You can add more claims here as needed
+                }),
+                Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        private string GenerateJwtToken(Admin user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.AdminId.ToString()),
+                    // Add more claims as needed
+                }),
+                Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        private string GenerateJwtToken(Committee user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.CommitteeId.ToString()),
+                    // Add more claims as needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
