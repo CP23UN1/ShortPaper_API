@@ -23,7 +23,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("comments")]
+        [Route("comments/{fileId}")]
         public ServiceResponse<List<CommentDTO>> GetComments(int fileId)
         {
             var comments = _commentService.GetCommentsForFile(fileId);
