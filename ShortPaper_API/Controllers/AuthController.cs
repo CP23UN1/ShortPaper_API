@@ -25,7 +25,7 @@ namespace ShortPaper_API.Controllers
             var token = await _authService.AuthenticateAsync(model.Email, model.Password);
             if (token == null)
             {
-                return Unauthorized(new { message = "Invalid user ID or password" });
+                return Unauthorized(new { message = "Invalid User's Email or Password" });
             }
 
             return Ok(new { token });
