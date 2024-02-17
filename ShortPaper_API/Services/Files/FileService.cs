@@ -30,8 +30,14 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
+            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsDirectory))
+            {
+                Directory.CreateDirectory(uploadsDirectory);
+            }
+
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-            var filePath = Path.Combine("wwwroot", "uploads", uniqueFileName);
+            var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -55,7 +61,8 @@ namespace ShortPaper_API.Services.Files
                 Remark = remark,
                 CreatedDatetime = DateTime.Now,
                 UpdatedDatetime = DateTime.Now,
-                ShortpaperId = shortpaperId
+                ShortpaperId = shortpaperId,
+                Status = "not_approve"
             };
 
             _db.ShortpaperFiles.Add(newFile);
@@ -89,7 +96,6 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = a.TypeId,
                                     TypeName = a.TypeName,
-                                    Status = a.Status,
                                 }).ToList();
 
                 var result = new ServiceResponse<List<ShortpaperFileTypeDTO>>
@@ -132,9 +138,8 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                    Status = fileType.Status
                                 },
-                                Status = fileType.Status
+                                Status = a.Status
 
                             }).ToList();
 
@@ -180,9 +185,8 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                    Status = fileType.Status
                                 },
-                                Status = fileType.Status
+                                Status = a.Status
 
                             }).ToList();
 
@@ -261,9 +265,8 @@ namespace ShortPaper_API.Services.Files
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
-                                    Status = fileType.Status
                                 },
-                                Status = fileType.Status
+                                Status = a.Status
 
                             }).ToList();
 

@@ -73,7 +73,7 @@ namespace ShortPaper_API.Services.Students
                                                        {
                                                            ShortpaperFileId = spf.ShortpaperFileId,
                                                            FileName = spf.FileName,
-                                                           Status = spfd.Status,
+                                                           Status = spf.Status,
                                                            ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                        }).ToList()
                                 })
@@ -177,7 +177,7 @@ namespace ShortPaper_API.Services.Students
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
-                                                                Status = spfd.Status,
+                                                                Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
@@ -259,7 +259,7 @@ namespace ShortPaper_API.Services.Students
                                                             {
                                                                 ShortpaperFileId = spf.ShortpaperFileId,
                                                                 FileName = spf.FileName,
-                                                                Status = spfd.Status,
+                                                                Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList()
                                      })
@@ -359,7 +359,7 @@ namespace ShortPaper_API.Services.Students
                                                       {
                                                           ShortpaperFileId = spf.ShortpaperFileId,
                                                           FileName = spf.FileName,
-                                                          Status = spfd.Status,
+                                                          Status = spf.Status,
                                                           ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                       }).ToList()
                                })
