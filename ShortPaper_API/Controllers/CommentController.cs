@@ -31,7 +31,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("add-comment")]
+        [Route("comment/create")]
         public IActionResult AddCommentToFile(AddCommentDTO commentDTO)
         {
             try

@@ -39,7 +39,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("upload")]
+        [Route("file/upload")]
         public IActionResult UploadFile([FromForm] FileUploadDTO model)
         {
             // Check if the model is valid
@@ -73,7 +73,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("download/{fileId}")]
+        [Route("file/download/{fileId}")]
         public IActionResult DownloadFile(int fileId)
         {
             // Call the DownloadFile method from the FileService
@@ -109,7 +109,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("file-by-student/{studentId}")]
+        [Route("file/search-by-student/{studentId}")]
         public ServiceResponse<List<ShortpaperFileDTO>> GetFileByStudentId(string studentId)
         {
             var getFile = _fileService.GetFileByStudent(studentId);
@@ -117,7 +117,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("file-by-id-and-student/{fileId}/{studentId}")]
+        [Route("file/search-by-id-and-student/{fileId}/{studentId}")]
         public ServiceResponse<List<ShortpaperFileDTO>> GetFileByIdAndStudentId(int fileId, string studentId)
         {
             var getFile = _fileService.GetFileByIdAndStudent(fileId, studentId);

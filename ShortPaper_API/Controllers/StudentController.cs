@@ -33,7 +33,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("students-by-filter/{filterText}")]
+        [Route("student/search-by-filter/{filterText}")]
         public ServiceResponse<List<StudentDTO>> GetStudentByFilter(string filterText)
         {
             var students = _studentService.GetStudentByFilter(filterText);
@@ -41,7 +41,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("student-by-id/{id}")]
+        [Route("student/search-by-id/{id}")]
         public ServiceResponse<StudentDTO> GetStudentById(string id)
         {
             var student = _studentService.GetStudent(id);

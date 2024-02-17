@@ -29,7 +29,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("add-from-csv")]
+        [Route("committee/add-from-csv")]
         public async Task<IActionResult> AddCommitteesFromCsv(IFormFile csvFile)
         {
             var result = await _committeeService.AddCommitteesFromCsvAsync(csvFile);
@@ -43,7 +43,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("assign-from-csv-for-student")]
+        [Route("committee/assign-from-csv-for-student")]
         public async Task<IActionResult> AddCommitteesForStudentFromCsv(IFormFile csvFile)
         {
             var result = await _committeeService.AddCommitteesForStudentsFromCsvAsync(csvFile);
