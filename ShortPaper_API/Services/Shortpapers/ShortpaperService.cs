@@ -161,6 +161,7 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
+                                   where (shortpaper.ShortpaperTopic.Contains(searchText) || shortpaper.SubjectId.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
                                    select new
                                    {
                                        Shortpaper = new ShortpaperDTO
