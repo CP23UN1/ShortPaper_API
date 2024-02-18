@@ -13,5 +13,7 @@ namespace ShortPaper_API.Services.Students
         ServiceResponse<UpdateStudentDTO> UpdateStudent(UpdateStudentDTO studentDTO);
         Student DeleteStudent(string id);
 
+        ServiceResponse<List<string>> GetUniqueYears();
+
     }
 }

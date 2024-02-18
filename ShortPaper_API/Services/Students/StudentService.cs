@@ -570,5 +570,31 @@ namespace ShortPaper_API.Services.Students
 
             return deleteUser;
         }
+
+        public ServiceResponse<List<string>> GetUniqueYears()
+        {
+            try
+            {
+                var years = _db.Students.Select(student => student.Year).Distinct().ToList();
+
+                var result = new ServiceResponse<List<string>>()
+                {
+                    httpStatusCode = StatusCodes.Status200OK,
+                    Data = years
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<string>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
     }
 }

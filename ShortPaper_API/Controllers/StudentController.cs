@@ -71,5 +71,13 @@ namespace ShortPaper_API.Controllers
             var deleteUser = _studentService.DeleteStudent(id);
             return deleteUser;
         }
+
+        [HttpDelete]
+        [Route("years/list")]
+        public ServiceResponse<List<string>> GetUniqueYears()
+        {
+            var response = _studentService.GetUniqueYears();
+            return response;
+        }
     }
 }
