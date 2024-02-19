@@ -37,5 +37,13 @@ namespace ShortPaper_API.Controllers
             var shortpaper = _shortpaperService.GetShortpaperByFilter(filterText);
             return shortpaper;
         }
+
+        [HttpGet]
+        [Route("shortpaper/search-by-student/{studentId}")]
+        public ServiceResponse<ShortpaperDTO> GetStudentByStudent(string studentId)
+        {
+            var shortpaper = _shortpaperService.GetShortpaperByStudent(studentId);
+            return shortpaper;
+        }
     }
 }
