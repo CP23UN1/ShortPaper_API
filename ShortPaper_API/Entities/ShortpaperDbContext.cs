@@ -163,10 +163,6 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Firstname)
                 .HasMaxLength(50)
                 .HasColumnName("firstname");
-            entity.Property(e => e.IsAdvisor)
-                .HasDefaultValueSql("b'0'")
-                .HasColumnType("bit(1)")
-                .HasColumnName("is_advisor");
             entity.Property(e => e.Lastname)
                 .HasMaxLength(50)
                 .HasColumnName("lastname");
@@ -288,6 +284,18 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.Property(e => e.ShortpaperId).HasColumnName("shortpaper_id");
             entity.Property(e => e.CommitteeId).HasColumnName("committee_id");
+            entity.Property(e => e.IsAdvisor)
+                .HasDefaultValueSql("b'0'")
+                .HasColumnType("bit(1)")
+                .HasColumnName("is_advisor");
+            entity.Property(e => e.IsCommittee)
+                .HasDefaultValueSql("b'0'")
+                .HasColumnType("bit(1)")
+                .HasColumnName("is_committee");
+            entity.Property(e => e.IsPrincipal)
+                .HasDefaultValueSql("b'0'")
+                .HasColumnType("bit(1)")
+                .HasColumnName("is_principal");
 
             entity.HasOne(d => d.Committee).WithMany(p => p.ShortpapersHasCommittees)
                 .HasForeignKey(d => d.CommitteeId)

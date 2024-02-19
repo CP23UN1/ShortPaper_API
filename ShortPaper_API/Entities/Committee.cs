@@ -19,7 +19,5 @@ public partial class Committee
 
     public string? Phonenumber { get; set; }
 
-    public ulong IsAdvisor { get; set; }
-
     public virtual ICollection<ShortpapersHasCommittee> ShortpapersHasCommittees { get; set; } = new List<ShortpapersHasCommittee>();
 }
