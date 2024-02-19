@@ -3,6 +3,6 @@
     public class AddCommitteeForStudentDTO
     {
         public string StudentId { get; set; }
-        public int CommitteeId { get; set; }
+        public string CommitteeName { get; set; }
     }
 }

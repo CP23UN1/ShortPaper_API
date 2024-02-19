@@ -13,10 +13,12 @@ namespace ShortPaper_API.Services.Committees
     public class CommitteeService : ICommitteeService
     {
         private readonly ShortpaperDbContext _db;
+        private readonly ILogger<CommitteeService> _logger;
 
-        public CommitteeService(ShortpaperDbContext db)
+        public CommitteeService(ShortpaperDbContext db, ILogger<CommitteeService> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         public async Task<ServiceResponse<List<CommitteeDTO>>> GetCommitteesAsync()
@@ -57,10 +59,17 @@ namespace ShortPaper_API.Services.Committees
                 using (var reader = new StreamReader(csvFile.OpenReadStream()))
                 {
                     var committeesToAdd = new List<Committee>();
+                    bool isFirstRow = true;
 
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
+                        if (isFirstRow)
+                        {
+                            isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+
                         var values = line.Split(',');
 
                         if (values.Length >= 3) // Assuming CSV format: Firstname,Lastname,Email
@@ -110,49 +119,62 @@ namespace ShortPaper_API.Services.Committees
 
             try
             {
-                // AddCommitteesForStudentsFromCsvAsync method
-
                 using (var reader = new StreamReader(csvFile.OpenReadStream()))
                 {
-                    var studentCommitteeMappings = new List<(string StudentId, int CommitteeId)>();
+                    var studentCommitteeMappings = new List<(string StudentId, string CommitteeName)>(); // Change CommitteeId to CommitteeName
+                    bool isFirstRow = true;
 
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
-                        var values = line.Split(','); // Consider supporting different delimiters
 
-                        if (values.Length >= 2) // Assuming CSV format: StudentId,CommitteeId
+                        if (isFirstRow)
+                        {
+                            isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+
+                        var values = line.Split(',');
+
+                        if (values.Length >= 2)
                         {
                             var studentId = values[0].Trim();
-                            var committeeIdStr = values[1].Trim();
+                            var committeeName = values[1].Trim(); // Get Committee name instead of ID
 
-                            if (int.TryParse(committeeIdStr, out int committeeId))
-                            {
-                                studentCommitteeMappings.Add((studentId, committeeId));
-                            }
+                            studentCommitteeMappings.Add((studentId, committeeName));
                         }
                     }
 
                     foreach (var mapping in studentCommitteeMappings)
                     {
-                        var student = await _db.Students.FirstOrDefaultAsync(s => s.StudentId == mapping.StudentId);
-                        var committee = await _db.Committees.FirstOrDefaultAsync(c => c.CommitteeId == mapping.CommitteeId);
-
-                        if (student == null || committee == null)
-                        {
-                            // Log or handle the case where the student or committee ID is not found
-                            continue;
-                        }
-
                         try
                         {
-                            var shortpaperId = student.Shortpapers.FirstOrDefault()?.ShortpaperId;
+                            // Retrieve student asynchronously
+                            var student = await _db.Students.FirstOrDefaultAsync(s => s.StudentId == mapping.StudentId);
+                            if (student == null)
+                            {
+                                // Log student not found
+                                _logger.LogWarning($"Student with ID {mapping.StudentId} not found.");
+                                continue;
+                            }
+
+                            // Retrieve committee asynchronously
+                            var committee = await _db.Committees.FirstOrDefaultAsync(c => (c.Firstname + " " + c.Lastname) == mapping.CommitteeName);
+                            if (committee == null)
+                            {
+                                // Log committee not found
+                                _logger.LogWarning($"Committee with name {mapping.CommitteeName} not found.");
+                                continue;
+                            }
+
+                            // Check if student has shortpaper
+                            var shortpaperId = _db.Shortpapers.FirstOrDefault(c => c.StudentId == mapping.StudentId);
                             if (shortpaperId != null)
                             {
                                 var shortpaperHasCommittee = new ShortpapersHasCommittee
                                 {
-                                    ShortpaperId = shortpaperId.Value,
-                                    CommitteeId = committee.CommitteeId
+                                    ShortpaperId = shortpaperId.ShortpaperId,
+                                    CommitteeId = committee.CommitteeId // Use CommitteeId here
                                 };
 
                                 _db.ShortpapersHasCommittees.Add(shortpaperHasCommittee);
@@ -160,11 +182,13 @@ namespace ShortPaper_API.Services.Committees
                             else
                             {
                                 // Log or handle the case where the student has no shortpaper
+                                _logger.LogWarning($"Student with ID {mapping.StudentId} has no shortpaper.");
                             }
                         }
                         catch (Exception ex)
                         {
-                            // Log the exception or handle it as needed
+                            // Log the exception
+                            _logger.LogError($"An error occurred while processing student with ID {mapping.StudentId} and committee with name {mapping.CommitteeName}: {ex.Message}");
                         }
                     }
 
@@ -174,7 +198,7 @@ namespace ShortPaper_API.Services.Committees
                     response.Data = studentCommitteeMappings.Select(mapping => new AddCommitteeForStudentDTO
                     {
                         StudentId = mapping.StudentId,
-                        CommitteeId = mapping.CommitteeId
+                        CommitteeName = mapping.CommitteeName // Change CommitteeId to CommitteeName
                     }).ToList();
                 }
             }
@@ -182,11 +206,13 @@ namespace ShortPaper_API.Services.Committees
             {
                 response.IsSuccess = false;
                 response.ErrorMessage = "An unexpected error occurred while adding committees for students from CSV.";
-                // Log the exception or handle it as needed
+                // Log the exception
+                _logger.LogError($"An unexpected error occurred while processing CSV file: {ex.Message}");
             }
 
             return response;
-
         }
+
+
     }
 }
