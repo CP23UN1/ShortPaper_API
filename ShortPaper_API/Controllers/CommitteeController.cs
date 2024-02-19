@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Services.Committees;
 
 namespace ShortPaper_API.Controllers
@@ -47,6 +48,20 @@ namespace ShortPaper_API.Controllers
         public async Task<IActionResult> AddCommitteesForStudentFromCsv(IFormFile csvFile)
         {
             var result = await _committeeService.AddCommitteesForStudentsFromCsvAsync(csvFile);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("committee/update-roles-for-student")]
+        public async Task<IActionResult> UpdateCommitteeRolesForStudent(string studentId, List<CommitteeRoleDTO> committeeRoles)
+        {
+            var result = await _committeeService.UpdateCommitteeRolesForStudentAsync(studentId, committeeRoles);
 
             if (result.IsSuccess)
             {

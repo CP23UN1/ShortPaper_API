@@ -131,7 +131,7 @@ namespace ShortPaper_API.Services.Committees
             {
                 using (var reader = new StreamReader(csvFile.OpenReadStream()))
                 {
-                    var studentCommitteeMappings = new List<(string StudentId, string CommitteeName)>(); // Change CommitteeId to CommitteeName
+                    var studentCommitteeMappings = new List<(string StudentId, string CommitteeName, bool IsAdvisor, bool IsPrincipal, bool IsCommittee)>();
                     bool isFirstRow = true;
 
                     while (!reader.EndOfStream)
@@ -146,12 +146,15 @@ namespace ShortPaper_API.Services.Committees
 
                         var values = line.Split(',');
 
-                        if (values.Length >= 2)
+                        if (values.Length >= 5) // Assuming IsAdvisor, IsPrincipal, IsCommittee are boolean values in the CSV
                         {
                             var studentId = values[0].Trim();
-                            var committeeName = values[1].Trim(); // Get Committee name instead of ID
+                            var committeeName = values[1].Trim();
+                            var isAdvisor = bool.Parse(values[2].Trim());
+                            var isPrincipal = bool.Parse(values[3].Trim());
+                            var isCommittee = bool.Parse(values[4].Trim());
 
-                            studentCommitteeMappings.Add((studentId, committeeName));
+                            studentCommitteeMappings.Add((studentId, committeeName, isAdvisor, isPrincipal, isCommittee));
                         }
                     }
 
@@ -184,7 +187,10 @@ namespace ShortPaper_API.Services.Committees
                                 var shortpaperHasCommittee = new ShortpapersHasCommittee
                                 {
                                     ShortpaperId = shortpaperId.ShortpaperId,
-                                    CommitteeId = committee.CommitteeId // Use CommitteeId here
+                                    CommitteeId = committee.CommitteeId,
+                                    IsAdvisor = mapping.IsAdvisor ? 1u : 0u,
+                                    IsPrincipal = mapping.IsPrincipal ? 1u : 0u,
+                                    IsCommittee = mapping.IsCommittee ? 1u : 0u
                                 };
 
                                 _db.ShortpapersHasCommittees.Add(shortpaperHasCommittee);
@@ -208,7 +214,10 @@ namespace ShortPaper_API.Services.Committees
                     response.Data = studentCommitteeMappings.Select(mapping => new AddCommitteeForStudentDTO
                     {
                         StudentId = mapping.StudentId,
-                        CommitteeName = mapping.CommitteeName // Change CommitteeId to CommitteeName
+                        CommitteeName = mapping.CommitteeName,
+                        IsAdvisor = mapping.IsAdvisor ? 1u : 0u,
+                        IsPrincipal = mapping.IsPrincipal ? 1u : 0u,
+                        IsCommittee = mapping.IsCommittee ? 1u : 0u
                     }).ToList();
                 }
             }
@@ -223,6 +232,104 @@ namespace ShortPaper_API.Services.Committees
             return response;
         }
 
+        public async Task<ServiceResponse<List<CommitteeRoleDTO>>> UpdateCommitteeRolesForStudentAsync(string studentId, List<CommitteeRoleDTO> committeeRoles)
+        {
+            var response = new ServiceResponse<List<CommitteeRoleDTO>>();
 
+            try
+            {
+                var updatedCommitteeRoles = new List<CommitteeRoleDTO>();
+                // Retrieve the student
+                var student = await _db.Students.FirstOrDefaultAsync(s => s.StudentId == studentId);
+                if (student == null)
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = $"Student with ID {studentId} not found.";
+                    return response;
+                }
+
+                // Retrieve the shortpaper for the student
+                var shortpaper = await _db.Shortpapers.FirstOrDefaultAsync(sp => sp.StudentId == studentId);
+                if (shortpaper == null)
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = $"Shortpaper not found for student with ID {studentId}.";
+                    return response;
+                }
+
+                foreach (var role in committeeRoles)
+                {
+                    var committeeName = role.CommitteeName;
+                    var isAdvisor = role.IsAdvisor;
+                    var isPrincipal = role.IsPrincipal;
+                    var isCommittee = role.IsCommittee;
+                    updatedCommitteeRoles.Add(role);
+
+                    // Validate committee name
+                    if (string.IsNullOrEmpty(committeeName))
+                    {
+                        response.IsSuccess = false;
+                        response.ErrorMessage = "Committee name is empty or null.";
+                        return response;
+                    }
+
+                    // Retrieve the committee
+                    var committee = await _db.Committees.FirstOrDefaultAsync(c => (c.Firstname + " " + c.Lastname) == committeeName);
+                    if (committee == null)
+                    {
+                        response.IsSuccess = false;
+                        response.ErrorMessage = $"Committee with name '{committeeName}' not found.";
+                        return response;
+                    }
+
+                    // Check if the student already has a role in the specified committee
+                    var existingRole = await _db.ShortpapersHasCommittees.FirstOrDefaultAsync(s => s.ShortpaperId == shortpaper.ShortpaperId && s.CommitteeId == committee.CommitteeId);
+                    if (existingRole != null)
+                    {
+                        // Check if the new roles conflict with existing roles
+                        if ((isAdvisor && existingRole.IsAdvisor == 1) ||
+                            (isPrincipal && existingRole.IsPrincipal == 1) ||
+                            (isCommittee && existingRole.IsCommittee == 1))
+                        {
+                            response.IsSuccess = false;
+                            response.ErrorMessage = "The specified role conflicts with the existing role for this committee.";
+                            return response;
+                        }
+
+                        // Update the roles
+                        existingRole.IsAdvisor = isAdvisor ? 1u : 0u;
+                        existingRole.IsPrincipal = isPrincipal ? 1u : 0u;
+                        existingRole.IsCommittee = isCommittee ? 1u : 0u;
+                    }
+                    else
+                    {
+                        // Create a new role entry
+                        var newRole = new ShortpapersHasCommittee
+                        {
+                            ShortpaperId = shortpaper.ShortpaperId,
+                            CommitteeId = committee.CommitteeId,
+                            IsAdvisor = isAdvisor ? 1u : 0u,
+                            IsPrincipal = isPrincipal ? 1u : 0u,
+                            IsCommittee = isCommittee ? 1u : 0u
+                        };
+                        _db.ShortpapersHasCommittees.Add(newRole);
+                    }
+                }
+
+                await _db.SaveChangesAsync();
+
+                response.IsSuccess = true;
+                response.Data = updatedCommitteeRoles;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.ErrorMessage = $"An unexpected error occurred while updating committee roles for student {studentId}: {ex.Message}";
+                // Log the exception
+                _logger.LogError(response.ErrorMessage);
+            }
+
+            return response;
+        }
     }
 }

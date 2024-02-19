@@ -62,7 +62,10 @@ namespace ShortPaper_API.Services.Students
                                         Lastname = c.Lastname,
                                         Email = c.Email,
                                         AlternativeEmail = c.AlternativeEmail,
-                                        Phonenumber = c.Phonenumber
+                                        Phonenumber = c.Phonenumber,
+                                        IsAdvisor = shc.IsAdvisor,
+                                        IsPrincipal = shc.IsPrincipal,
+                                        IsCommittee = shc.IsCommittee,
                                     } : null,
                                     ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                        join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
@@ -178,7 +181,10 @@ namespace ShortPaper_API.Services.Students
                                              Lastname = c.Lastname,
                                              Email = c.Email,
                                              AlternativeEmail = c.AlternativeEmail,
-                                             Phonenumber = c.Phonenumber
+                                             Phonenumber = c.Phonenumber,
+                                             IsAdvisor = shc.IsAdvisor,
+                                             IsPrincipal = shc.IsPrincipal,
+                                             IsCommittee = shc.IsCommittee,
                                          } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
@@ -260,7 +266,10 @@ namespace ShortPaper_API.Services.Students
                                              Lastname = c.Lastname,
                                              Email = c.Email,
                                              AlternativeEmail = c.AlternativeEmail,
-                                             Phonenumber = c.Phonenumber
+                                             Phonenumber = c.Phonenumber,
+                                             IsAdvisor = shc.IsAdvisor,
+                                             IsPrincipal = shc.IsPrincipal,
+                                             IsCommittee = shc.IsCommittee,
                                          } : null,
                                          ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                             join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId
@@ -372,7 +381,10 @@ namespace ShortPaper_API.Services.Students
                                        Lastname = c.Lastname,
                                        Email = c.Email,
                                        AlternativeEmail = c.AlternativeEmail,
-                                       Phonenumber = c.Phonenumber
+                                       Phonenumber = c.Phonenumber,
+                                       IsAdvisor = shc.IsAdvisor,
+                                       IsPrincipal = shc.IsPrincipal,
+                                       IsCommittee = shc.IsCommittee,
                                    } : null,
                                    ShortpaperFiles = (from spf in _db.ShortpaperFiles
                                                       join type in _db.ShortpaperFileTypes on spf.ShortpaperFileTypeId equals type.TypeId

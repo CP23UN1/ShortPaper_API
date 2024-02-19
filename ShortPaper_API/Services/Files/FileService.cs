@@ -134,13 +134,12 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
+                                Status = a.Status,
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
                                 },
-                                Status = a.Status
-
                             }).ToList();
 
                 var result = new ServiceResponse<List<ShortpaperFileDTO>>
@@ -181,13 +180,12 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
+                                Status = a.Status,
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
                                 },
-                                Status = a.Status
-
                             }).ToList();
 
                     var result = new ServiceResponse<List<ShortpaperFileDTO>>
