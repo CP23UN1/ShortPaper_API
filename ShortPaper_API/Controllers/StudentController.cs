@@ -50,6 +50,7 @@ namespace ShortPaper_API.Controllers
 
         [HttpPost]
         [Route("student/create")]
+        [AllowAnonymous]
         public ServiceResponse<CreateStudentDTO> CreateStudent(CreateStudentDTO newStudent)
         {
             var status = _studentService.CreateStudent(newStudent);

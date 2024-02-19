@@ -23,13 +23,26 @@ namespace ShortPaper_API.Services.Subjects
                                          SubjectId = a.SubjectId,
                                          SubjectName = a.SubjectName,
                                      }).ToList();
-                var result = new ServiceResponse<List<SubjectDTO>>()
-                {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = subjects
-                };
 
-                return result;
+                if (subjects.Count == 0)
+                {
+                    var noresult = new ServiceResponse<List<SubjectDTO>>
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no subjects found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<SubjectDTO>>
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = subjects
+                    };
+
+                    return result;
+                }
 
             }
             catch (Exception ex)
@@ -71,14 +84,26 @@ namespace ShortPaper_API.Services.Subjects
                                 }).ToList();
                 }
 
-                   
-                var result = new ServiceResponse<List<SubjectDTO>>()
-                {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = subjects
-                };
 
-                return result;
+                if (subjects.Count == 0)
+                {
+                    var noresult = new ServiceResponse<List<SubjectDTO>>
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no subjects found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<SubjectDTO>>
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = subjects
+                    };
+
+                    return result;
+                }
 
             }
             catch (Exception ex)

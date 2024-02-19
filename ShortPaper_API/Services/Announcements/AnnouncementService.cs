@@ -31,6 +31,17 @@ namespace ShortPaper_API.Services.Announcements
                                          ImageUrl = a.ImageUrl
                                      }).ToList();
 
+                if (announcements.Count == 0)
+                {
+                    var noresult = new ServiceResponse<List<AnnouncementDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "No announcements found."
+                    };
+
+                    return noresult;
+                }
+
                 // Convert date and time to Thai format
                 var thaiCulture = new CultureInfo("th-TH");
 
@@ -54,8 +65,6 @@ namespace ShortPaper_API.Services.Announcements
 
                 return result;
             }
-
-
         }
 
         public ServiceResponse<AnnouncementDTO> CreateAnnouncement(AnnouncementDTO newAnnouncement)

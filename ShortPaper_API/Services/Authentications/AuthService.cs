@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ShortPaper_API.Entities;
+using ShortPaper_API.Helper;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -19,36 +20,67 @@ namespace ShortPaper_API.Services.Authentications
             _configuration = configuration;
         }
 
-        public async Task<string?> AuthenticateAsync(string email, string password)
+        public async Task<ServiceResponse<string>> AuthenticateAsync(string email, string password)
         {
-            // Attempt to retrieve a user from the database based on email
-            var student = await _dbContext.Students.SingleOrDefaultAsync(u => u.Email == email);
-            var admin = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Email == email);
-            var committee = await _dbContext.Committees.SingleOrDefaultAsync(c => c.Email == email);
+            try
+            {
+                // Attempt to retrieve a user from the database based on email
+                var student = await _dbContext.Students.SingleOrDefaultAsync(u => u.Email == email);
+                var admin = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Email == email);
+                var committee = await _dbContext.Committees.SingleOrDefaultAsync(c => c.Email == email);
 
-            // Check if a student, admin, or committee with the given email exists
-            if (student != null && VerifyPassword(student.Password, email, password))
-            {
-                // Generate JWT token for student
-                var token = GenerateJwtToken(student);
-                return token;
+                // Check if a student, admin, or committee with the given email exists
+                if (student != null && VerifyPassword(student.Password, email, password))
+                {
+                    // Generate JWT token for student
+                    var token = GenerateJwtToken(student);
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = true,
+                        Data = token,
+                        httpStatusCode = StatusCodes.Status200OK
+                    };
+                }
+                else if (admin != null && VerifyPassword(admin.Password, email, password))
+                {
+                    // Generate JWT token for admin
+                    var token = GenerateJwtToken(admin);
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = true,
+                        Data = token,
+                        httpStatusCode = StatusCodes.Status200OK
+                    };
+                }
+                else if (committee != null && VerifyPassword(committee.Password, email, password))
+                {
+                    var token = GenerateJwtToken(committee);
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = true,
+                        Data = token,
+                        httpStatusCode = StatusCodes.Status200OK
+                    };
+                }
+                else
+                {
+                    // No matching user found, or password doesn't match
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Invalid email or password.",
+                        httpStatusCode = StatusCodes.Status400BadRequest
+                    };
+                }
             }
-            else if (admin != null && VerifyPassword(admin.Password, email, password))
+            catch (Exception ex)
             {
-                // Generate JWT token for admin
-                var token = GenerateJwtToken(admin);
-                return token;
-            }
-            else if (committee != null && VerifyPassword(committee.Password, email, password))
-            {
-                // Generate JWT token for committee
-                var token = GenerateJwtToken(committee);
-                return token;
-            }
-            else
-            {
-                // No matching user found, or password doesn't match
-                return null; // Invalid email or password
+                return new ServiceResponse<string>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    httpStatusCode = StatusCodes.Status500InternalServerError
+                };
             }
         }
 

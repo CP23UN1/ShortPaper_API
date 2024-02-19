@@ -96,13 +96,25 @@ namespace ShortPaper_API.Services.Students
                 .ToList();
 
 
-                var result = new ServiceResponse<List<StudentDTO>>()
+                if (students.Count == 0)
                 {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = students
-                };
+                    var noresult = new ServiceResponse<List<StudentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no students found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<StudentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = students
+                    };
 
-                return result;
+                    return result;
+                }
             }
             catch (Exception ex)
             {
@@ -282,13 +294,25 @@ namespace ShortPaper_API.Services.Students
                 .ToList();
 
                 }
-                var result = new ServiceResponse<List<StudentDTO>>()
+                if (students.Count == 0)
                 {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = students
-                };
+                    var noresult = new ServiceResponse<List<StudentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no students found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<StudentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = students
+                    };
 
-                return result;
+                    return result;
+                }
             }
             catch (Exception ex)
             {

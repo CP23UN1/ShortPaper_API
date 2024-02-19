@@ -38,8 +38,18 @@ namespace ShortPaper_API.Services.Committees
                     })
                     .ToListAsync();
 
-                response.IsSuccess = true;
-                response.Data = committees;
+                if(committees.Count == 0)
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = "No committees found.";
+                    response.httpStatusCode = StatusCodes.Status404NotFound;
+
+                }
+                else 
+                {
+                    response.IsSuccess = true;
+                    response.Data = committees;
+                }
             }
             catch (Exception ex)
             {

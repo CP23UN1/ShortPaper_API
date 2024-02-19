@@ -30,15 +30,27 @@ namespace ShortPaper_API.Services.Comments
                })
                .ToList();
 
-                // Convert date and time to Thai format
-
-                var result = new ServiceResponse<List<CommentDTO>>()
+                if (comments.Count == 0)
                 {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = comments
-                };
+                    var result = new ServiceResponse<List<CommentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "No comments found."
+                    };
 
-                return result;
+                    return result;
+                }
+                else
+                {
+
+                    var result = new ServiceResponse<List<CommentDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = comments
+                    };
+
+                    return result;
+                }
 
             }
             catch (Exception ex)

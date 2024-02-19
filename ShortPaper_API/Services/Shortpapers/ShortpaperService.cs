@@ -71,13 +71,26 @@ namespace ShortPaper_API.Services.Shortpapers
                 })
                 .ToList();
 
-                var result = new ServiceResponse<List<ShortpaperDTO>>()
+                if(shortpapers.Count == 0)
                 {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = shortpapers
-                };
+                    var noresult = new ServiceResponse<List<ShortpaperDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no shortpaper found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<ShortpaperDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = shortpapers
+                    };
 
-                return result;
+                    return result;
+                }
+
             }
             catch (Exception ex)
             {
@@ -213,13 +226,26 @@ namespace ShortPaper_API.Services.Shortpapers
                 })
                 .ToList();
                 }
-                var result = new ServiceResponse<List<ShortpaperDTO>>()
-                {
-                    httpStatusCode = StatusCodes.Status200OK,
-                    Data = shortpapers
-                };
 
-                return result;
+                if (shortpapers.Count == 0)
+                {
+                    var noresult = new ServiceResponse<List<ShortpaperDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "no shortpaper found."
+                    };
+                    return noresult;
+                }
+                else
+                {
+                    var result = new ServiceResponse<List<ShortpaperDTO>>()
+                    {
+                        httpStatusCode = StatusCodes.Status200OK,
+                        Data = shortpapers
+                    };
+
+                    return result;
+                }
             }
             catch (Exception ex)
             {
