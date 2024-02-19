@@ -24,11 +24,31 @@ namespace ShortPaper_API.Services.Authentications
         {
             try
             {
+                // Check if email is empty or null
+                if (string.IsNullOrEmpty(email))
+                {
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "Email cannot be empty.",
+                        httpStatusCode = StatusCodes.Status400BadRequest
+                    };
+                }
                 // Attempt to retrieve a user from the database based on email
                 var student = await _dbContext.Students.SingleOrDefaultAsync(u => u.Email == email);
                 var admin = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Email == email);
                 var committee = await _dbContext.Committees.SingleOrDefaultAsync(c => c.Email == email);
 
+                // Check if a user with the given email exists
+                if (student == null && admin == null && committee == null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        IsSuccess = false,
+                        ErrorMessage = "No user found with this email.",
+                        httpStatusCode = StatusCodes.Status404NotFound
+                    };
+                }
                 // Check if a student, admin, or committee with the given email exists
                 if (student != null && VerifyPassword(student.Password, email, password))
                 {
@@ -64,12 +84,12 @@ namespace ShortPaper_API.Services.Authentications
                 }
                 else
                 {
-                    // No matching user found, or password doesn't match
+                    // Password doesn't match
                     return new ServiceResponse<string>
                     {
                         IsSuccess = false,
-                        ErrorMessage = "Invalid email or password.",
-                        httpStatusCode = StatusCodes.Status400BadRequest
+                        ErrorMessage = "Invalid password.",
+                        httpStatusCode = StatusCodes.Status401Unauthorized
                     };
                 }
             }
