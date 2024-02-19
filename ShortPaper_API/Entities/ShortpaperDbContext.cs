@@ -43,7 +43,7 @@ public partial class ShortpaperDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Arm@2020;database=shortpaper_db");
+        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Jajah36674!;database=shortpaper_db");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -243,7 +243,7 @@ public partial class ShortpaperDbContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("remark");
             entity.Property(e => e.Status)
-                .HasDefaultValueSql("'not_send'")
+                .HasDefaultValueSql("'not_approve'")
                 .HasColumnType("enum('approved','not_approve','not_send')")
                 .HasColumnName("status");
             entity.Property(e => e.UpdatedDatetime)
