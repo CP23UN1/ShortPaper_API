@@ -124,7 +124,6 @@ namespace ShortPaper_API.Services.Files
             try
             {
                 var file = (from a in _db.ShortpaperFiles
-
                             join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
                             into ft
                             from fileType in ft.DefaultIfEmpty()
@@ -134,7 +133,7 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
-                                Status = a.Status,
+                                Status = a.Status ?? "not_send",
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
@@ -180,7 +179,7 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
-                                Status = a.Status,
+                                Status = a.Status ?? "not_send",
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
@@ -212,6 +211,7 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
+                                Status = a.Status ?? "not_send",
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
@@ -259,12 +259,12 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
+                                Status = a.Status ?? "not_send",
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
                                     TypeName = fileType.TypeName,
                                 },
-                                Status = a.Status
 
                             }).ToList();
 
@@ -291,6 +291,7 @@ namespace ShortPaper_API.Services.Files
                                 ShortpaperFileId = a.ShortpaperFileId,
                                 FileName = a.FileName,
                                 UpdatedDatetime = a.UpdatedDatetime,
+                                Status = a.Status ?? "not_send",
                                 ShortpaperFileType = new ShortpaperFileTypeDTO
                                 {
                                     TypeId = fileType.TypeId,
