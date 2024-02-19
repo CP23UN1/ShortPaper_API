@@ -16,5 +16,9 @@
         public string? Phonenumber { get; set; }
 
         public ulong IsAdvisor { get; set; }
+
+        public ulong IsPrincipal { get; set; }
+
+        public ulong IsCommittee { get; set; }
     }
 }

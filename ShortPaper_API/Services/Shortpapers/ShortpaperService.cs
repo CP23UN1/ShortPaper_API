@@ -55,6 +55,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                            Email = sct.Email,
                                            AlternativeEmail = sct.AlternativeEmail,
                                            Phonenumber = sct.Phonenumber,
+                                           IsAdvisor = sphc.IsAdvisor,
+                                           IsCommittee = sphc.IsCommittee,
+                                           IsPrincipal = sphc.IsPrincipal,
                                        } : null,
                                    }).GroupBy(x => x.Shortpaper.ShortpaperId) // Group by ShortpaperId
                 .Select(group => new ShortpaperDTO
@@ -135,7 +138,10 @@ namespace ShortPaper_API.Services.Shortpapers
                                            Lastname = sct.Lastname,
                                            Email = sct.Email,
                                            AlternativeEmail = sct.AlternativeEmail,
-                                           Phonenumber = sct.Phonenumber
+                                           Phonenumber = sct.Phonenumber,
+                                           IsAdvisor = sphc.IsAdvisor,
+                                           IsCommittee = sphc.IsCommittee,
+                                           IsPrincipal = sphc.IsPrincipal,
                                        } : null,
                                    }).GroupBy(x => x.Shortpaper.ShortpaperId) // Group by ShortpaperId
                 .Select(group => new ShortpaperDTO
@@ -190,7 +196,10 @@ namespace ShortPaper_API.Services.Shortpapers
                                            Lastname = sct.Lastname,
                                            Email = sct.Email,
                                            AlternativeEmail = sct.AlternativeEmail,
-                                           Phonenumber = sct.Phonenumber
+                                           Phonenumber = sct.Phonenumber,
+                                           IsAdvisor = sphc.IsAdvisor,
+                                           IsCommittee = sphc.IsCommittee,
+                                           IsPrincipal = sphc.IsPrincipal,
                                        } : null,
                                    }).GroupBy(x => x.Shortpaper.ShortpaperId) // Group by ShortpaperId
                 .Select(group => new ShortpaperDTO
