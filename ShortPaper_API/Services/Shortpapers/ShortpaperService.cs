@@ -46,7 +46,7 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = sps.SubjectId,
                                                        SubjectName = sps.SubjectName,
-                                                   }).ToList(),
+                                                   }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -127,7 +127,7 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = sps.SubjectId,
                                                        SubjectName = sps.SubjectName,
-                                                   }).ToList(),
+                                                   }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -182,7 +182,7 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = sps.SubjectId,
                                                        SubjectName = sps.SubjectName,
-                                                   }).ToList(),
+                                                   }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
