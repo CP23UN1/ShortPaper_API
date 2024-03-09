@@ -21,5 +21,7 @@ public partial class Student
 
     public string Year { get; set; } = null!;
 
+    public string Status { get; set; } = null!;
+
     public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
 }
