@@ -10,6 +10,7 @@ namespace ShortPaper_API.Services.Students
         ServiceResponse<List<StudentDTO>> GetStudentByFilter(string searchText);
         ServiceResponse<StudentDTO> GetStudent(string id);
         ServiceResponse<CreateStudentDTO> CreateStudent(CreateStudentDTO studentDTO);
+        Task<ServiceResponse<List<CreateStudentDTO>>> AddStudentsFromCsvAsync(IFormFile csvFile);
         ServiceResponse<UpdateStudentDTO> UpdateStudent(UpdateStudentDTO studentDTO);
         Student DeleteStudent(string id);
 

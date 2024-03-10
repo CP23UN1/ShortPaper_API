@@ -1,5 +1,6 @@
 ﻿using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
@@ -505,6 +506,87 @@ namespace ShortPaper_API.Services.Students
             // Encode the combined string using Base64
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(combinedString));
         }
+
+        public async Task<ServiceResponse<List<CreateStudentDTO>>> AddStudentsFromCsvAsync(IFormFile csvFile)
+        {
+            var response = new ServiceResponse<List<CreateStudentDTO>>();
+
+            try
+            {
+                using (var reader = new StreamReader(csvFile.OpenReadStream()))
+                {
+                    var studentsToAdd = new List<Student>();
+                    bool isFirstRow = true;
+
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (isFirstRow)
+                        {
+                            isFirstRow = false;
+                            continue; // Skip the first row
+                        }
+
+                        var values = line.Split(',');
+
+                        if (values.Length >= 6) // Assuming CSV format: StudentId,Firstname,Lastname,Email,Password,Phonenumber,Year
+                        {
+                            var studentId = values[0].Trim();
+                            var existingStudent = await _db.Students.FirstOrDefaultAsync(s => s.StudentId == studentId);
+
+                            if (existingStudent != null)
+                            {
+                                // Update existing student's status to "old"
+                                existingStudent.Status = "old";
+                            }
+                            else
+                            {
+                                // Create a new student
+                                var student = new Student
+                                {
+                                    StudentId = values[0].Trim(),
+                                    Firstname = values[1].Trim(),
+                                    Lastname = values[2].Trim(),
+                                    Email = values[3].Trim(),
+                                    Password = values[4].Trim(),
+                                    Phonenumber = values[5].Trim(),
+                                    Year = values[6].Trim()
+                                };
+
+                                studentsToAdd.Add(student);
+                            }
+                        }
+                    }
+
+                    // Add new students to the database
+                    _db.Students.AddRange(studentsToAdd);
+                    await _db.SaveChangesAsync();
+
+                    // Convert added students to DTOs for response
+                    var addedStudents = studentsToAdd.Select(s => new CreateStudentDTO
+                    {
+                        StudentId = s.StudentId,
+                        Firstname = s.Firstname,
+                        Lastname = s.Lastname,
+                        Email = s.Email,
+                        Password = s.Password,
+                        Phonenumber = s.Phonenumber,
+                        Year = s.Year
+                    }).ToList();
+
+                    response.IsSuccess = true;
+                    response.Data = addedStudents;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "An unexpected error occurred while adding students from CSV.";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
+        }
+
 
         [ProducesResponseType(typeof(ServiceResponse<UpdateStudentDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ServiceResponse<UpdateStudentDTO>), StatusCodes.Status400BadRequest)]

@@ -124,5 +124,13 @@ namespace ShortPaper_API.Controllers
             return getFile;
         }
 
+        [HttpGet]
+        [Route("file/search-by-committee-id/{committeeId}")]
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByCommitteeId(int committeeId)
+        {
+            var getFile = _fileService.GetFileByCommittee(committeeId);
+            return getFile;
+        }
+
     }
 }

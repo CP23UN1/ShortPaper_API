@@ -57,6 +57,20 @@ namespace ShortPaper_API.Controllers
             return status;
         }
 
+        [HttpPost]
+        [Route("student/add-from-csv")]
+        public async Task<IActionResult> AddStudentFromCsv(IFormFile csvFile)
+        {
+            var result = await _studentService.AddStudentsFromCsvAsync(csvFile);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+
         [HttpPatch]
         [Route("student/update/{id}")]
         public ServiceResponse<UpdateStudentDTO> UpdateUserForStudent(UpdateStudentDTO student)
