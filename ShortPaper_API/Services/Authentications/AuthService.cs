@@ -147,8 +147,9 @@ namespace ShortPaper_API.Services.Authentications
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, student.StudentId)
-                    // You can add more claims here as needed
+            new Claim(ClaimTypes.NameIdentifier, student.StudentId),
+            new Claim(ClaimTypes.Role, "Student") // Add role claim for student
+                                                  // You can add more claims here as needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -165,8 +166,9 @@ namespace ShortPaper_API.Services.Authentications
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.AdminId.ToString()),
-                    // Add more claims as needed
+            new Claim(ClaimTypes.NameIdentifier, user.AdminId.ToString()),
+            new Claim(ClaimTypes.Role, "Admin") // Add role claim for admin
+                                                // Add more claims as needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -183,8 +185,9 @@ namespace ShortPaper_API.Services.Authentications
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.CommitteeId.ToString()),
-                    // Add more claims as needed
+            new Claim(ClaimTypes.NameIdentifier, user.CommitteeId.ToString()),
+            new Claim(ClaimTypes.Role, "Committee") // Add role claim for committee
+                                                    // Add more claims as needed
                 }),
                 Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
