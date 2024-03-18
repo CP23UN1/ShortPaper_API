@@ -369,7 +369,7 @@ namespace ShortPaper_API.Services.Files
                             join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
                             into ft2
                             from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
-                            where (shortpaperFileAndStudent.StudentId.Contains(student.StudentId) && a.ShortpaperFileId.Equals(student.StudentId))
+                            where (shortpaperFileAndStudent.StudentId.Contains(student.StudentId))
                             select new ShortpaperFileDTO
                             {
                                 ShortpaperFileId = a.ShortpaperFileId,
