@@ -17,6 +17,9 @@ using System.Configuration;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using ShortPaper_API.Helper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "AllowSpecificOrigin";
@@ -59,6 +62,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+
+// Auth Service
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddOpenIdConnect(options =>
+{
+    options.Authority = "https://login.sit.kmutt.ac.th"; // Keycloak server URL
+    options.ClientId = "auth-cp23un1"; // Your client ID
+    options.ClientSecret = "Inz9aNsu1zJNDkbt0T1uHM75hMaSnQgm"; // Your client secret
+    options.ResponseType = OpenIdConnectResponseType.Code;
+    options.SaveTokens = true;
+});
+
+builder.Services.AddHttpClient();
 
 // Add services to the container.
 

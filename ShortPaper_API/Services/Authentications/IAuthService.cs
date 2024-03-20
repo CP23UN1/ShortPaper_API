@@ -1,10 +1,11 @@
 ﻿using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
+using static ShortPaper_API.Services.Authentications.AuthService;
 
 namespace ShortPaper_API.Services.Authentications
 {
     public interface IAuthService
     {
-        Task<ServiceResponse<string>> AuthenticateAsync(string email, string password);
+        Task<AuthResponse> AuthenticateAsync(string username, string password);
     }
 }

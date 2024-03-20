@@ -4,196 +4,111 @@ using Microsoft.IdentityModel.Tokens;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+
 
 namespace ShortPaper_API.Services.Authentications
 {
     public class AuthService : IAuthService
     {
+        private readonly HttpClient _httpClient;
         private readonly ShortpaperDbContext _dbContext;
         private readonly IConfiguration _configuration;
 
-        public AuthService(ShortpaperDbContext dbContext, IConfiguration configuration)
+        public AuthService(ShortpaperDbContext dbContext, IConfiguration configuration, HttpClient httpClient)
         {
             _dbContext = dbContext;
             _configuration = configuration;
+            _httpClient = httpClient;
         }
-
-        public async Task<ServiceResponse<string>> AuthenticateAsync(string email, string password)
+        public async Task<AuthResponse> AuthenticateAsync(string username, string password)
         {
-            try
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                // Check if email is empty or null
-                if (string.IsNullOrEmpty(email))
-                {
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Email cannot be empty.",
-                        httpStatusCode = StatusCodes.Status400BadRequest
-                    };
-                }
-                // Attempt to retrieve a user from the database based on email
-                var student = await _dbContext.Students.SingleOrDefaultAsync(u => u.Email == email);
-                var admin = await _dbContext.Admins.SingleOrDefaultAsync(a => a.Email == email);
-                var committee = await _dbContext.Committees.SingleOrDefaultAsync(c => c.Email == email);
-
-                // Check if a user with the given email exists
-                if (student == null && admin == null && committee == null)
-                {
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "No user found with this email.",
-                        httpStatusCode = StatusCodes.Status404NotFound
-                    };
-                }
-                // Check if a student, admin, or committee with the given email exists
-                if (student != null && VerifyPassword(student.Password, email, password))
-                {
-                    // Generate JWT token for student
-                    var token = GenerateJwtToken(student);
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = true,
-                        Data = token,
-                        httpStatusCode = StatusCodes.Status200OK
-                    };
-                }
-                else if (admin != null && VerifyPassword(admin.Password, email, password))
-                {
-                    // Generate JWT token for admin
-                    var token = GenerateJwtToken(admin);
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = true,
-                        Data = token,
-                        httpStatusCode = StatusCodes.Status200OK
-                    };
-                }
-                else if (committee != null && VerifyPassword(committee.Password, email, password))
-                {
-                    var token = GenerateJwtToken(committee);
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = true,
-                        Data = token,
-                        httpStatusCode = StatusCodes.Status200OK
-                    };
-                }
-                else
-                {
-                    // Password doesn't match
-                    return new ServiceResponse<string>
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Invalid password.",
-                        httpStatusCode = StatusCodes.Status401Unauthorized
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<string>
+                return new AuthResponse
                 {
                     IsSuccess = false,
-                    ErrorMessage = ex.Message,
-                    httpStatusCode = StatusCodes.Status500InternalServerError
+                    ErrorMessage = "Invalid username or password"
+                };
+            }
+
+            var formData = new FormUrlEncodedContent(new[]
+            {
+        new KeyValuePair<string, string>("username", username),
+        new KeyValuePair<string, string>("password", password),
+        new KeyValuePair<string, string>("client_secret", "Inz9aNsu1zJNDkbt0T1uHM75hMaSnQgm"),
+        new KeyValuePair<string, string>("grant_type", "password"),
+        new KeyValuePair<string, string>("client_id", "auth-cp23un1")
+    });
+
+            var response = await _httpClient.PostAsync("https://login.sit.kmutt.ac.th/realms/student-project/protocol/openid-connect/token", formData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var tokenResponse = JsonSerializer.Deserialize<TokenReponse>(content);
+
+                return new AuthResponse
+                {
+                    AccessToken = tokenResponse?.access_token,
+                    DecodedToken = DecodeToken(tokenResponse?.access_token)
+                };
+            }
+            else
+            {
+                return new AuthResponse
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Authentication failed"
                 };
             }
         }
 
-        public static bool VerifyPassword(string encodedPassword, string email, string password)
-        {
-            try
-            {
-                // Decode the encoded password
-                var decodedPassword = DecodePassword(encodedPassword, email);
 
-                // Compare the decoded password with the provided password
-                return decodedPassword == password;
-            }
-            catch (Exception)
-            {
-                // Handle decoding errors
-                return false;
-            }
+        public class TokenReponse
+        {
+            public string access_token { get; set; }
         }
 
-        public static string DecodePassword(string encodedPassword, string email)
+        public class DecodedToken
         {
-            // Decode the encoded password from Base64
-            string decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(encodedPassword));
-
-            // Split the decoded string into email and password
-            string[] parts = decodedString.Split(':');
-
-            if (parts.Length == 2 && parts[0] == email)
-            {
-                return parts[1]; // Return the password part
-            }
-            else
-            {
-                throw new FormatException("Invalid encoded password format");
-            }
+            public string Name { get; set; }
+            public string PreferredUsername { get; set; }
+            public string GroupId { get; set; }
+            public string Email { get; set; }
         }
 
-        private string GenerateJwtToken(Student student)
+        private DecodedToken DecodeToken(string accessToken)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadJwtToken(accessToken);
+
+            return new DecodedToken
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.NameIdentifier, student.StudentId),
-            new Claim(ClaimTypes.Role, "Student") // Add role claim for student
-                                                  // You can add more claims here as needed
-                }),
-                Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Name = token.Claims.FirstOrDefault(c => c.Type == "name")?.Value,
+                PreferredUsername = token.Claims.FirstOrDefault(c => c.Type == "preferred_username")?.Value,
+                GroupId = token.Claims.FirstOrDefault(c => c.Type == "group_id")?.Value,
+                Email = token.Claims.FirstOrDefault(c => c.Type == "email")?.Value
+                // Add more properties as needed
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
 
-        private string GenerateJwtToken(Admin user)
+        public class AuthResponse
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
-            var tokenDescriptor = new SecurityTokenDescriptor
+            public string AccessToken { get; set; }
+            public DecodedToken DecodedToken { get; set; }
+            public bool IsSuccess { get; set; }
+            public string ErrorMessage { get; set; }
+
+            // Constructor to initialize IsSuccess and ErrorMessage properties
+            public AuthResponse()
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.NameIdentifier, user.AdminId.ToString()),
-            new Claim(ClaimTypes.Role, "Admin") // Add role claim for admin
-                                                // Add more claims as needed
-                }),
-                Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                IsSuccess = true; // Default value assuming success
+            }
         }
 
-        private string GenerateJwtToken(Committee user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]); // Get secret key from configuration
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-            new Claim(ClaimTypes.NameIdentifier, user.CommitteeId.ToString()),
-            new Claim(ClaimTypes.Role, "Committee") // Add role claim for committee
-                                                    // Add more claims as needed
-                }),
-                Expires = DateTime.UtcNow.AddDays(7), // Token expiry time
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
     }
 }

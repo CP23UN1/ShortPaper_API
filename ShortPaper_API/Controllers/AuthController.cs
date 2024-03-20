@@ -20,16 +20,25 @@ namespace ShortPaper_API.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous] // Allow anonymous access to login endpoint
-        public async Task<IActionResult> Login(LoginDTO model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            var response = await _authService.AuthenticateAsync(model.Email, model.Password);
-
-            if (!response.IsSuccess)
+            try
             {
-                return Unauthorized(new { message = response.ErrorMessage });
-            }
+                var result = await _authService.AuthenticateAsync(model.Username, model.Password);
 
-            return Ok(new { token = response.Data });
+                if (result.IsSuccess)
+                {
+                    return Ok(new { Token = result.AccessToken, DecodedToken = result.DecodedToken });
+                }
+                else
+                {
+                    return BadRequest(new { Message = result.ErrorMessage });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Internal server error" });
+            }
         }
     }
 }
