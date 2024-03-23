@@ -7,7 +7,7 @@ public partial class ShortpapersHasCommittee
 {
     public int ShortpaperId { get; set; }
 
-    public int CommitteeId { get; set; }
+    public string CommitteeId { get; set; } = null!;
 
     public ulong IsAdvisor { get; set; }
 

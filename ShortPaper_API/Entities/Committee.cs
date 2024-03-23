@@ -5,7 +5,7 @@ namespace ShortPaper_API.Entities;
 
 public partial class Committee
 {
-    public int CommitteeId { get; set; }
+    public string CommitteeId { get; set; } = null!;
 
     public string Firstname { get; set; } = null!;
 

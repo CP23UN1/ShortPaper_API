@@ -5,7 +5,7 @@ namespace ShortPaper_API.Entities;
 
 public partial class Admin
 {
-    public int AdminId { get; set; }
+    public string AdminId { get; set; } = null!;
 
     public string Email { get; set; } = null!;
 

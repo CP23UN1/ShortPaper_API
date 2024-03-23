@@ -43,7 +43,7 @@ public partial class ShortpaperDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Arm@2020;database=shortpaper_db");
+        => optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=Jajah36674!;database=shortpaper_db");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,7 +53,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.ToTable("admins");
 
-            entity.Property(e => e.AdminId).HasColumnName("admin_id");
+            entity.Property(e => e.AdminId)
+                .HasMaxLength(11)
+                .HasColumnName("admin_id");
             entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .HasColumnName("email");
@@ -153,7 +155,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.ToTable("committees");
 
-            entity.Property(e => e.CommitteeId).HasColumnName("committee_id");
+            entity.Property(e => e.CommitteeId)
+                .HasMaxLength(11)
+                .HasColumnName("committee_id");
             entity.Property(e => e.AlternativeEmail)
                 .HasMaxLength(45)
                 .HasColumnName("alternative_email");
@@ -283,7 +287,9 @@ public partial class ShortpaperDbContext : DbContext
             entity.HasIndex(e => e.ShortpaperId, "fk_shortpapers_has_committees_shortpapers_idx");
 
             entity.Property(e => e.ShortpaperId).HasColumnName("shortpaper_id");
-            entity.Property(e => e.CommitteeId).HasColumnName("committee_id");
+            entity.Property(e => e.CommitteeId)
+                .HasMaxLength(11)
+                .HasColumnName("committee_id");
             entity.Property(e => e.IsAdvisor)
                 .HasDefaultValueSql("b'0'")
                 .HasColumnType("bit(1)")
@@ -330,10 +336,6 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(10)
                 .HasColumnName("phonenumber");
-            entity.Property(e => e.Status)
-                .HasDefaultValueSql("'new'")
-                .HasColumnType("enum('new','old')")
-                .HasColumnName("status");
             entity.Property(e => e.Year)
                 .HasMaxLength(6)
                 .HasColumnName("year");
