@@ -2,7 +2,7 @@
 {
     public class CommitteeDTO
     {
-        public int CommitteeId { get; set; }
+        public string CommitteeId { get; set; }
 
         public string Firstname { get; set; } = null!;
 

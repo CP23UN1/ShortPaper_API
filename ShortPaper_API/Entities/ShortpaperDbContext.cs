@@ -336,6 +336,10 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(10)
                 .HasColumnName("phonenumber");
+            entity.Property(e => e.Status)
+                .HasDefaultValueSql("'new'")
+                .HasColumnType("enum('old','new')")
+                .HasColumnName("status");
             entity.Property(e => e.Year)
                 .HasMaxLength(6)
                 .HasColumnName("year");

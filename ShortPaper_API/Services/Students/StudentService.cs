@@ -537,7 +537,8 @@ namespace ShortPaper_API.Services.Students
                             if (existingStudent != null)
                             {
                                 // Update existing student's status to "old"
-                                existingStudent.Status = "old";
+                                //existingStudent.Status = "old";
+                                
                             }
                             else
                             {

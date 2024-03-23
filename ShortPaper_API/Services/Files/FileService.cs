@@ -321,13 +321,13 @@ namespace ShortPaper_API.Services.Files
             }
         }
 
-        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByCommittee(int committeeId)
+        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByCommittee(string committeeId)
         {
             try
             {
                 var file = new List<ShortpaperFileDTO>();
 
-                var shasc = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.CommitteeId == committeeId);
+                var shasc = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.CommitteeId.Contains(committeeId));
                 var shortpaper = _db.Shortpapers.FirstOrDefault(s => s.ShortpaperId == shasc.ShortpaperId);
                 var student = _db.Students.FirstOrDefault(s => s.StudentId == shortpaper.StudentId);
 
