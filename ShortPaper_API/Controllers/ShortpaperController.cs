@@ -45,5 +45,12 @@ namespace ShortPaper_API.Controllers
             var shortpaper = _shortpaperService.GetShortpaperByStudent(studentId);
             return shortpaper;
         }
+
+        [HttpPost("shortpapers/create")]
+        public ServiceResponse<AddShortpaperDTO> AddShortpaper(AddShortpaperDTO shortpaperDTO)
+        {
+            var status = _shortpaperService.AddShortpaper(shortpaperDTO);
+            return status;
+        }
     }
 }

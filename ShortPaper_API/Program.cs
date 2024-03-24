@@ -72,11 +72,48 @@ builder.Services.AddAuthentication(options =>
 .AddCookie()
 .AddOpenIdConnect(options =>
 {
+    options.MetadataAddress = "https://login.sit.kmutt.ac.th/realms/student-project/.well-known/openid-configuration";
     options.Authority = "https://login.sit.kmutt.ac.th"; // Keycloak server URL
+    options.Authority = "account";
+    options.RequireHttpsMetadata = true;
     options.ClientId = "auth-cp23un1"; // Your client ID
     options.ClientSecret = "Inz9aNsu1zJNDkbt0T1uHM75hMaSnQgm"; // Your client secret
     options.ResponseType = OpenIdConnectResponseType.Code;
     options.SaveTokens = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = "account",
+        ValidIssuer = "https://login.sit.kmutt.ac.th/realms/student-project"
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("all", policy => policy.RequireAssertion(context =>
+    {
+        return context.User.HasClaim("groupid", "904") || context.User.HasClaim("groupid", "902") || context.User.HasClaim("groupid", "901");
+    }));
+
+    options.AddPolicy("studentoradmin", policy => policy.RequireAssertion(context =>
+    {
+        return context.User.HasClaim("groupid", "904") || context.User.HasClaim("groupid", "902");
+    }));
+
+    options.AddPolicy("studentorlecturer", policy => policy.RequireAssertion(context =>
+    {
+        return context.User.HasClaim("groupid", "904") || context.User.HasClaim("groupid", "901");
+    }));
+
+    options.AddPolicy("adminorlecturer", policy => policy.RequireAssertion(context =>
+    {
+        return context.User.HasClaim("groupid", "902") || context.User.HasClaim("groupid", "901");
+    }));
+
+    options.AddPolicy("lecturer", policy => policy.RequireClaim("groupid", "901"));
+    options.AddPolicy("admin", policy => policy.RequireClaim("groupid", "902"));
+    options.AddPolicy("student", policy => policy.RequireClaim("groupid", "904"));
 });
 
 builder.Services.AddHttpClient();

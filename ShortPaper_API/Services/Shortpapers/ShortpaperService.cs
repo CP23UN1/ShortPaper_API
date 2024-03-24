@@ -353,5 +353,53 @@ namespace ShortPaper_API.Services.Shortpapers
                 return result;
             }
         }
+
+        public ServiceResponse<AddShortpaperDTO> AddShortpaper(AddShortpaperDTO addShortpaperDTO)
+        {
+            var response = new ServiceResponse<AddShortpaperDTO>();
+
+            try
+            {
+                // Check if the student exists
+                var existingStudent = _db.Students.FirstOrDefault(s => s.StudentId == addShortpaperDTO.StudentId);
+                if (existingStudent == null)
+                {
+                    response.ErrorMessage = "Cannot found student id";
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                // Check if the subject exists
+                var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == addShortpaperDTO.SubjectId);
+                if (existingSubject == null)
+                {
+                    response.ErrorMessage = "Cannot found subject id";
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                // Create a new Shortpaper entity
+                var newShortpaper = new Shortpaper
+                {
+                    ShortpaperTopic = addShortpaperDTO.ShortpaperTopic,
+                    StudentId = addShortpaperDTO.StudentId,
+                    SubjectId = addShortpaperDTO.SubjectId
+                };
+
+                // Add the new Shortpaper to the database
+                _db.Shortpapers.Add(newShortpaper);
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = addShortpaperDTO;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "An unexpected error occurred";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+
+            }
+            return response;
+        }
     }
 }
