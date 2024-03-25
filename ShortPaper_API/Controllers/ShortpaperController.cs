@@ -46,10 +46,19 @@ namespace ShortPaper_API.Controllers
             return shortpaper;
         }
 
-        [HttpPost("shortpapers/create")]
+        [HttpPost]
+        [Route("shortpaper/create")]
         public ServiceResponse<AddShortpaperDTO> AddShortpaper(AddShortpaperDTO shortpaperDTO)
         {
             var status = _shortpaperService.AddShortpaper(shortpaperDTO);
+            return status;
+        }
+
+        [HttpPatch]
+        [Route("shortpaper/update/{id}")]
+        public ServiceResponse<UpdateShortpaperDTO> UpdateShortpaper(UpdateShortpaperDTO shortpaperDTO)
+        {
+            var status = _shortpaperService.UpdateShortpaper(shortpaperDTO);
             return status;
         }
     }

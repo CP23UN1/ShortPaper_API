@@ -401,5 +401,42 @@ namespace ShortPaper_API.Services.Shortpapers
             }
             return response;
         }
+
+        public ServiceResponse<UpdateShortpaperDTO> UpdateShortpaper(UpdateShortpaperDTO shortpaperDTO)
+        {
+            var response = new ServiceResponse<UpdateShortpaperDTO>();
+
+            try
+            {
+                // Check if the subject exists
+                var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == shortpaperDTO.SubjectId);
+                if (existingSubject == null)
+                {
+                    response.ErrorMessage = "Cannot found subject id";
+                    response.httpStatusCode = StatusCodes.Status400BadRequest;
+                    return response;
+                }
+
+                var updateShortpaper = (from a in _db.Shortpapers
+                                     where a.ShortpaperId == shortpaperDTO.ShortpaperId
+                                     select a).FirstOrDefault();
+
+                updateShortpaper.ShortpaperTopic = shortpaperDTO.ShortpaperTopic;
+                updateShortpaper.SubjectId = shortpaperDTO.SubjectId;
+
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = shortpaperDTO;
+            }
+            catch (Exception ex)
+            {
+
+                response.ErrorMessage = "An unexpected error occurred";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace ShortPaper_API.Services.Shortpapers
         ServiceResponse<List<ShortpaperDTO>> GetShortpaper();
         ServiceResponse<List<ShortpaperDTO>> GetShortpaperByFilter(string searchText);
         ServiceResponse<ShortpaperDTO> GetShortpaperByStudent(string id);
-
         ServiceResponse<AddShortpaperDTO> AddShortpaper(AddShortpaperDTO addShortpaperDTO);
+        ServiceResponse<UpdateShortpaperDTO> UpdateShortpaper(UpdateShortpaperDTO shortpaperDTO);
     }
 }
