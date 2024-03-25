@@ -89,6 +89,8 @@ namespace ShortPaper_API.Services.Students
                                                 {
                                                     SubjectId = spf.SubjectId,
                                                     SubjectName = spf.SubjectName,
+                                                    IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                    IsPaperSubject = sshs.IsPaperSubject
                                                 }).ToList(),
                                 })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -219,6 +221,8 @@ namespace ShortPaper_API.Services.Students
                                                      {
                                                          SubjectId = spf.SubjectId,
                                                          SubjectName = spf.SubjectName,
+                                                         IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                         IsPaperSubject = sshs.IsPaperSubject
                                                      }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -315,6 +319,8 @@ namespace ShortPaper_API.Services.Students
                                                      {
                                                          SubjectId = spf.SubjectId,
                                                          SubjectName = spf.SubjectName,
+                                                         IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                         IsPaperSubject = sshs.IsPaperSubject
                                                      }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -441,6 +447,8 @@ namespace ShortPaper_API.Services.Students
                                                {
                                                    SubjectId = spf.SubjectId,
                                                    SubjectName = spf.SubjectName,
+                                                   IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                   IsPaperSubject = sshs.IsPaperSubject
                                                }).ToList(),
                                })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId

@@ -59,6 +59,8 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = spf.SubjectId,
                                                        SubjectName = spf.SubjectName,
+                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                       IsPaperSubject = sshs.IsPaperSubject
                                                    }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
@@ -160,7 +162,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                                {
                                                    SubjectId = spf.SubjectId,
                                                    SubjectName = spf.SubjectName,
-                                       }).ToList(),
+                                                   IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                   IsPaperSubject = sshs.IsPaperSubject
+                                               }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -229,7 +233,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = spf.SubjectId,
                                                        SubjectName = spf.SubjectName,
-                                       }).ToList(),
+                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                       IsPaperSubject = sshs.IsPaperSubject
+                                                   }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -334,7 +340,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                                    {
                                                        SubjectId = spf.SubjectId,
                                                        SubjectName = spf.SubjectName,
-                                       }).ToList(),
+                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
+                                                       IsPaperSubject = sshs.IsPaperSubject
+                                                   }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
