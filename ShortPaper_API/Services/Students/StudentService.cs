@@ -49,13 +49,13 @@ namespace ShortPaper_API.Services.Students
                                             ShortpaperTopic = studentShort.ShortpaperTopic,
                                         } : null,
                                     },
-                                    Subjects = (from sps in _db.Subjects
-                                                where sps.SubjectId == studentShort.SubjectId
-                                                select new SubjectDTO
-                                                {
-                                                    SubjectId = sps.SubjectId,
-                                                    SubjectName = sps.SubjectName,
-                                                }).FirstOrDefault(),
+                                    //Subjects = (from sps in _db.Subjects
+                                    //            where sps.SubjectId == studentShort.SubjectId
+                                    //            select new SubjectDTO
+                                    //            {
+                                    //                SubjectId = sps.SubjectId,
+                                    //                SubjectName = sps.SubjectName,
+                                    //            }).FirstOrDefault(),
                                     Committee = c != null ? new CommitteeDTO
                                     {
                                         CommitteeId = c.CommitteeId,
@@ -93,7 +93,7 @@ namespace ShortPaper_API.Services.Students
                     Phonenumber = group.First().Student.Phonenumber,
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -168,13 +168,13 @@ namespace ShortPaper_API.Services.Students
                                                  ShortpaperTopic = studentShort.ShortpaperTopic,
                                              } : null,
                                          },
-                                         Subjects = (from sps in _db.Subjects
-                                                     where sps.SubjectId == studentShort.SubjectId
-                                                     select new SubjectDTO
-                                                     {
-                                                         SubjectId = sps.SubjectId,
-                                                         SubjectName = sps.SubjectName,                                                      
-                                                     }).FirstOrDefault(),
+                                         //Subjects = (from sps in _db.Subjects
+                                         //            where sps.SubjectId == studentShort.SubjectId
+                                         //            select new SubjectDTO
+                                         //            {
+                                         //                SubjectId = sps.SubjectId,
+                                         //                SubjectName = sps.SubjectName,                                                      
+                                         //            }).FirstOrDefault(),
                                          Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
@@ -212,7 +212,7 @@ namespace ShortPaper_API.Services.Students
                     Phonenumber = group.First().Student.Phonenumber,
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -253,13 +253,13 @@ namespace ShortPaper_API.Services.Students
                                                  ShortpaperTopic = studentShort.ShortpaperTopic,
                                              } : null,
                                          },
-                                         Subjects = (from sps in _db.Subjects
-                                                     where sps.SubjectId == studentShort.SubjectId
-                                                     select new SubjectDTO
-                                                     {
-                                                         SubjectId = sps.SubjectId,
-                                                         SubjectName = sps.SubjectName,
-                                                     }).FirstOrDefault(),
+                                         //Subjects = (from sps in _db.Subjects
+                                         //            where sps.SubjectId == studentShort.SubjectId
+                                         //            select new SubjectDTO
+                                         //            {
+                                         //                SubjectId = sps.SubjectId,
+                                         //                SubjectName = sps.SubjectName,
+                                         //            }).FirstOrDefault(),
                                          Committee = c != null ? new CommitteeDTO
                                          {
                                              CommitteeId = c.CommitteeId,
@@ -297,7 +297,7 @@ namespace ShortPaper_API.Services.Students
                     Phonenumber = group.First().Student.Phonenumber,
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -368,13 +368,13 @@ namespace ShortPaper_API.Services.Students
                                            ShortpaperTopic = studentShort.ShortpaperTopic,
                                        } : null,
                                    },
-                                   Subjects = (from sps in _db.Subjects
-                                               where sps.SubjectId == studentShort.SubjectId
-                                               select new SubjectDTO
-                                               {
-                                                   SubjectId = sps.SubjectId,
-                                                   SubjectName = sps.SubjectName,
-                                               }).FirstOrDefault(),
+                                   //Subjects = (from sps in _db.Subjects
+                                   //            where sps.SubjectId == studentShort.SubjectId
+                                   //            select new SubjectDTO
+                                   //            {
+                                   //                SubjectId = sps.SubjectId,
+                                   //                SubjectName = sps.SubjectName,
+                                   //            }).FirstOrDefault(),
                                    Committee = c != null ? new CommitteeDTO
                                    {
                                        CommitteeId = c.CommitteeId,
@@ -412,7 +412,7 @@ namespace ShortPaper_API.Services.Students
                     Phonenumber = group.First().Student.Phonenumber,
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
