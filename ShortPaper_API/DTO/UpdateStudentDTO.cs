@@ -15,6 +15,7 @@
         public string? AlternativeEmail { get; set; }
 
         public string? Phonenumber { get; set; }
+        public List<UpdateSubjectDTO> Subjects { get; set; }
 
         //public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
     }

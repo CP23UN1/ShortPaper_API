@@ -32,6 +32,9 @@ namespace ShortPaper_API.Services.Students
                                 join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
                                 into committees
                                 from c in committees.DefaultIfEmpty()
+                                join shs in _db.StudentsHasSubjects on student.StudentId equals shs.StudentId
+                                into studentsHasSubjects
+                                from sshs in studentsHasSubjects.DefaultIfEmpty()
                                 select new
                                 {
                                     Student = new StudentDTO
@@ -79,7 +82,14 @@ namespace ShortPaper_API.Services.Students
                                                            FileName = spf.FileName,
                                                            Status = spf.Status,
                                                            ShortpaperFileTypeId = spf.ShortpaperFileTypeId
-                                                       }).ToList()
+                                                       }).ToList(),
+                                    Subjects = (from spf in _db.Subjects
+                                                where spf.SubjectId == sshs.SubjectId
+                                                select new SubjectDTO
+                                                {
+                                                    SubjectId = spf.SubjectId,
+                                                    SubjectName = spf.SubjectName,
+                                                }).ToList(),
                                 })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
                 .Select(group => new StudentDTO
@@ -94,6 +104,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     //Subjects = group.First().Subjects,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -151,6 +162,9 @@ namespace ShortPaper_API.Services.Students
                                      join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
                                      into committees
                                      from c in committees.DefaultIfEmpty()
+                                     join shs in _db.StudentsHasSubjects on student.StudentId equals shs.StudentId
+                                     into studentsHasSubjects
+                                     from sshs in studentsHasSubjects.DefaultIfEmpty()
                                      select new
                                      {
                                          Student = new StudentDTO
@@ -198,7 +212,14 @@ namespace ShortPaper_API.Services.Students
                                                                 FileName = spf.FileName,
                                                                 Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
-                                                            }).ToList()
+                                                            }).ToList(),
+                                         Subjects = (from spf in _db.Subjects
+                                                     where spf.SubjectId == sshs.SubjectId
+                                                     select new SubjectDTO
+                                                     {
+                                                         SubjectId = spf.SubjectId,
+                                                         SubjectName = spf.SubjectName,
+                                                     }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
                 .Select(group => new StudentDTO
@@ -213,6 +234,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     //Subjects = group.First().Subjects,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -231,6 +253,9 @@ namespace ShortPaper_API.Services.Students
                                      join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
                                      into committees
                                      from c in committees.DefaultIfEmpty()
+                                     join shs in _db.StudentsHasSubjects on student.StudentId equals shs.StudentId
+                                     into studentsHasSubjects
+                                     from sshs in studentsHasSubjects.DefaultIfEmpty()
                                      where (string.IsNullOrEmpty(searchText) ||
                                       student.Firstname.Contains(searchText) ||
                                       student.Lastname.Contains(searchText) ||
@@ -283,7 +308,14 @@ namespace ShortPaper_API.Services.Students
                                                                 FileName = spf.FileName,
                                                                 Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
-                                                            }).ToList()
+                                                            }).ToList(),
+                                         Subjects = (from spf in _db.Subjects
+                                                     where spf.SubjectId == sshs.SubjectId
+                                                     select new SubjectDTO
+                                                     {
+                                                         SubjectId = spf.SubjectId,
+                                                         SubjectName = spf.SubjectName,
+                                                     }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
                 .Select(group => new StudentDTO
@@ -298,6 +330,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     //Subjects = group.First().Subjects,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -350,6 +383,9 @@ namespace ShortPaper_API.Services.Students
                                join committee in _db.Committees on shc.CommitteeId equals committee.CommitteeId
                                into committees
                                from c in committees.DefaultIfEmpty()
+                               join shs in _db.StudentsHasSubjects on s.StudentId equals shs.StudentId
+                               into studentsHasSubjects
+                               from sshs in studentsHasSubjects.DefaultIfEmpty()
                                where s.StudentId == id
                                select new
                                {
@@ -398,7 +434,14 @@ namespace ShortPaper_API.Services.Students
                                                           FileName = spf.FileName,
                                                           Status = spf.Status,
                                                           ShortpaperFileTypeId = spf.ShortpaperFileTypeId
-                                                      }).ToList()
+                                                      }).ToList(),
+                                   Subjects = (from spf in _db.Subjects
+                                               where spf.SubjectId == sshs.SubjectId
+                                               select new SubjectDTO
+                                               {
+                                                   SubjectId = spf.SubjectId,
+                                                   SubjectName = spf.SubjectName,
+                                               }).ToList(),
                                })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
                 .Select(group => new StudentDTO
@@ -413,6 +456,7 @@ namespace ShortPaper_API.Services.Students
                     Year = group.First().Student.Year,
                     Shortpaper = group.First().Student.Shortpaper,
                     //Subjects = group.First().Subjects,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                     ShortpaperFiles = group.First().ShortpaperFiles
                 })
@@ -619,16 +663,40 @@ namespace ShortPaper_API.Services.Students
                     return response;
                 }
 
+                var updateStudent = _db.Students.Include(s => s.StudentsHasSubjects)
+                                        .SingleOrDefault(a => a.StudentId == student.StudentId);
 
-                var updateStudent = (from a in _db.Students
-                                     where a.StudentId == student.StudentId
-                                     select a).FirstOrDefault();
+                if (updateStudent == null)
+                {
+                    response.ErrorMessage = "Student not found";
+                    response.httpStatusCode = StatusCodes.Status404NotFound;
+                    return response;
+                }
 
                 updateStudent.Firstname = student.Firstname;
                 updateStudent.Lastname = student.Lastname;
                 updateStudent.Email = student.Email;
                 updateStudent.AlternativeEmail = student.AlternativeEmail;
                 updateStudent.Phonenumber = student.Phonenumber;
+
+                // Clear existing subjects
+                updateStudent.StudentsHasSubjects.Clear();
+
+                // Add new subjects with additional properties
+                if (student.Subjects != null && student.Subjects.Any())
+                {
+                    foreach (var subject in student.Subjects)
+                    {
+                        var studentHasSubject = new StudentsHasSubject
+                        {
+                            StudentId = student.StudentId,
+                            SubjectId = subject.SubjectId,
+                            IsRegisteredSubject = subject.IsRegisteredSubject ? 1UL : 0UL,
+                            IsPaperSubject = subject.IsPaperSubject ? 1UL : 0UL
+                        };
+                        updateStudent.StudentsHasSubjects.Add(studentHasSubject);
+                    }
+                }
 
                 _db.SaveChanges();
 

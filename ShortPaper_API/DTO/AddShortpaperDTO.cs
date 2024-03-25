@@ -6,6 +6,6 @@
 
         public string StudentId { get; set; } = null!;
 
-        public string SubjectId { get; set; } = null!;
+        //public string SubjectId { get; set; } = null!;
     }
 }

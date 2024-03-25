@@ -27,6 +27,12 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
+                                   join shs in _db.StudentsHasSubjects on shortpaper.StudentId equals shs.StudentId
+                                   into studentHasSubjects
+                                   from sshs in studentHasSubjects.DefaultIfEmpty()
+                                   join sub in _db.Subjects on sshs.SubjectId equals sub.SubjectId
+                                   into shortpaperSubjects
+                                   from sps in shortpaperSubjects.DefaultIfEmpty()
                                    select new 
                                    {
                                        Shortpaper = new ShortpaperDTO {
@@ -47,6 +53,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
+                                       Subjects = (from spf in _db.Subjects
+                                                   where spf.SubjectId == sshs.SubjectId
+                                                   select new SubjectDTO
+                                                   {
+                                                       SubjectId = spf.SubjectId,
+                                                       SubjectName = spf.SubjectName,
+                                                   }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -67,6 +80,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
                     //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
                 .ToList();
@@ -123,6 +137,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
+                                   join shs in _db.StudentsHasSubjects on shortpaper.StudentId equals shs.StudentId
+                                   into studentHasSubjects
+                                   from sshs in studentHasSubjects.DefaultIfEmpty()
                                    select new
                                    {
                                        Shortpaper = new ShortpaperDTO
@@ -137,13 +154,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                            } : null,
                                        },
-                                       //Subjects = (from sps in _db.Subjects
-                                       //            where sps.SubjectId == shortpaper.SubjectId
-                                       //            select new SubjectDTO
-                                       //            {
-                                       //                SubjectId = sps.SubjectId,
-                                       //                SubjectName = sps.SubjectName,
-                                       //            }).FirstOrDefault(),
+                                       Subjects = (from spf in _db.Subjects
+                                               where spf.SubjectId == sshs.SubjectId
+                                               select new SubjectDTO
+                                               {
+                                                   SubjectId = spf.SubjectId,
+                                                   SubjectName = spf.SubjectName,
+                                       }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -162,8 +179,8 @@ namespace ShortPaper_API.Services.Shortpapers
                     // Select properties from the first item in the group (assuming Shortpaper properties are the same for each group)
                     ShortpaperId = group.First().Shortpaper.ShortpaperId,
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
-                    //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
                 .ToList();
@@ -180,7 +197,10 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
-                                   //where (shortpaper.ShortpaperTopic.Contains(searchText) || shortpaper.SubjectId.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
+                                   join shs in _db.StudentsHasSubjects on s.StudentId equals shs.StudentId
+                                   into studentHasSubjects
+                                   from sshs in studentHasSubjects.DefaultIfEmpty()
+                                       //where (shortpaper.ShortpaperTopic.Contains(searchText) || shortpaper.SubjectId.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
                                    where (shortpaper.ShortpaperTopic.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
                                    select new
                                    {
@@ -203,6 +223,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
+                                       Subjects = (from spf in _db.Subjects
+                                                   where spf.SubjectId == sshs.SubjectId
+                                                   select new SubjectDTO
+                                                   {
+                                                       SubjectId = spf.SubjectId,
+                                                       SubjectName = spf.SubjectName,
+                                       }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -223,6 +250,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
                     //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
                 .ToList();
@@ -275,6 +303,9 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
+                                   join shs in _db.StudentsHasSubjects on shortpaper.StudentId equals shs.StudentId
+                                   into studentHasSubjects
+                                   from sshs in studentHasSubjects.DefaultIfEmpty()
                                    where shortpaper.StudentId == id
                                    select new
                                    {
@@ -297,6 +328,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
+                                       Subjects = (from spf in _db.Subjects
+                                                   where spf.SubjectId == sshs.SubjectId
+                                                   select new SubjectDTO
+                                                   {
+                                                       SubjectId = spf.SubjectId,
+                                                       SubjectName = spf.SubjectName,
+                                       }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -316,6 +354,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
                     //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
+                    Subjects = group.First().Subjects,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
                 .FirstOrDefault();
@@ -371,13 +410,13 @@ namespace ShortPaper_API.Services.Shortpapers
                 }
 
                 // Check if the subject exists
-                var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == addShortpaperDTO.SubjectId);
-                if (existingSubject == null)
-                {
-                    response.ErrorMessage = "Cannot found subject id";
-                    response.httpStatusCode = StatusCodes.Status400BadRequest;
-                    return response;
-                }
+                //var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == addShortpaperDTO.SubjectId);
+                //if (existingSubject == null)
+                //{
+                //    response.ErrorMessage = "Cannot found subject id";
+                //    response.httpStatusCode = StatusCodes.Status400BadRequest;
+                //    return response;
+                //}
 
                 // Create a new Shortpaper entity
                 var newShortpaper = new Shortpaper
@@ -410,13 +449,13 @@ namespace ShortPaper_API.Services.Shortpapers
             try
             {
                 // Check if the subject exists
-                var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == shortpaperDTO.SubjectId);
-                if (existingSubject == null)
-                {
-                    response.ErrorMessage = "Cannot found subject id";
-                    response.httpStatusCode = StatusCodes.Status400BadRequest;
-                    return response;
-                }
+                //var existingSubject = _db.Subjects.FirstOrDefault(s => s.SubjectId == shortpaperDTO.SubjectId);
+                //if (existingSubject == null)
+                //{
+                //    response.ErrorMessage = "Cannot found subject id";
+                //    response.httpStatusCode = StatusCodes.Status400BadRequest;
+                //    return response;
+                //}
 
                 var updateShortpaper = (from a in _db.Shortpapers
                                      where a.ShortpaperId == shortpaperDTO.ShortpaperId
