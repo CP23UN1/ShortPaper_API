@@ -11,9 +11,5 @@ public partial class Shortpaper
 
     public string StudentId { get; set; } = null!;
 
-    public string SubjectId { get; set; } = null!;
-
     public virtual Student Student { get; set; } = null!;
-
-    public virtual Subject Subject { get; set; } = null!;
 }

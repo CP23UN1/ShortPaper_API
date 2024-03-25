@@ -35,6 +35,8 @@ public partial class ShortpaperDbContext : DbContext
 
     public virtual DbSet<Student> Students { get; set; }
 
+    public virtual DbSet<StudentsHasSubject> StudentsHasSubjects { get; set; }
+
     public virtual DbSet<Subject> Subjects { get; set; }
 
     public virtual DbSet<TopicCategoriesHasShortpaper> TopicCategoriesHasShortpapers { get; set; }
@@ -180,13 +182,11 @@ public partial class ShortpaperDbContext : DbContext
 
         modelBuilder.Entity<Shortpaper>(entity =>
         {
-            entity.HasKey(e => new { e.ShortpaperId, e.StudentId, e.SubjectId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.ShortpaperId, e.StudentId }).HasName("PRIMARY");
 
             entity.ToTable("shortpapers");
 
             entity.HasIndex(e => e.StudentId, "fk_shortpapers_students1_idx");
-
-            entity.HasIndex(e => e.SubjectId, "fk_shortpapers_subjects1_idx");
 
             entity.Property(e => e.ShortpaperId)
                 .ValueGeneratedOnAdd()
@@ -194,9 +194,6 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.StudentId)
                 .HasMaxLength(11)
                 .HasColumnName("student_id");
-            entity.Property(e => e.SubjectId)
-                .HasMaxLength(6)
-                .HasColumnName("subject_id");
             entity.Property(e => e.ShortpaperTopic)
                 .HasMaxLength(100)
                 .HasColumnName("shortpaper_topic");
@@ -205,11 +202,6 @@ public partial class ShortpaperDbContext : DbContext
                 .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_shortpapers_students1");
-
-            entity.HasOne(d => d.Subject).WithMany(p => p.Shortpapers)
-                .HasForeignKey(d => d.SubjectId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_shortpapers_subjects1");
         });
 
         modelBuilder.Entity<ShortpaperFile>(entity =>
@@ -343,6 +335,42 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Year)
                 .HasMaxLength(6)
                 .HasColumnName("year");
+        });
+
+        modelBuilder.Entity<StudentsHasSubject>(entity =>
+        {
+            entity.HasKey(e => new { e.StudentsStudentId, e.SubjectsSubjectId }).HasName("PRIMARY");
+
+            entity.ToTable("students_has_subjects");
+
+            entity.HasIndex(e => e.StudentsStudentId, "fk_students_has_subjects_students1_idx");
+
+            entity.HasIndex(e => e.SubjectsSubjectId, "fk_students_has_subjects_subjects1_idx");
+
+            entity.Property(e => e.StudentsStudentId)
+                .HasMaxLength(11)
+                .HasColumnName("students_student_id");
+            entity.Property(e => e.SubjectsSubjectId)
+                .HasMaxLength(6)
+                .HasColumnName("subjects_subject_id");
+            entity.Property(e => e.IsPaperSubject)
+                .HasDefaultValueSql("b'0'")
+                .HasColumnType("bit(1)")
+                .HasColumnName("isPaperSubject");
+            entity.Property(e => e.IsRegisteredSubject)
+                .HasDefaultValueSql("b'0'")
+                .HasColumnType("bit(1)")
+                .HasColumnName("isRegisteredSubject");
+
+            entity.HasOne(d => d.StudentsStudent).WithMany(p => p.StudentsHasSubjects)
+                .HasForeignKey(d => d.StudentsStudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_students_has_subjects_students1");
+
+            entity.HasOne(d => d.SubjectsSubject).WithMany(p => p.StudentsHasSubjects)
+                .HasForeignKey(d => d.SubjectsSubjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_students_has_subjects_subjects1");
         });
 
         modelBuilder.Entity<Subject>(entity =>

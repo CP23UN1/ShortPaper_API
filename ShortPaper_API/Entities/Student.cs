@@ -24,4 +24,6 @@ public partial class Student
     public string Year { get; set; } = null!;
 
     public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
+
+    public virtual ICollection<StudentsHasSubject> StudentsHasSubjects { get; set; } = new List<StudentsHasSubject>();
 }

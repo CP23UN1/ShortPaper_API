@@ -40,13 +40,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                             } : null,
                                        },
-                                       Subjects = (from sps in _db.Subjects
-                                                   where sps.SubjectId == shortpaper.SubjectId
-                                                   select new SubjectDTO
-                                                   {
-                                                       SubjectId = sps.SubjectId,
-                                                       SubjectName = sps.SubjectName,
-                                                   }).FirstOrDefault(),
+                                       //Subjects = (from sps in _db.Subjects
+                                       //            where sps.SubjectId == shortpaper.SubjectId
+                                       //            select new SubjectDTO
+                                       //            {
+                                       //                SubjectId = sps.SubjectId,
+                                       //                SubjectName = sps.SubjectName,
+                                       //            }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -65,7 +65,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     // Select properties from the first item in the group (assuming Shortpaper properties are the same for each group)
                     ShortpaperId = group.First().Shortpaper.ShortpaperId,
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
@@ -137,13 +137,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                            } : null,
                                        },
-                                       Subjects = (from sps in _db.Subjects
-                                                   where sps.SubjectId == shortpaper.SubjectId
-                                                   select new SubjectDTO
-                                                   {
-                                                       SubjectId = sps.SubjectId,
-                                                       SubjectName = sps.SubjectName,
-                                                   }).FirstOrDefault(),
+                                       //Subjects = (from sps in _db.Subjects
+                                       //            where sps.SubjectId == shortpaper.SubjectId
+                                       //            select new SubjectDTO
+                                       //            {
+                                       //                SubjectId = sps.SubjectId,
+                                       //                SubjectName = sps.SubjectName,
+                                       //            }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -162,7 +162,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     // Select properties from the first item in the group (assuming Shortpaper properties are the same for each group)
                     ShortpaperId = group.First().Shortpaper.ShortpaperId,
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
@@ -180,7 +180,8 @@ namespace ShortPaper_API.Services.Shortpapers
                                    join student in _db.Students on shortpaper.StudentId equals student.StudentId
                                    into shortpaperStudent
                                    from s in shortpaperStudent.DefaultIfEmpty()
-                                   where (shortpaper.ShortpaperTopic.Contains(searchText) || shortpaper.SubjectId.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
+                                   //where (shortpaper.ShortpaperTopic.Contains(searchText) || shortpaper.SubjectId.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
+                                   where (shortpaper.ShortpaperTopic.Contains(searchText) || s.StudentId.Contains(searchText) || s.Year.Contains(searchText))
                                    select new
                                    {
                                        Shortpaper = new ShortpaperDTO
@@ -195,13 +196,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                            } : null,
                                        },
-                                       Subjects = (from sps in _db.Subjects
-                                                   where sps.SubjectId == shortpaper.SubjectId
-                                                   select new SubjectDTO
-                                                   {
-                                                       SubjectId = sps.SubjectId,
-                                                       SubjectName = sps.SubjectName,
-                                                   }).FirstOrDefault(),
+                                       //Subjects = (from sps in _db.Subjects
+                                       //            where sps.SubjectId == shortpaper.SubjectId
+                                       //            select new SubjectDTO
+                                       //            {
+                                       //                SubjectId = sps.SubjectId,
+                                       //                SubjectName = sps.SubjectName,
+                                       //            }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -220,7 +221,7 @@ namespace ShortPaper_API.Services.Shortpapers
                     // Select properties from the first item in the group (assuming Shortpaper properties are the same for each group)
                     ShortpaperId = group.First().Shortpaper.ShortpaperId,
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
@@ -289,13 +290,13 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                            } : null,
                                        },
-                                       Subjects = (from sps in _db.Subjects
-                                                   where sps.SubjectId == shortpaper.SubjectId
-                                                   select new SubjectDTO
-                                                   {
-                                                       SubjectId = sps.SubjectId,
-                                                       SubjectName = sps.SubjectName,
-                                                   }).FirstOrDefault(),
+                                       //Subjects = (from sps in _db.Subjects
+                                       //            where sps.SubjectId == shortpaper.SubjectId
+                                       //            select new SubjectDTO
+                                       //            {
+                                       //                SubjectId = sps.SubjectId,
+                                       //                SubjectName = sps.SubjectName,
+                                       //            }).FirstOrDefault(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -313,7 +314,7 @@ namespace ShortPaper_API.Services.Shortpapers
                 {
                     ShortpaperId = group.First().Shortpaper.ShortpaperId,
                     ShortpaperTopic = group.First().Shortpaper.ShortpaperTopic,
-                    Subjects = group.First().Subjects,
+                    //Subjects = group.First().Subjects,
                     Student = group.First().Shortpaper.Student,
                     Committees = group.Select(x => x.Committee).ToList(),
                 })
@@ -383,7 +384,7 @@ namespace ShortPaper_API.Services.Shortpapers
                 {
                     ShortpaperTopic = addShortpaperDTO.ShortpaperTopic,
                     StudentId = addShortpaperDTO.StudentId,
-                    SubjectId = addShortpaperDTO.SubjectId
+                    //SubjectId = addShortpaperDTO.SubjectId
                 };
 
                 // Add the new Shortpaper to the database
@@ -422,7 +423,7 @@ namespace ShortPaper_API.Services.Shortpapers
                                      select a).FirstOrDefault();
 
                 updateShortpaper.ShortpaperTopic = shortpaperDTO.ShortpaperTopic;
-                updateShortpaper.SubjectId = shortpaperDTO.SubjectId;
+                //updateShortpaper.SubjectId = shortpaperDTO.SubjectId;
 
                 _db.SaveChanges();
 
