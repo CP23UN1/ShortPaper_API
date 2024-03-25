@@ -101,17 +101,17 @@ builder.Services.AddAuthorization(options =>
         return context.User.HasClaim("groupid", "904") || context.User.HasClaim("groupid", "902");
     }));
 
-    options.AddPolicy("studentorlecturer", policy => policy.RequireAssertion(context =>
+    options.AddPolicy("studentorcommittee", policy => policy.RequireAssertion(context =>
     {
         return context.User.HasClaim("groupid", "904") || context.User.HasClaim("groupid", "901");
     }));
 
-    options.AddPolicy("adminorlecturer", policy => policy.RequireAssertion(context =>
+    options.AddPolicy("adminorcommittee", policy => policy.RequireAssertion(context =>
     {
         return context.User.HasClaim("groupid", "902") || context.User.HasClaim("groupid", "901");
     }));
 
-    options.AddPolicy("lecturer", policy => policy.RequireClaim("groupid", "901"));
+    options.AddPolicy("committee", policy => policy.RequireClaim("groupid", "901"));
     options.AddPolicy("admin", policy => policy.RequireClaim("groupid", "902"));
     options.AddPolicy("student", policy => policy.RequireClaim("groupid", "904"));
 });
