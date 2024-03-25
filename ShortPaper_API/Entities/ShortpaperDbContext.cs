@@ -339,20 +339,20 @@ public partial class ShortpaperDbContext : DbContext
 
         modelBuilder.Entity<StudentsHasSubject>(entity =>
         {
-            entity.HasKey(e => new { e.StudentsStudentId, e.SubjectsSubjectId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.StudentId, e.SubjectId }).HasName("PRIMARY");
 
             entity.ToTable("students_has_subjects");
 
-            entity.HasIndex(e => e.StudentsStudentId, "fk_students_has_subjects_students1_idx");
+            entity.HasIndex(e => e.StudentId, "fk_students_has_subjects_students1_idx");
 
-            entity.HasIndex(e => e.SubjectsSubjectId, "fk_students_has_subjects_subjects1_idx");
+            entity.HasIndex(e => e.SubjectId, "fk_students_has_subjects_subjects1_idx");
 
-            entity.Property(e => e.StudentsStudentId)
+            entity.Property(e => e.StudentId)
                 .HasMaxLength(11)
-                .HasColumnName("students_student_id");
-            entity.Property(e => e.SubjectsSubjectId)
+                .HasColumnName("student_id");
+            entity.Property(e => e.SubjectId)
                 .HasMaxLength(6)
-                .HasColumnName("subjects_subject_id");
+                .HasColumnName("subject_id");
             entity.Property(e => e.IsPaperSubject)
                 .HasDefaultValueSql("b'0'")
                 .HasColumnType("bit(1)")
@@ -362,13 +362,13 @@ public partial class ShortpaperDbContext : DbContext
                 .HasColumnType("bit(1)")
                 .HasColumnName("isRegisteredSubject");
 
-            entity.HasOne(d => d.StudentsStudent).WithMany(p => p.StudentsHasSubjects)
-                .HasForeignKey(d => d.StudentsStudentId)
+            entity.HasOne(d => d.Student).WithMany(p => p.StudentsHasSubjects)
+                .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_students_has_subjects_students1");
 
-            entity.HasOne(d => d.SubjectsSubject).WithMany(p => p.StudentsHasSubjects)
-                .HasForeignKey(d => d.SubjectsSubjectId)
+            entity.HasOne(d => d.Subject).WithMany(p => p.StudentsHasSubjects)
+                .HasForeignKey(d => d.SubjectId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_students_has_subjects_subjects1");
         });
