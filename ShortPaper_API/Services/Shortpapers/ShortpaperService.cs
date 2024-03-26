@@ -53,14 +53,15 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
-                                       Subjects = (from spf in _db.Subjects
-                                                   where spf.SubjectId == sshs.SubjectId
+                                       Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                   join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                   where studentSubject.StudentId == s.StudentId
                                                    select new SubjectDTO
                                                    {
-                                                       SubjectId = spf.SubjectId,
-                                                       SubjectName = spf.SubjectName,
-                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                       IsPaperSubject = sshs.IsPaperSubject
+                                                       SubjectId = subject.SubjectId,
+                                                       SubjectName = subject.SubjectName,
+                                                       IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                       IsPaperSubject = studentSubject.IsPaperSubject
                                                    }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
@@ -156,15 +157,16 @@ namespace ShortPaper_API.Services.Shortpapers
                                                Email = s.Email,
                                            } : null,
                                        },
-                                       Subjects = (from spf in _db.Subjects
-                                               where spf.SubjectId == sshs.SubjectId
-                                               select new SubjectDTO
-                                               {
-                                                   SubjectId = spf.SubjectId,
-                                                   SubjectName = spf.SubjectName,
-                                                   IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                   IsPaperSubject = sshs.IsPaperSubject
-                                               }).ToList(),
+                                       Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                   join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                   where studentSubject.StudentId == s.StudentId
+                                                   select new SubjectDTO
+                                                   {
+                                                       SubjectId = subject.SubjectId,
+                                                       SubjectName = subject.SubjectName,
+                                                       IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                       IsPaperSubject = studentSubject.IsPaperSubject
+                                                   }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
                                            CommitteeId = sct.CommitteeId,
@@ -227,14 +229,15 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
-                                       Subjects = (from spf in _db.Subjects
-                                                   where spf.SubjectId == sshs.SubjectId
+                                       Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                   join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                   where studentSubject.StudentId == s.StudentId
                                                    select new SubjectDTO
                                                    {
-                                                       SubjectId = spf.SubjectId,
-                                                       SubjectName = spf.SubjectName,
-                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                       IsPaperSubject = sshs.IsPaperSubject
+                                                       SubjectId = subject.SubjectId,
+                                                       SubjectName = subject.SubjectName,
+                                                       IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                       IsPaperSubject = studentSubject.IsPaperSubject
                                                    }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {
@@ -334,14 +337,15 @@ namespace ShortPaper_API.Services.Shortpapers
                                        //                SubjectId = sps.SubjectId,
                                        //                SubjectName = sps.SubjectName,
                                        //            }).FirstOrDefault(),
-                                       Subjects = (from spf in _db.Subjects
-                                                   where spf.SubjectId == sshs.SubjectId
+                                       Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                   join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                   where studentSubject.StudentId == s.StudentId
                                                    select new SubjectDTO
                                                    {
-                                                       SubjectId = spf.SubjectId,
-                                                       SubjectName = spf.SubjectName,
-                                                       IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                       IsPaperSubject = sshs.IsPaperSubject
+                                                       SubjectId = subject.SubjectId,
+                                                       SubjectName = subject.SubjectName,
+                                                       IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                       IsPaperSubject = studentSubject.IsPaperSubject
                                                    }).ToList(),
                                        Committee = sct != null ? new CommitteeDTO
                                        {

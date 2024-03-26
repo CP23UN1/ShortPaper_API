@@ -7,5 +7,6 @@ namespace ShortPaper_API.Services.Subjects
     {
         ServiceResponse<List<SubjectDTO>> GetSubjects();
         ServiceResponse<List<SubjectDTO>> GetSubjectByFilter(string text);
+        ServiceResponse<UpdateSubjectDTO> UpdateStudentSubject(string studentId, UpdateSubjectDTO subject);
     }
 }

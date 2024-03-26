@@ -83,14 +83,15 @@ namespace ShortPaper_API.Services.Students
                                                            Status = spf.Status,
                                                            ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                        }).ToList(),
-                                    Subjects = (from spf in _db.Subjects
-                                                where spf.SubjectId == sshs.SubjectId
+                                    Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                where studentSubject.StudentId == student.StudentId
                                                 select new SubjectDTO
                                                 {
-                                                    SubjectId = spf.SubjectId,
-                                                    SubjectName = spf.SubjectName,
-                                                    IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                    IsPaperSubject = sshs.IsPaperSubject
+                                                    SubjectId = subject.SubjectId,
+                                                    SubjectName = subject.SubjectName,
+                                                    IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                    IsPaperSubject = studentSubject.IsPaperSubject
                                                 }).ToList(),
                                 })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -215,14 +216,15 @@ namespace ShortPaper_API.Services.Students
                                                                 Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList(),
-                                         Subjects = (from spf in _db.Subjects
-                                                     where spf.SubjectId == sshs.SubjectId
+                                         Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                     join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                     where studentSubject.StudentId == student.StudentId
                                                      select new SubjectDTO
                                                      {
-                                                         SubjectId = spf.SubjectId,
-                                                         SubjectName = spf.SubjectName,
-                                                         IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                         IsPaperSubject = sshs.IsPaperSubject
+                                                         SubjectId = subject.SubjectId,
+                                                         SubjectName = subject.SubjectName,
+                                                         IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                         IsPaperSubject = studentSubject.IsPaperSubject
                                                      }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -313,14 +315,15 @@ namespace ShortPaper_API.Services.Students
                                                                 Status = spf.Status,
                                                                 ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                             }).ToList(),
-                                         Subjects = (from spf in _db.Subjects
-                                                     where spf.SubjectId == sshs.SubjectId
+                                         Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                                     join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                                     where studentSubject.StudentId == student.StudentId
                                                      select new SubjectDTO
                                                      {
-                                                         SubjectId = spf.SubjectId,
-                                                         SubjectName = spf.SubjectName,
-                                                         IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                         IsPaperSubject = sshs.IsPaperSubject
+                                                         SubjectId = subject.SubjectId,
+                                                         SubjectName = subject.SubjectName,
+                                                         IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                         IsPaperSubject = studentSubject.IsPaperSubject
                                                      }).ToList(),
                                      })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -441,14 +444,15 @@ namespace ShortPaper_API.Services.Students
                                                           Status = spf.Status,
                                                           ShortpaperFileTypeId = spf.ShortpaperFileTypeId
                                                       }).ToList(),
-                                   Subjects = (from spf in _db.Subjects
-                                               where spf.SubjectId == sshs.SubjectId
+                                   Subjects = (from studentSubject in _db.StudentsHasSubjects
+                                               join subject in _db.Subjects on studentSubject.SubjectId equals subject.SubjectId
+                                               where studentSubject.StudentId == s.StudentId
                                                select new SubjectDTO
                                                {
-                                                   SubjectId = spf.SubjectId,
-                                                   SubjectName = spf.SubjectName,
-                                                   IsRegisteredSubject = sshs.IsRegisteredSubject,
-                                                   IsPaperSubject = sshs.IsPaperSubject
+                                                   SubjectId = subject.SubjectId,
+                                                   SubjectName = subject.SubjectName,
+                                                   IsRegisteredSubject = studentSubject.IsRegisteredSubject,
+                                                   IsPaperSubject = studentSubject.IsPaperSubject
                                                }).ToList(),
                                })
                 .GroupBy(x => x.Student.StudentId) // Group by StudentId
@@ -686,25 +690,6 @@ namespace ShortPaper_API.Services.Students
                 updateStudent.Email = student.Email;
                 updateStudent.AlternativeEmail = student.AlternativeEmail;
                 updateStudent.Phonenumber = student.Phonenumber;
-
-                // Clear existing subjects
-                updateStudent.StudentsHasSubjects.Clear();
-
-                // Add new subjects with additional properties
-                if (student.Subjects != null && student.Subjects.Any())
-                {
-                    foreach (var subject in student.Subjects)
-                    {
-                        var studentHasSubject = new StudentsHasSubject
-                        {
-                            StudentId = student.StudentId,
-                            SubjectId = subject.SubjectId,
-                            IsRegisteredSubject = subject.IsRegisteredSubject ? 1UL : 0UL,
-                            IsPaperSubject = subject.IsPaperSubject ? 1UL : 0UL
-                        };
-                        updateStudent.StudentsHasSubjects.Add(studentHasSubject);
-                    }
-                }
 
                 _db.SaveChanges();
 

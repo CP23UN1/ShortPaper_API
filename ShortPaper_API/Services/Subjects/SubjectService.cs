@@ -1,4 +1,6 @@
-﻿using ShortPaper_API.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using System.Globalization;
@@ -117,6 +119,58 @@ namespace ShortPaper_API.Services.Subjects
 
                 return result;
             }
+        }
+
+        public ServiceResponse<UpdateSubjectDTO> UpdateStudentSubject(string studentId, UpdateSubjectDTO subject)
+        {
+            var response = new ServiceResponse<UpdateSubjectDTO>();
+
+            try
+            {
+                // Retrieve the student from the database
+                var student = _db.Students.Include(s => s.StudentsHasSubjects)
+                                          .SingleOrDefault(a => a.StudentId == studentId);
+
+                if (student == null)
+                {
+                    response.ErrorMessage = "Student not found";
+                    response.httpStatusCode = StatusCodes.Status404NotFound;
+                }
+
+                // Find the subject in the student's list of subjects
+                var existingSubject = student.StudentsHasSubjects.FirstOrDefault(s => s.SubjectId == subject.SubjectId);
+
+                if (existingSubject == null)
+                {
+                    // If subject does not exist, create a new one
+                    var newSubject = new StudentsHasSubject
+                    {
+                        StudentId = studentId,
+                        SubjectId = subject.SubjectId,
+                        IsRegisteredSubject = subject.IsRegisteredSubject ? 1UL : 0UL,
+                        IsPaperSubject = subject.IsPaperSubject ? 1UL : 0UL
+                    };
+                    student.StudentsHasSubjects.Add(newSubject);
+                }
+                else
+                {
+                    // Update the properties of the existing subject
+                    existingSubject.IsRegisteredSubject = subject.IsRegisteredSubject ? 1UL : 0UL;
+                    existingSubject.IsPaperSubject = subject.IsPaperSubject ? 1UL : 0UL;
+                }
+
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = subject;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "An unexpected error occurred";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
         }
     }
 }

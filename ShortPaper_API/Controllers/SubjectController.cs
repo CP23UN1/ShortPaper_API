@@ -37,5 +37,13 @@ namespace ShortPaper_API.Controllers
             var subjects = _subjectService.GetSubjectByFilter(searchText);
             return subjects;
         }
+
+        [HttpPatch]
+        [Route("subject/update/{studentId}")]
+        public ServiceResponse<UpdateSubjectDTO> UpdateSubject(string studentId, UpdateSubjectDTO updateSubjectDTO)
+        {
+            var reponse = _subjectService.UpdateStudentSubject(studentId, updateSubjectDTO);
+            return reponse;
+        }
     }
 }
