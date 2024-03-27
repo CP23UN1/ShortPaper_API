@@ -48,6 +48,22 @@ namespace ShortPaper_API.Controllers
             return student;
         }
 
+        [HttpGet]
+        [Route("student/committee/{id}")]
+        public ServiceResponse<List<StudentDTO>> GetStudentByCommittee(string id)
+        {
+            var student = _studentService.GetStudentByCommittee(id);
+            return student;
+        }
+
+        [HttpGet]
+        [Route("student/committee-filter/{id}/{filterText}")]
+        public ServiceResponse<List<StudentDTO>> GetStudentByCommitteeAndFilter(string id, string filterText)
+        {
+            var student = _studentService.GetStudentByCommitteeAndFilter(id, filterText);
+            return student;
+        }
+
         [HttpPost]
         [Route("student/create")]
         [AllowAnonymous]
