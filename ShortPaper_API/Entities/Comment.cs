@@ -14,4 +14,6 @@ public partial class Comment
     public DateTime UpdatedDatetime { get; set; }
 
     public int FileId { get; set; }
+
+    public int? ReplyCommentId { get; set; }
 }

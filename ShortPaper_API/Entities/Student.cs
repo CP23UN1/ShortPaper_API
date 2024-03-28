@@ -25,5 +25,7 @@ public partial class Student
 
     public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
 
+    public virtual ICollection<StudentsHasArticle> StudentsHasArticles { get; set; } = new List<StudentsHasArticle>();
+
     public virtual ICollection<StudentsHasSubject> StudentsHasSubjects { get; set; } = new List<StudentsHasSubject>();
 }

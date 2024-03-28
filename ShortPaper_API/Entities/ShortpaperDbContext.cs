@@ -21,6 +21,8 @@ public partial class ShortpaperDbContext : DbContext
 
     public virtual DbSet<AnnouncementFile> AnnouncementFiles { get; set; }
 
+    public virtual DbSet<Article> Articles { get; set; }
+
     public virtual DbSet<Comment> Comments { get; set; }
 
     public virtual DbSet<Committee> Committees { get; set; }
@@ -34,6 +36,8 @@ public partial class ShortpaperDbContext : DbContext
     public virtual DbSet<ShortpapersHasCommittee> ShortpapersHasCommittees { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
+
+    public virtual DbSet<StudentsHasArticle> StudentsHasArticles { get; set; }
 
     public virtual DbSet<StudentsHasSubject> StudentsHasSubjects { get; set; }
 
@@ -126,11 +130,50 @@ public partial class ShortpaperDbContext : DbContext
                 .HasConstraintName("fk_announcement_files_announcements1");
         });
 
+        modelBuilder.Entity<Article>(entity =>
+        {
+            entity.HasKey(e => new { e.ArticleId, e.SubjectId }).HasName("PRIMARY");
+
+            entity.ToTable("article");
+
+            entity.HasIndex(e => e.SubjectId, "fk_article_subjects1_idx");
+
+            entity.Property(e => e.ArticleId).HasColumnName("article_id");
+            entity.Property(e => e.SubjectId)
+                .HasMaxLength(6)
+                .HasColumnName("subject_id");
+            entity.Property(e => e.Author)
+                .HasMaxLength(100)
+                .HasColumnName("author");
+            entity.Property(e => e.FileName)
+                .HasMaxLength(100)
+                .HasColumnName("file_name");
+            entity.Property(e => e.FileSize)
+                .HasMaxLength(50)
+                .HasColumnName("file_size");
+            entity.Property(e => e.FileType)
+                .HasMaxLength(50)
+                .HasColumnName("file_type");
+            entity.Property(e => e.Topic)
+                .HasMaxLength(100)
+                .HasColumnName("topic");
+            entity.Property(e => e.Year)
+                .HasMaxLength(6)
+                .HasColumnName("year");
+
+            entity.HasOne(d => d.Subject).WithMany(p => p.Articles)
+                .HasForeignKey(d => d.SubjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_article_subjects1");
+        });
+
         modelBuilder.Entity<Comment>(entity =>
         {
             entity.HasKey(e => new { e.CommentId, e.FileId }).HasName("PRIMARY");
 
             entity.ToTable("comments");
+
+            entity.HasIndex(e => e.ReplyCommentId, "fk_comments_comments1_idx");
 
             entity.HasIndex(e => e.FileId, "fk_comments_files1_idx");
 
@@ -145,6 +188,7 @@ public partial class ShortpaperDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("created_datetime");
+            entity.Property(e => e.ReplyCommentId).HasColumnName("reply_commentId");
             entity.Property(e => e.UpdatedDatetime)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
@@ -335,6 +379,27 @@ public partial class ShortpaperDbContext : DbContext
             entity.Property(e => e.Year)
                 .HasMaxLength(6)
                 .HasColumnName("year");
+        });
+
+        modelBuilder.Entity<StudentsHasArticle>(entity =>
+        {
+            entity.HasKey(e => new { e.StudentId, e.ArticleId }).HasName("PRIMARY");
+
+            entity.ToTable("students_has_article");
+
+            entity.HasIndex(e => e.ArticleId, "fk_students_has_article_article1_idx");
+
+            entity.HasIndex(e => e.StudentId, "fk_students_has_article_students1_idx");
+
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(11)
+                .HasColumnName("student_id");
+            entity.Property(e => e.ArticleId).HasColumnName("article_id");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.StudentsHasArticles)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_students_has_article_students1");
         });
 
         modelBuilder.Entity<StudentsHasSubject>(entity =>
