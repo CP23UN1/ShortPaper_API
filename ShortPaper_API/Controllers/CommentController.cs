@@ -30,19 +30,27 @@ namespace ShortPaper_API.Controllers
             return comments;
         }
 
+        [HttpGet]
+        [Route("comment/replycomment/{fileId}/{replyId}")]
+        public ServiceResponse<List<CommentDTO>> GetReplyComment(int fileId, int replyId) {
+            var comments = _commentService.GetCommentsFormReplyId(fileId, replyId);
+            return comments;
+        }
+
         [HttpPost]
         [Route("comment/create")]
-        public IActionResult AddCommentToFile(AddCommentDTO commentDTO)
+        public ServiceResponse<AddCommentDTO> AddCommentToFile(AddCommentDTO commentDTO)
         {
-            try
-            {
-                _commentService.AddCommentToFile(commentDTO);
-                return Ok("Comment added successfully.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var result = _commentService.AddCommentToFile(commentDTO);
+            return result;
+        }
+
+        [HttpPost]
+        [Route("comment/create/replycomment")]
+        public ServiceResponse<AddCommentDTO> CreateReplyComment(AddCommentDTO commentDTO)
+        {
+            var result = _commentService.AddReplyComment(commentDTO);
+            return  result;
         }
     }
 }
