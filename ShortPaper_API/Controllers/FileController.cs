@@ -47,9 +47,16 @@ namespace ShortPaper_API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            int shortpaperId;
             // Get the shortpaperId from the model or any other source
-            int shortpaperId = model.ShortpaperId;
+            if (model.ShortpaperId == 0)
+            {
+                shortpaperId = 0;
+            } else
+            {
+                shortpaperId = model.ShortpaperId;
+            }
+            
 
             // Call the UploadFile method in the FileService
             var uploadedFile = _fileService.UploadFile(
@@ -57,7 +64,8 @@ namespace ShortPaper_API.Controllers
                 model.File,
                 model.ExplanationVideo,
                 model.Remark,
-                model.FileTypeId
+                model.FileTypeId,
+                model.StudentId
             );
 
             // Check if the file upload was successful

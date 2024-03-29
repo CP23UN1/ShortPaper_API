@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using ShortPaper_API.Helper;
 using ShortPaper_API.DTO;
+using ShortPaper_API.Services.Shortpapers;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -9,11 +10,13 @@ namespace ShortPaper_API.Services.Files
     {
         private readonly ShortpaperDbContext _db;
         private readonly IWebHostEnvironment _hostingEnvironment;
+        private IShortpaperService _shortpaperService;
 
-        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment)
+        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment, IShortpaperService shortpaperService)
         {
             _db = db;
             _hostingEnvironment = hostingEnvironment;
+            _shortpaperService = shortpaperService;
         }
 
         public IEnumerable<ShortpaperFile> ListFiles(int shortpaperId)
@@ -23,7 +26,7 @@ namespace ShortPaper_API.Services.Files
                 .ToList();
         }
 
-        public ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId)
+        public ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId, string studentId)
         {
             if (file == null || file.Length == 0)
             {
@@ -51,6 +54,20 @@ namespace ShortPaper_API.Services.Files
                 fileData = memoryStream.ToArray();
             }
 
+            if (shortpaperId == 0)
+            {
+                var shortpaper = new AddShortpaperDTO
+                {
+                    ShortpaperTopic = null,
+                    StudentId = studentId
+                };
+                _shortpaperService.AddShortpaper(shortpaper);
+                _db.SaveChanges();
+
+            }
+
+            var lastshortpaper = _db.Shortpapers.FirstOrDefault(s => s.StudentId == studentId);
+
             var newFile = new ShortpaperFile
             {
                 FileName = uniqueFileName,
@@ -61,9 +78,10 @@ namespace ShortPaper_API.Services.Files
                 Remark = remark,
                 CreatedDatetime = DateTime.Now,
                 UpdatedDatetime = DateTime.Now,
-                ShortpaperId = shortpaperId,
+                ShortpaperId = lastshortpaper.ShortpaperId,
                 Status = "not_approve"
             };
+
 
             _db.ShortpaperFiles.Add(newFile);
             _db.SaveChanges();

@@ -8,7 +8,7 @@ namespace ShortPaper_API.Services.Files
     public interface IFileService
     {
         IEnumerable<ShortpaperFile> ListFiles(int shortpaperId);
-        ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId);
+        ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId, string studentId);
         byte[] DownloadFile(int fileId);
         ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType();
         ServiceResponse<List<ShortpaperFileDTO>> GetFiles();

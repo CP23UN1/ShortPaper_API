@@ -7,5 +7,6 @@
         public int FileTypeId { get; set; }
         public string? ExplanationVideo { get; set; }
         public string? Remark { get; set; }
+        public string? StudentId { get; set; }
     }
 }
