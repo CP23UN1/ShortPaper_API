@@ -108,7 +108,7 @@ namespace ShortPaper_API.Services.Files
                 Status = "not_approve"
             };
 
-            SendEmailToCommitee(committee,student.Firstname); 
+            //SendEmailToCommitee(committee,student.Firstname); 
 
             _db.ShortpaperFiles.Add(newFile);
             _db.SaveChanges();
