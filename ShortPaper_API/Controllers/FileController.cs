@@ -140,5 +140,18 @@ namespace ShortPaper_API.Controllers
             return getFile;
         }
 
+        [HttpGet]
+        [Route("file/preview/{fileId}")]
+        public IActionResult GetPreview(int fileId)
+        {
+            var previewData = _fileService.GeneratePdfPreview(fileId); // Change to GenerateImagePreview if generating image preview
+            if (previewData == null)
+            {
+                return NotFound();
+            }
+
+            return File(previewData, "image/jpeg"); // Change the content type as appropriate
+        }
+
     }
 }

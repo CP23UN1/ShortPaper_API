@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using ShortPaper_API.Helper;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Services.Shortpapers;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using PdfiumViewer;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -420,6 +425,32 @@ namespace ShortPaper_API.Services.Files
                 };
 
                 return result;
+            }
+        }
+
+        public byte[] GeneratePdfPreview(int fileId)
+        {
+            var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+
+            if (file == null || file.FileType != "application/pdf")
+            {
+                return null; // Not a PDF file or file not found
+            }
+
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
+
+            using (var document = PdfDocument.Load(filePath))
+            {
+                // Render the first page of the PDF as an image
+                using (var image = document.Render(0, 300, 300, true))
+                {
+                    // Convert the rendered image to a byte array
+                    using (var stream = new MemoryStream())
+                    {
+                        image.Save(stream, ImageFormat.Jpeg);
+                        return stream.ToArray();
+                    }
+                }
             }
         }
     }
