@@ -169,18 +169,28 @@ public partial class ShortpaperDbContext : DbContext
 
         modelBuilder.Entity<Comment>(entity =>
         {
-            entity.HasKey(e => new { e.CommentId, e.FileId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.CommentId, e.FileId, e.StudentId, e.CommitteeId }).HasName("PRIMARY");
 
             entity.ToTable("comments");
 
             entity.HasIndex(e => e.ReplyCommentId, "fk_comments_comments1_idx");
 
+            entity.HasIndex(e => e.CommitteeId, "fk_comments_committees1_idx");
+
             entity.HasIndex(e => e.FileId, "fk_comments_files1_idx");
+
+            entity.HasIndex(e => e.StudentId, "fk_comments_students1_idx");
 
             entity.Property(e => e.CommentId)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("comment_id");
             entity.Property(e => e.FileId).HasColumnName("file_id");
+            entity.Property(e => e.StudentId)
+                .HasMaxLength(11)
+                .HasColumnName("student_id");
+            entity.Property(e => e.CommitteeId)
+                .HasMaxLength(11)
+                .HasColumnName("committee_id");
             entity.Property(e => e.CommentContent)
                 .HasMaxLength(100)
                 .HasColumnName("comment_content");
@@ -193,6 +203,16 @@ public partial class ShortpaperDbContext : DbContext
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("datetime")
                 .HasColumnName("updated_datetime");
+
+            entity.HasOne(d => d.Committee).WithMany(p => p.Comments)
+                .HasForeignKey(d => d.CommitteeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_comments_committees1");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.Comments)
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_comments_students1");
         });
 
         modelBuilder.Entity<Committee>(entity =>
