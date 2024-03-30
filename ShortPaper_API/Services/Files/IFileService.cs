@@ -9,7 +9,7 @@ namespace ShortPaper_API.Services.Files
     {
         IEnumerable<ShortpaperFile> ListFiles(int shortpaperId);
         ShortpaperFile UploadFile(int shortpaperId, IFormFile file, string explanationVideo, string remark, int fileTypeId, string studentId);
-        byte[] DownloadFile(int fileId);
+        byte[] DownloadFile(int shortpaperId, int fileTypeId);
         ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType();
         ServiceResponse<List<ShortpaperFileDTO>> GetFiles();
         ServiceResponse<List<ShortpaperFileDTO>> GetFileByStudent(string id);

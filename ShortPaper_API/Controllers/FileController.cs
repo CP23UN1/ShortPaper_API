@@ -81,11 +81,11 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpGet]
-        [Route("file/download/{fileId}")]
-        public IActionResult DownloadFile(int fileId)
+        [Route("file/download/{shortpaperId}/{fileTypeId}")]
+        public IActionResult DownloadFile(int shortpaperId, int fileTypeId)
         {
             // Call the DownloadFile method from the FileService
-            var fileBytes = _fileService.DownloadFile(fileId);
+            var fileBytes = _fileService.DownloadFile(shortpaperId, fileTypeId);
 
             if (fileBytes == null)
             {
@@ -94,7 +94,7 @@ namespace ShortPaper_API.Controllers
             }
 
             // Retrieve the file information from the database
-            var file = _dbContext.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+            var file = _dbContext.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperId == shortpaperId && f.ShortpaperFileTypeId == fileTypeId );
 
             // Return the file as a response
             return File(fileBytes, file.FileType, file.FileName);

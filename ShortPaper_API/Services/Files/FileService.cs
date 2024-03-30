@@ -41,6 +41,8 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
+
+
             var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsDirectory))
             {
@@ -48,7 +50,20 @@ namespace ShortPaper_API.Services.Files
             }
 
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+
             var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
+            // Check if a file with the same name exists
+            var existingFile = _db.ShortpaperFiles
+                .Where(f => f.FileName == uniqueFileName)
+                .OrderByDescending(f => f.UpdatedDatetime)
+                .FirstOrDefault();
+
+            if (existingFile != null)
+            {
+                // Update the file name with a version or timestamp
+                var versionNumber = existingFile.UpdatedDatetime.Ticks; // Using ticks as version number
+                uniqueFileName = $"{Path.GetFileNameWithoutExtension(uniqueFileName)}_{versionNumber}{Path.GetExtension(uniqueFileName)}";
+            }
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
@@ -101,16 +116,27 @@ namespace ShortPaper_API.Services.Files
             return newFile;
         }
 
-        public byte[] DownloadFile(int fileId)
+        public byte[] DownloadFile(int shortpaperId, int fileTypeId)
         {
-            var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+            var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperId == shortpaperId && f.ShortpaperFileTypeId == fileTypeId);
 
             if (file == null)
             {
                 return null;
             }
 
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", file.FileName);
+            // Retrieve the latest version of the file with the same name
+            var latestVersionFile = _db.ShortpaperFiles
+                .Where(f => f.ShortpaperFileTypeId == fileTypeId)
+                .OrderByDescending(f => f.UpdatedDatetime)
+                .FirstOrDefault();
+
+            if (latestVersionFile == null)
+            {
+                return null;
+            }
+
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", latestVersionFile.FileName);
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
