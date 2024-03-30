@@ -136,7 +136,13 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", latestVersionFile.FileName);
+            // Get the path to the wwwroot directory
+            var webRootPath = _hostingEnvironment.WebRootPath;
+
+            // Construct the path to the uploads directory
+            var uploadsDirectory = Path.Combine(webRootPath, "uploads");
+
+            var filePath = Path.Combine(uploadsDirectory, latestVersionFile.FileName);
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
