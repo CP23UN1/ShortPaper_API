@@ -11,6 +11,7 @@ namespace ShortPaper_API.DTO
         public ShortpaperFileTypeDTO? ShortpaperFileType { get; set; }
         public int ShortpaperFileTypeId { get; set; }
         public string Status { get; set; }
+        public int ShortpaperId { get; set; }
         public DateTime UpdatedDatetime { get; set; }
     }
 }

@@ -8,6 +8,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using PdfiumViewer;
+using System.Net;
+using System.Net.Mail;
+using static System.Net.WebRequestMethods;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -72,6 +75,9 @@ namespace ShortPaper_API.Services.Files
             }
 
             var lastshortpaper = _db.Shortpapers.FirstOrDefault(s => s.StudentId == studentId);
+            var shortpaper_has_commitee = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.ShortpaperId == lastshortpaper.ShortpaperId);
+            var student = _db.Students.FirstOrDefault(s => s.StudentId == studentId);
+            var committee = _db.Committees.FirstOrDefault(s => s.CommitteeId == shortpaper_has_commitee.CommitteeId);
 
             var newFile = new ShortpaperFile
             {
@@ -87,6 +93,7 @@ namespace ShortPaper_API.Services.Files
                 Status = "not_approve"
             };
 
+            SendEmailToCommitee(committee,student.Firstname); 
 
             _db.ShortpaperFiles.Add(newFile);
             _db.SaveChanges();
@@ -451,6 +458,46 @@ namespace ShortPaper_API.Services.Files
                         return stream.ToArray();
                     }
                 }
+            }
+        }
+
+        private void SendEmailToCommitee(Committee committee,string studentName)
+        {
+            // Replace these values with your SMTP server credentials and email content.
+            string smtpServer = "smtp.gmail.com";
+            int smtpPort = 587; // Update with your SMTP port
+            string smtpUsername = "shortpaper.cp23un1@gmail.com";
+            string smtpPassword = "hejXoqfibxan3niqbu";
+
+            string senderEmail = "shortpaper.cp23un1@gmail.com";
+            string subject = "File Upload From Student";
+            string link = "https://capstone23.sit.kmutt.ac.th/un1/#/login";
+            string body = $"Dear {committee.Firstname},\n\nA new file from {studentName} has been uploaded \n\nYou can check in this link: <a href='{link}'>here</a>.";
+
+            try
+            {
+                using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress(senderEmail, "Non-Reply Shortpaper System");
+                    mailMessage.To.Add(new MailAddress(committee.Email, committee.Firstname));
+                    mailMessage.Subject = subject;
+                    mailMessage.Body = body;
+                    mailMessage.IsBodyHtml = true;
+
+                    // Set the Reply-To header to a non-reply email address
+                    mailMessage.ReplyToList.Add("noreply@example.com");
+
+                    smtpClient.Send(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions here, such as logging the error
+                Console.WriteLine($"Failed to send email to {studentName}: {ex.Message}");
             }
         }
     }
