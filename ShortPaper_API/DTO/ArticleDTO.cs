@@ -9,11 +9,11 @@ namespace ShortPaper_API.DTO
 
         public string Author { get; set; }
 
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
 
-        public string FileSize { get; set; }
+        public string? FileSize { get; set; }
 
-        public string FileType { get; set; }
+        public string? FileType { get; set; }
 
         public string Year { get; set; }
 

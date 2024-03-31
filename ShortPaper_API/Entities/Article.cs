@@ -11,11 +11,11 @@ public partial class Article
 
     public string Author { get; set; } = null!;
 
-    public string FileName { get; set; } = null!;
+    public string? FileName { get; set; }
 
-    public string FileSize { get; set; } = null!;
+    public string? FileSize { get; set; }
 
-    public string FileType { get; set; } = null!;
+    public string? FileType { get; set; }
 
     public string Year { get; set; } = null!;
 

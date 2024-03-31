@@ -138,7 +138,9 @@ public partial class ShortpaperDbContext : DbContext
 
             entity.HasIndex(e => e.SubjectId, "fk_article_subjects1_idx");
 
-            entity.Property(e => e.ArticleId).HasColumnName("article_id");
+            entity.Property(e => e.ArticleId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("article_id");
             entity.Property(e => e.SubjectId)
                 .HasMaxLength(6)
                 .HasColumnName("subject_id");
