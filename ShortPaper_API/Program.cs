@@ -5,6 +5,7 @@ using ShortPaper_API.Services.Announcements;
 using ShortPaper_API.Services.Students;
 using ShortPaper_API.Services.Committees;
 using ShortPaper_API.Services.Files;
+using ShortPaper_API.Services.Articles;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using ShortPaper_API.Services.Shortpapers;
@@ -163,6 +164,7 @@ builder.Services.AddScoped<IShortpaperService, ShortpaperService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddSingleton<FileStoreService>(provider =>
 {
     string basePath = Directory.GetCurrentDirectory();
