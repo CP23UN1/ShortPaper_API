@@ -34,6 +34,7 @@ namespace ShortPaper_API.Services.Articles
                                 Year = a.Year,
                                 Subjects = new SubjectDTO
                                 {
+                                    SubjectId = subjectOfArticle.SubjectId,
                                     SubjectName = subjectOfArticle.SubjectName
                                 }
                             }).ToList();
