@@ -79,16 +79,19 @@ namespace ShortPaper_API.Services.Files
 
         public byte[] DownloadFile(int shortpaperId, int fileTypeId)
         {
-            // Retrieve file from database
-            var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperId == shortpaperId && f.ShortpaperFileTypeId == fileTypeId);
+            // Retrieve the latest file of the specified file type for the given short paper
+            var latestFile = _db.ShortpaperFiles
+                .Where(f => f.ShortpaperId == shortpaperId && f.ShortpaperFileTypeId == fileTypeId)
+                .OrderByDescending(f => f.CreatedDatetime) // Order by upload timestamp descending to get the latest file
+                .FirstOrDefault();
 
-            if (file == null)
+            if (latestFile == null)
             {
                 return null;
             }
 
             // Use FileStoreService to retrieve file content
-            using (var fileStream = _fileStoreService.GetFile(file.FileName))
+            using (var fileStream = _fileStoreService.GetFile(latestFile.FileName))
             {
                 if (fileStream == null)
                 {
@@ -270,6 +273,7 @@ namespace ShortPaper_API.Services.Files
                             join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
                             into ft
                             from fileType in ft.DefaultIfEmpty()
+                            orderby a.CreatedDatetime descending
                             select new ShortpaperFileDTO
                             {
                                 ShortpaperFileId = a.ShortpaperFileId,
@@ -302,6 +306,7 @@ namespace ShortPaper_API.Services.Files
                             into ft2
                             from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
                             where (shortpaperFileAndStudent.StudentId.Contains(studentId) && a.ShortpaperFileId.Equals(fileId))
+                            orderby a.CreatedDatetime descending
                             select new ShortpaperFileDTO
                             {
                                 ShortpaperFileId = a.ShortpaperFileId,
