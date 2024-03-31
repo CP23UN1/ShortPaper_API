@@ -163,6 +163,12 @@ builder.Services.AddScoped<IShortpaperService, ShortpaperService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<FileStoreService>(provider =>
+{
+    string basePath = Directory.GetCurrentDirectory();
+    string uploadsDirectory = "uploads"; // Provide the uploads directory here
+    return new FileStoreService(basePath, uploadsDirectory);
+});
 
 var app = builder.Build();
 

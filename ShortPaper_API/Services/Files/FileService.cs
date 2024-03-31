@@ -19,12 +19,14 @@ namespace ShortPaper_API.Services.Files
         private readonly ShortpaperDbContext _db;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private IShortpaperService _shortpaperService;
+        private readonly FileStoreService _fileStoreService;
 
-        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment, IShortpaperService shortpaperService)
+        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment, IShortpaperService shortpaperService, FileStoreService fileStoreService)
         {
             _db = db;
             _hostingEnvironment = hostingEnvironment;
             _shortpaperService = shortpaperService;
+            _fileStoreService = fileStoreService;
         }
 
         public IEnumerable<ShortpaperFile> ListFiles(int shortpaperId)
@@ -41,54 +43,6 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
-
-
-            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-            if (!Directory.Exists(uploadsDirectory))
-            {
-                Directory.CreateDirectory(uploadsDirectory);
-            }
-
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-
-            var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
-            // Check if a file with the same name exists
-            var existingFile = _db.ShortpaperFiles
-                .Where(f => f.FileName == uniqueFileName)
-                .OrderByDescending(f => f.UpdatedDatetime)
-                .FirstOrDefault();
-
-            if (existingFile != null)
-            {
-                // Update the file name with a version or timestamp
-                var versionNumber = existingFile.UpdatedDatetime.Ticks; // Using ticks as version number
-                uniqueFileName = $"{Path.GetFileNameWithoutExtension(uniqueFileName)}_{versionNumber}{Path.GetExtension(uniqueFileName)}";
-            }
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-
-            byte[] fileData;
-            using (var memoryStream = new MemoryStream())
-            {
-                file.OpenReadStream().CopyTo(memoryStream);
-                fileData = memoryStream.ToArray();
-            }
-
-            if (shortpaperId == 0)
-            {
-                var shortpaper = new AddShortpaperDTO
-                {
-                    ShortpaperTopic = null,
-                    StudentId = studentId
-                };
-                _shortpaperService.AddShortpaper(shortpaper);
-                _db.SaveChanges();
-
-            }
-
             var lastshortpaper = _db.Shortpapers.FirstOrDefault(s => s.StudentId == studentId);
             var shortpaper_has_commitee = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.ShortpaperId == lastshortpaper.ShortpaperId);
             var student = _db.Students.FirstOrDefault(s => s.StudentId == studentId);
@@ -96,7 +50,7 @@ namespace ShortPaper_API.Services.Files
 
             var newFile = new ShortpaperFile
             {
-                FileName = uniqueFileName,
+                FileName = file.FileName,
                 FileSize = file.Length.ToString(),
                 FileType = file.ContentType,
                 ExplanationVideo = explanationVideo,
@@ -113,11 +67,19 @@ namespace ShortPaper_API.Services.Files
             _db.ShortpaperFiles.Add(newFile);
             _db.SaveChanges();
 
+
+            // Use FileStoreService to store file
+            // Use FileStoreService to store file
+            using (var fileStream = file.OpenReadStream())
+            {
+                _fileStoreService.StoreFile(newFile.FileName, fileStream);
+            }
             return newFile;
         }
 
         public byte[] DownloadFile(int shortpaperId, int fileTypeId)
         {
+            // Retrieve file from database
             var file = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperId == shortpaperId && f.ShortpaperFileTypeId == fileTypeId);
 
             if (file == null)
@@ -125,22 +87,20 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
-            // Retrieve the latest version of the file with the same name
-            var latestVersionFile = _db.ShortpaperFiles
-                .Where(f => f.ShortpaperFileTypeId == fileTypeId)
-                .OrderByDescending(f => f.UpdatedDatetime)
-                .FirstOrDefault();
-
-            if (latestVersionFile == null)
+            // Use FileStoreService to retrieve file content
+            using (var fileStream = _fileStoreService.GetFile(file.FileName))
             {
-                return null;
+                if (fileStream == null)
+                {
+                    return null;
+                }
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    fileStream.CopyTo(memoryStream);
+                    return memoryStream.ToArray();
+                }
             }
-
-            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "uploads", latestVersionFile.FileName);
-
-            var fileBytes = System.IO.File.ReadAllBytes(filePath);
-
-            return fileBytes;
         }
 
         public ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType()
