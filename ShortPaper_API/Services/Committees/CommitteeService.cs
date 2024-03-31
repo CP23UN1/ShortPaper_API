@@ -60,6 +60,47 @@ namespace ShortPaper_API.Services.Committees
             return response;
         }
 
+        public async Task<ServiceResponse<CommitteeDTO>> GetCommitteesById(string committeeId)
+        {
+            var response = new ServiceResponse<CommitteeDTO>();
+
+            try
+            {
+                var committees = await _db.Committees
+                    .Select(c => new CommitteeDTO
+                    {
+                        CommitteeId = c.CommitteeId,
+                        Firstname = c.Firstname,
+                        Lastname = c.Lastname,
+                        Email = c.Email,
+                        // Map other properties as needed
+                    })
+                    .FirstAsync(c => c.CommitteeId == committeeId);
+
+                if (committees.CommitteeId == null)
+                {
+                    response.IsSuccess = false;
+                    response.ErrorMessage = "No committees found.";
+                    response.httpStatusCode = StatusCodes.Status404NotFound;
+
+                }
+                else
+                {
+                    response.IsSuccess = true;
+                    response.Data = committees;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "An unexpected error occurred while retrieving committees.";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
+        }
+
+
+
         public async Task<ServiceResponse<List<AddCommitteeDTO>>> AddCommitteesFromCsvAsync(IFormFile csvFile)
         {
             var response = new ServiceResponse<List<AddCommitteeDTO>>();

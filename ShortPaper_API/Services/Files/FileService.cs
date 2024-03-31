@@ -58,9 +58,9 @@ namespace ShortPaper_API.Services.Files
             }
 
             var lastshortpaper = _db.Shortpapers.FirstOrDefault(s => s.StudentId == studentId);
-            //var shortpaper_has_commitee = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.ShortpaperId == lastshortpaper.ShortpaperId);
-            //var student = _db.Students.FirstOrDefault(s => s.StudentId == studentId);
-            //var committee = _db.Committees.FirstOrDefault(s => s.CommitteeId == shortpaper_has_commitee.CommitteeId);
+            var shortpaper_has_commitee = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.ShortpaperId == lastshortpaper.ShortpaperId);
+            var student = _db.Students.FirstOrDefault(s => s.StudentId == studentId);
+            var committee = _db.Committees.FirstOrDefault(s => s.CommitteeId == shortpaper_has_commitee.CommitteeId);
 
             var newFile = new ShortpaperFile
             {

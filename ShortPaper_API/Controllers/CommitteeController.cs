@@ -29,6 +29,19 @@ namespace ShortPaper_API.Controllers
             return BadRequest(result.ErrorMessage);
         }
 
+        [HttpGet("committee/{id}")]
+        public async Task<IActionResult> GetCommitteeById(string id)
+        {
+            var result = await _committeeService.GetCommitteesById(id);
+
+            if (result.IsSuccess)
+            {
+                return Ok(result.Data);
+            }
+
+            return BadRequest(result.ErrorMessage);
+        }
+
         [HttpPost]
         [Route("committee/add-from-csv")]
         public async Task<IActionResult> AddCommitteesFromCsv(IFormFile csvFile)
@@ -58,7 +71,7 @@ namespace ShortPaper_API.Controllers
         }
 
         [HttpPost]
-        [Route("committee/update-roles-for-student")]
+        [Route("committee/update-roles-for-student/{studentId}")]
         public async Task<IActionResult> UpdateCommitteeRolesForStudent(string studentId, List<CommitteeRoleDTO> committeeRoles)
         {
             var result = await _committeeService.UpdateCommitteeRolesForStudentAsync(studentId, committeeRoles);
