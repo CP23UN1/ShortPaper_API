@@ -32,7 +32,7 @@ namespace ShortPaper_API.Services.Articles
                                 FileName = a.FileName,
                                 FileType = a.FileType,
                                 Year = a.Year,
-                                SubjectDTO = new SubjectDTO
+                                Subjects = new SubjectDTO
                                 {
                                     SubjectName = subjectOfArticle.SubjectName
                                 }

@@ -17,7 +17,7 @@ namespace ShortPaper_API.DTO
 
         public string Year { get; set; }
 
-        public SubjectDTO SubjectDTO { get; set; }
+        public SubjectDTO Subjects { get; set; }
     }
 }
 
