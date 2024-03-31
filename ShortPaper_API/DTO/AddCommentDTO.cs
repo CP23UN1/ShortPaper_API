@@ -7,5 +7,7 @@
         public int FileId { get; set; }
 
         public int replyId { get; set; }
+
+        public string AuthorId { get; set; }
     }
 }

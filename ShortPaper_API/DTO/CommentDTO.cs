@@ -11,5 +11,7 @@
         public DateTime UpdatedDatetime { get; set; }
 
         public int FileId { get; set; }
+
+        public string AuthorId { get; set; }
     }
 }

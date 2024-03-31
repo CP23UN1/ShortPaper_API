@@ -26,7 +26,8 @@ namespace ShortPaper_API.Services.Comments
                    CommentId = c.CommentId,
                    CommentContent = c.CommentContent,
                    CreatedDatetime = c.CreatedDatetime,
-                   FileId = fileId
+                   FileId = fileId,
+                   AuthorId = c.AuthorId
                })
                .ToList();
 
@@ -77,7 +78,8 @@ namespace ShortPaper_API.Services.Comments
                    CommentId = c.CommentId,
                    CommentContent = c.CommentContent,
                    CreatedDatetime = c.CreatedDatetime,
-                   FileId = fileId
+                   FileId = fileId,
+                   AuthorId = c.AuthorId
                })
                .ToList();
 
@@ -134,7 +136,8 @@ namespace ShortPaper_API.Services.Comments
                     CommentContent = commentDTO.CommentContent,
                     CreatedDatetime = DateTime.Now,
                     UpdatedDatetime = DateTime.Now,
-                    FileId = commentDTO.FileId
+                    FileId = commentDTO.FileId,
+                    AuthorId = commentDTO.AuthorId
                 };
 
                 // Add the comment to the database
@@ -163,7 +166,8 @@ namespace ShortPaper_API.Services.Comments
                 CreatedDatetime = DateTime.Now,
                 UpdatedDatetime = DateTime.Now,
                 ReplyCommentId = commentDTO.replyId,
-                FileId = commentDTO.FileId
+                FileId = commentDTO.FileId,
+                AuthorId = commentDTO.AuthorId
             };
 
                 // Add the comment to the database
