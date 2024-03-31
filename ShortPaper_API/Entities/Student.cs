@@ -23,8 +23,6 @@ public partial class Student
 
     public string Year { get; set; } = null!;
 
-    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
     public virtual ICollection<Shortpaper> Shortpapers { get; set; } = new List<Shortpaper>();
 
     public virtual ICollection<StudentsHasArticle> StudentsHasArticles { get; set; } = new List<StudentsHasArticle>();
