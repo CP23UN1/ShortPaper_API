@@ -36,6 +36,8 @@ namespace ShortPaper_API
                 });
             });
 
+            services.Configure<StorageOptions>(Configuration.GetSection("Storage"));
+
             services.Configure<FormOptions>(options =>
             {
                 options.MultipartBodyLengthLimit = long.MaxValue; // Set to the maximum value or an appropriate limit
