@@ -11,7 +11,6 @@ using PdfiumViewer;
 using System.Net;
 using System.Net.Mail;
 using static System.Net.WebRequestMethods;
-using Microsoft.Extensions.Options;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -20,20 +19,12 @@ namespace ShortPaper_API.Services.Files
         private readonly ShortpaperDbContext _db;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private IShortpaperService _shortpaperService;
-        private readonly string _uploadsDirectory;
 
-        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment, IShortpaperService shortpaperService, IOptions<StorageOptions> storageOptions)
+        public FileService(ShortpaperDbContext db, IWebHostEnvironment hostingEnvironment, IShortpaperService shortpaperService)
         {
             _db = db;
             _hostingEnvironment = hostingEnvironment;
             _shortpaperService = shortpaperService;
-            _uploadsDirectory = Path.Combine(_hostingEnvironment.WebRootPath, storageOptions.Value.Location);
-
-            // Ensure the uploads directory exists
-            if (!Directory.Exists(_uploadsDirectory))
-            {
-                Directory.CreateDirectory(_uploadsDirectory);
-            }
         }
 
         public IEnumerable<ShortpaperFile> ListFiles(int shortpaperId)
@@ -50,9 +41,17 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
+
+
+            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+            if (!Directory.Exists(uploadsDirectory))
+            {
+                Directory.CreateDirectory(uploadsDirectory);
+            }
+
             var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
 
-            var filePath = Path.Combine(_uploadsDirectory, uniqueFileName);
+            var filePath = Path.Combine(uploadsDirectory, uniqueFileName);
             // Check if a file with the same name exists
             var existingFile = _db.ShortpaperFiles
                 .Where(f => f.FileName == uniqueFileName)
@@ -64,16 +63,18 @@ namespace ShortPaper_API.Services.Files
                 // Update the file name with a version or timestamp
                 var versionNumber = existingFile.UpdatedDatetime.Ticks; // Using ticks as version number
                 uniqueFileName = $"{Path.GetFileNameWithoutExtension(uniqueFileName)}_{versionNumber}{Path.GetExtension(uniqueFileName)}";
-                filePath = Path.Combine(_uploadsDirectory, uniqueFileName); // Update filePath with new unique file name
             }
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 file.CopyTo(stream);
             }
-            using (var stream = new FileStream(filePath, FileMode.Create))
+
+            byte[] fileData;
+            using (var memoryStream = new MemoryStream())
             {
-                file.CopyTo(stream);
+                file.OpenReadStream().CopyTo(memoryStream);
+                fileData = memoryStream.ToArray();
             }
 
             if (shortpaperId == 0)
@@ -124,14 +125,28 @@ namespace ShortPaper_API.Services.Files
                 return null;
             }
 
-            var filePath = Path.Combine(_uploadsDirectory, file.FileName);
+            // Retrieve the latest version of the file with the same name
+            var latestVersionFile = _db.ShortpaperFiles
+                .Where(f => f.ShortpaperFileTypeId == fileTypeId)
+                .OrderByDescending(f => f.UpdatedDatetime)
+                .FirstOrDefault();
 
-            if (!System.IO.File.Exists(filePath))
+            if (latestVersionFile == null)
             {
                 return null;
             }
 
-            return System.IO.File.ReadAllBytes(filePath);
+            // Get the path to the wwwroot directory
+            var webRootPath = _hostingEnvironment.WebRootPath;
+
+            // Construct the path to the uploads directory
+            var uploadsDirectory = Path.Combine(webRootPath, "uploads");
+
+            var filePath = Path.Combine(uploadsDirectory, latestVersionFile.FileName);
+
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            return fileBytes;
         }
 
         public ServiceResponse<List<ShortpaperFileTypeDTO>> GetFileType()
