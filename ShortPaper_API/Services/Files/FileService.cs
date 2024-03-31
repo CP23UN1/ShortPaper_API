@@ -11,6 +11,8 @@ using PdfiumViewer;
 using System.Net;
 using System.Net.Mail;
 using static System.Net.WebRequestMethods;
+using System;
+using System.Collections.Generic;
 
 namespace ShortPaper_API.Services.Files
 {
@@ -41,6 +43,18 @@ namespace ShortPaper_API.Services.Files
             if (file == null || file.Length == 0)
             {
                 return null;
+            }
+
+            if (shortpaperId == 0)
+            {
+                var shortpaper = new AddShortpaperDTO
+                {
+                    ShortpaperTopic = null,
+                    StudentId = studentId
+                };
+                _shortpaperService.AddShortpaper(shortpaper);
+                _db.SaveChanges();
+
             }
 
             var lastshortpaper = _db.Shortpapers.FirstOrDefault(s => s.StudentId == studentId);
@@ -260,79 +274,53 @@ namespace ShortPaper_API.Services.Files
             }
         }
 
-        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByIdAndStudent(int fileId, string studentId)
+        public ServiceResponse<ShortpaperFileDTO> GetFileByIdAndStudent(int fileId, string studentId)
         {
             try
             {
-                var file = new List<ShortpaperFileDTO>();
+                var latestFile = (from a in _db.ShortpaperFiles
+                                  join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
+                                  into ft
+                                  from fileType in ft.DefaultIfEmpty()
+                                  join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
+                                  into ft2
+                                  from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
+                                  where shortpaperFileAndStudent.StudentId == studentId
+                                  orderby a.CreatedDatetime descending
+                                  select new ShortpaperFileDTO
+                                  {
+                                      ShortpaperFileId = a.ShortpaperFileId,
+                                      FileName = a.FileName,
+                                      UpdatedDatetime = a.UpdatedDatetime,
+                                      Status = a.Status ?? "not_send",
+                                      ShortpaperFileType = new ShortpaperFileTypeDTO
+                                      {
+                                          TypeId = fileType.TypeId,
+                                          TypeName = fileType.TypeName,
+                                      }
 
-                if (fileId == null || studentId == "" || studentId == null)
+                                  }).FirstOrDefault();
+
+                if (latestFile == null)
                 {
-                    file = (from a in _db.ShortpaperFiles
-
-                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
-                            into ft
-                            from fileType in ft.DefaultIfEmpty()
-                            orderby a.CreatedDatetime descending
-                            select new ShortpaperFileDTO
-                            {
-                                ShortpaperFileId = a.ShortpaperFileId,
-                                FileName = a.FileName,
-                                UpdatedDatetime = a.UpdatedDatetime,
-                                Status = a.Status ?? "not_send",
-                                ShortpaperFileType = new ShortpaperFileTypeDTO
-                                {
-                                    TypeId = fileType.TypeId,
-                                    TypeName = fileType.TypeName,
-                                },
-
-                            }).ToList();
-
-                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
+                    return new ServiceResponse<ShortpaperFileDTO>
                     {
-                        Data = file,
-                        httpStatusCode = StatusCodes.Status200OK,
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "No files found for the specified student."
                     };
-
-                    return result;
                 }
-                else
+
+                var result = new ServiceResponse<ShortpaperFileDTO>
                 {
-                    file = (from a in _db.ShortpaperFiles
-                            join b in _db.ShortpaperFileTypes on a.ShortpaperFileTypeId equals b.TypeId
-                            into ft
-                            from fileType in ft.DefaultIfEmpty()
-                            join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
-                            into ft2
-                            from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
-                            where (shortpaperFileAndStudent.StudentId.Contains(studentId) && a.ShortpaperFileId.Equals(fileId))
-                            orderby a.CreatedDatetime descending
-                            select new ShortpaperFileDTO
-                            {
-                                ShortpaperFileId = a.ShortpaperFileId,
-                                FileName = a.FileName,
-                                UpdatedDatetime = a.UpdatedDatetime,
-                                Status = a.Status ?? "not_send",
-                                ShortpaperFileType = new ShortpaperFileTypeDTO
-                                {
-                                    TypeId = fileType.TypeId,
-                                    TypeName = fileType.TypeName,
-                                }
+                    Data = latestFile,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
 
-                            }).ToList();
-
-                    var result = new ServiceResponse<List<ShortpaperFileDTO>>
-                    {
-                        Data = file,
-                        httpStatusCode = StatusCodes.Status200OK,
-                    };
-
-                    return result;
-                }
+                return result;
             }
             catch (Exception ex)
             {
-                var result = new ServiceResponse<List<ShortpaperFileDTO>>()
+                var result = new ServiceResponse<ShortpaperFileDTO>()
                 {
                     httpStatusCode = StatusCodes.Status400BadRequest,
                     ErrorMessage = ex.Message
@@ -341,6 +329,63 @@ namespace ShortPaper_API.Services.Files
                 return result;
             }
         }
+
+        public ServiceResponse<ShortpaperFileDTO> GetFileByTypeIdAndShortpaper(int fileTypeId, int shortpaperId)
+        {
+            try
+            {
+                var latestFile = (from a in _db.ShortpaperFiles
+                                  join b in _db.ShortpaperFileTypes on fileTypeId equals b.TypeId
+                                  into ft
+                                  from fileType in  ft.DefaultIfEmpty()
+                                  join c in _db.Shortpapers on a.ShortpaperId equals c.ShortpaperId
+                                  into ft2
+                                  from shortpaperFileAndStudent in ft2.DefaultIfEmpty()
+                                  where a.ShortpaperId == shortpaperId && a.ShortpaperFileTypeId == fileTypeId
+                                  orderby a.CreatedDatetime descending
+                                  select new ShortpaperFileDTO
+                                  {
+                                      ShortpaperFileId = a.ShortpaperFileId,
+                                      FileName = a.FileName,
+                                      UpdatedDatetime = a.UpdatedDatetime,
+                                      Status = a.Status ?? "not_send",
+                                      ShortpaperFileType = new ShortpaperFileTypeDTO
+                                      {
+                                          TypeId = fileType.TypeId,
+                                          TypeName = fileType.TypeName,
+                                      }
+
+                                  }).FirstOrDefault();
+
+                if (latestFile == null)
+                {
+                    return new ServiceResponse<ShortpaperFileDTO>
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "No files found for the specified student."
+                    };
+                }
+
+                var result = new ServiceResponse<ShortpaperFileDTO>
+                {
+                    Data = latestFile,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<ShortpaperFileDTO>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
 
         public ServiceResponse<List<ShortpaperFileDTO>> GetFileByCommittee(string committeeId)
         {

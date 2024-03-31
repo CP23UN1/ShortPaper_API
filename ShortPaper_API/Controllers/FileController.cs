@@ -126,9 +126,17 @@ namespace ShortPaper_API.Controllers
 
         [HttpGet]
         [Route("file/search-by-id-and-student/{fileId}/{studentId}")]
-        public ServiceResponse<List<ShortpaperFileDTO>> GetFileByIdAndStudentId(int fileId, string studentId)
+        public ServiceResponse<ShortpaperFileDTO> GetFileByIdAndStudentId(int fileId, string studentId)
         {
             var getFile = _fileService.GetFileByIdAndStudent(fileId, studentId);
+            return getFile;
+        }
+
+        [HttpGet]
+        [Route("file/fileType/Shortpaper/{fileTypeId}/{shortpaperId}")]
+        public ServiceResponse<ShortpaperFileDTO> GetFileByTypeAndShortpaper(int fileTypeId, int shortpaperId)
+        {
+            var getFile = _fileService.GetFileByTypeIdAndShortpaper(fileTypeId, shortpaperId);
             return getFile;
         }
 
