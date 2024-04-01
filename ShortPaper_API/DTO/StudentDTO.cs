@@ -17,7 +17,7 @@ namespace ShortPaper_API.DTO
         public string? AlternativeEmail { get; set; }
 
         public string? Phonenumber { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         public string Year { get; set; } = null!;
 
