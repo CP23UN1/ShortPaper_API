@@ -152,11 +152,19 @@ namespace ShortPaper_API.Services.Subjects
                     };
                     student.StudentsHasSubjects.Add(newSubject);
 
+                    if (subject.IsRegisteredSubject && subject.IsPaperSubject)
+                    {
                         var otherSubjects = student.StudentsHasSubjects.Where(s => s.SubjectId != subject.SubjectId).ToList();
                         foreach (var otherSubject in otherSubjects)
                         {
                             _db.Remove(otherSubject);
                         }
+                    }
+                    var otherSubjectSames = student.StudentsHasSubjects.Where(s => s.SubjectId != subject.SubjectId && (s.IsPaperSubject == (subject.IsPaperSubject ? 1UL : 0UL) || s.IsRegisteredSubject == (subject.IsRegisteredSubject ? 1UL : 0UL))).ToList();
+                    foreach (var otherSubjectSame in otherSubjectSames)
+                    {
+                        _db.Remove(otherSubjectSame);
+                    }
                 }
                 else
                 {
