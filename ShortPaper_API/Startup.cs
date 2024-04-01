@@ -59,6 +59,12 @@ namespace ShortPaper_API
 
             services.AddControllers();
 
+            // Add Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ShortPaper API", Version = "v1" });
+            });
+
             // Add Services Scoped
             //services.AddScoped<IUserService, UserService>();
             //services.AddScoped<IFileService, FileService>();
@@ -79,6 +85,11 @@ namespace ShortPaper_API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShortPaper API V1");
+                });
             }
             else
             {
