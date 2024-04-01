@@ -17,6 +17,7 @@ namespace ShortPaper_API.Services.Files
         ServiceResponse<ShortpaperFileDTO> GetFileByTypeIdAndShortpaper(int fileTypeId, int shortpaperId);
         ServiceResponse<List<ShortpaperFileDTO>> GetFileByCommittee(string committeeId);
         public byte[] GeneratePdfPreview(int fileId);
+        ServiceResponse<string> UpdateFileStatusToApproved(int fileId);
 
         //        Task<Stream> DownloadFile(int fileId);
     }

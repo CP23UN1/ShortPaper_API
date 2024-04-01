@@ -161,5 +161,25 @@ namespace ShortPaper_API.Controllers
             return File(previewData, "image/jpeg"); // Change the content type as appropriate
         }
 
+        [HttpPut]
+        [Route("file/update/status/{fileId}")]
+        public IActionResult UpdateFileStatusToApproved(int fileId)
+        {
+            var updateStatusResponse = _fileService.UpdateFileStatusToApproved(fileId);
+
+            if (updateStatusResponse.httpStatusCode == StatusCodes.Status200OK)
+            {
+                return Ok(updateStatusResponse.Data);
+            }
+            else if (updateStatusResponse.httpStatusCode == StatusCodes.Status404NotFound)
+            {
+                return NotFound(updateStatusResponse.ErrorMessage);
+            }
+            else
+            {
+                return BadRequest(updateStatusResponse.ErrorMessage);
+            }
+        }
+
     }
 }

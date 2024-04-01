@@ -197,10 +197,10 @@ namespace ShortPaper_API.Services.Announcements
             // Replace these values with your SMTP server credentials and email content.
             string smtpServer = "smtp.gmail.com";
             int smtpPort = 587; // Update with your SMTP port
-            string smtpUsername = "oasipssi4@gmail.com";
-            string smtpPassword = "nxrpstsxvpyhbkpi";
+            string smtpUsername = "shortpaper.project@gmail.com";
+            string smtpPassword = "mgliofrgespahzof";
 
-            string senderEmail = "oasipssi4@gmail.com";
+            string senderEmail = "shortpaper.project@gmail.com";
             string subject = "New Announcement";
             string body = $"Dear {student.Firstname},\n\nA new announcement has been created: {announcement.Content}\n\nThank you.";
 
