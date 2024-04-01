@@ -103,7 +103,7 @@ namespace ShortPaper_API.Controllers
             return deleteUser;
         }
 
-        [HttpDelete]
+        [HttpGet]
         [Route("years/list")]
         public ServiceResponse<List<string>> GetUniqueYears()
         {

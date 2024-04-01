@@ -86,10 +86,7 @@ namespace ShortPaper_API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShortPaper API V1");
-                });
+                app.UseSwaggerUI();
             }
             else
             {
@@ -98,7 +95,7 @@ namespace ShortPaper_API
 
             // Use CORS before other middleware
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            app.UsePathBase("/un1");
+            //app.UsePathBase("/un1");
 
             app.UseHttpsRedirection();
             app.UseRouting();
