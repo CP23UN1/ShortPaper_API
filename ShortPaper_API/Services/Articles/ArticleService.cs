@@ -20,7 +20,7 @@ namespace ShortPaper_API.Services.Articles
         {
             try
             {
-                var file = (from a in _db.Articles
+                var articles = (from a in _db.Articles
                             join b in _db.Subjects on a.SubjectId equals b.SubjectId
                             into subject
                             from subjectOfArticle in subject.DefaultIfEmpty()
@@ -41,7 +41,7 @@ namespace ShortPaper_API.Services.Articles
 
                 var result = new ServiceResponse<List<ArticleDTO>>
                 {
-                    Data = file,
+                    Data = articles,
                     httpStatusCode = StatusCodes.Status200OK,
                 };
 
@@ -87,6 +87,103 @@ namespace ShortPaper_API.Services.Articles
             }
 
             _db.SaveChanges();
+        }
+
+        public ServiceResponse<StudentsHasArticle> AddArticleToStudent(string studentId, int articleId)
+        {
+            var response = new ServiceResponse<StudentsHasArticle>();
+
+            try
+            {
+                var studentAndArticle = new StudentsHasArticle
+                {
+                    ArticleId = articleId,
+                    StudentId = studentId
+                };
+
+                _db.StudentsHasArticles.Add(studentAndArticle);
+                _db.SaveChanges();
+
+                response.IsSuccess = true;
+                response.Data = studentAndArticle;
+            }
+            catch (Exception ex)
+            {
+                response.ErrorMessage = "An unexpected error occurred";
+                response.httpStatusCode = StatusCodes.Status500InternalServerError;
+            }
+
+            return response;
+        }
+
+        public ServiceResponse<List<ArticleDTO>> GetArticlesByFilter(string filterText)
+        {
+            try
+            {
+                var articles = new List<ArticleDTO>();
+                if(filterText == "" || filterText == null)
+                {
+                    articles    = (from a in _db.Articles
+                                join b in _db.Subjects on a.SubjectId equals b.SubjectId
+                                into subject
+                                from subjectOfArticle in subject.DefaultIfEmpty()
+                                select new ArticleDTO
+                                {
+                                    ArticleId = a.ArticleId,
+                                    Topic = a.Topic,
+                                    Author = a.Author,
+                                    FileName = a.FileName,
+                                    FileType = a.FileType,
+                                    Year = a.Year,
+                                    Subjects = new SubjectDTO
+                                    {
+                                        SubjectId = subjectOfArticle.SubjectId,
+                                        SubjectName = subjectOfArticle.SubjectName
+                                    }
+                                }).ToList();
+                }
+                else
+                {
+                 articles = (from a in _db.Articles
+                            join b in _db.Subjects on a.SubjectId equals b.SubjectId
+                            into subject
+                            from subjectOfArticle in subject.DefaultIfEmpty()
+                            where a.Author == filterText || a.FileName == filterText || a.Topic == filterText || a.Year == filterText || a.FileType == filterText
+                            select new ArticleDTO
+                            {
+                                ArticleId = a.ArticleId,
+                                Topic = a.Topic,
+                                Author = a.Author,
+                                FileName = a.FileName,
+                                FileType = a.FileType,
+                                Year = a.Year,
+                                Subjects = new SubjectDTO
+                                {
+                                    SubjectId = subjectOfArticle.SubjectId,
+                                    SubjectName = subjectOfArticle.SubjectName
+                                }
+                            }).ToList();
+                }
+                     
+
+                var result = new ServiceResponse<List<ArticleDTO>>
+                {
+                    Data = articles,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ArticleDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
         }
     }
 }

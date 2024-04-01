@@ -48,6 +48,22 @@ namespace ShortPaper_API.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpPost]
+        [Route("article/student/{studentId}/{articleId}")]
+        public ServiceResponse<StudentsHasArticle> AddArticleToStudent(string studentId, int articleId)
+        {
+            var result = _articleService.AddArticleToStudent(studentId, articleId);
+            return result;
+        }
+
+        [HttpGet]
+        [Route("article/filter")]
+        public ServiceResponse<List<ArticleDTO>> AddArticleToStudent(string filterText)
+        {
+            var result = _articleService.GetArticlesByFilter(filterText);
+            return result;
+        }
     }
 }
 
