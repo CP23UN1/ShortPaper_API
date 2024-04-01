@@ -152,15 +152,11 @@ namespace ShortPaper_API.Services.Subjects
                     };
                     student.StudentsHasSubjects.Add(newSubject);
 
-                    // Remove other subjects if existingSubject is both registered and paper subject
-                    if (subject.IsRegisteredSubject && subject.IsPaperSubject)
-                    {
                         var otherSubjects = student.StudentsHasSubjects.Where(s => s.SubjectId != subject.SubjectId).ToList();
                         foreach (var otherSubject in otherSubjects)
                         {
                             _db.Remove(otherSubject);
                         }
-                    }
                 }
                 else
                 {
