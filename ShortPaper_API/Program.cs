@@ -178,12 +178,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShortPaper API V1");
-        // Optionally, you can configure the Swagger UI route
-        c.RoutePrefix = "api/docs"; // This will serve Swagger UI at http://localhost:<port>/api/docs
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
