@@ -1,6 +1,7 @@
 ﻿using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.WSTrust;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
@@ -45,6 +46,7 @@ namespace ShortPaper_API.Services.Students
                                         Email = student.Email,
                                         AlternativeEmail = student.AlternativeEmail,
                                         Phonenumber = student.Phonenumber,
+                                        Status = student.Status,
                                         Year = student.Year,
                                         Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                         {
@@ -178,6 +180,7 @@ namespace ShortPaper_API.Services.Students
                                              Email = student.Email,
                                              AlternativeEmail = student.AlternativeEmail,
                                              Phonenumber = student.Phonenumber,
+                                             Status = student.Status,
                                              Year = student.Year,
                                              Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                              {
@@ -277,6 +280,7 @@ namespace ShortPaper_API.Services.Students
                                              Email = student.Email,
                                              AlternativeEmail = student.AlternativeEmail,
                                              Phonenumber = student.Phonenumber,
+                                             Status = student.Status,
                                              Year = student.Year,
                                              Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                              {
@@ -406,6 +410,7 @@ namespace ShortPaper_API.Services.Students
                                        Email = s.Email,
                                        AlternativeEmail = s.AlternativeEmail,
                                        Phonenumber = s.Phonenumber,
+                                       Status = s.Status,
                                        Year = s.Year,
                                        Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                        {
@@ -524,6 +529,7 @@ namespace ShortPaper_API.Services.Students
                                        Email = s.Email,
                                        AlternativeEmail = s.AlternativeEmail,
                                        Phonenumber = s.Phonenumber,
+                                       Status = s.Status,
                                        Year = s.Year,
                                        Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                        {
@@ -646,6 +652,7 @@ namespace ShortPaper_API.Services.Students
                                        Email = s.Email,
                                        AlternativeEmail = s.AlternativeEmail,
                                        Phonenumber = s.Phonenumber,
+                                       Status = s.Status,
                                        Year = s.Year,
                                        Shortpaper = studentShort != null ? new ShortpaperForStudentDTO
                                        {
@@ -925,6 +932,7 @@ namespace ShortPaper_API.Services.Students
                 updateStudent.Email = student.Email;
                 updateStudent.AlternativeEmail = student.AlternativeEmail;
                 updateStudent.Phonenumber = student.Phonenumber;
+                updateStudent.Status = "old";
 
                 _db.SaveChanges();
 
