@@ -86,7 +86,12 @@ namespace ShortPaper_API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ShortPaper API V1");
+                    // Optionally, you can configure the Swagger UI route
+                    c.RoutePrefix = "api/docs"; // This will serve Swagger UI at http://localhost:<port>/api/docs
+                });
             }
             else
             {
