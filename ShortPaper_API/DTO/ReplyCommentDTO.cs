@@ -1,6 +1,6 @@
 ﻿namespace ShortPaper_API.DTO
 {
-    public class CommentDTO
+    public class ReplyCommentDTO
     {
         public int CommentId { get; set; }
 
@@ -10,12 +10,8 @@
 
         public DateTime UpdatedDatetime { get; set; }
 
-        public int FileId { get; set; }
-
         public int? ReplyCommentId { get; set; }
 
         public string AuthorId { get; set; }
-
-        public List<ReplyCommentDTO> ReplyComment { get; set; }
     }
 }

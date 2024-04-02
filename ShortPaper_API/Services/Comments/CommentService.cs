@@ -3,6 +3,7 @@ using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace ShortPaper_API.Services.Comments
 {
@@ -19,17 +20,42 @@ namespace ShortPaper_API.Services.Comments
         {
             try
             {
-                var comments = _db.Comments
-               .Where(c => c.FileId == fileId)
-               .Select(c => new CommentDTO
-               {
-                   CommentId = c.CommentId,
-                   CommentContent = c.CommentContent,
-                   CreatedDatetime = c.CreatedDatetime,
-                   FileId = fileId,
-                   AuthorId = c.AuthorId
-               })
-               .ToList();
+                var comments = (from c in _db.Comments
+                                where c.FileId == fileId && c.ReplyCommentId == null
+                                select new
+                                {
+                                    Comment = new CommentDTO
+                                    {
+                                        CommentId = c.CommentId,
+                                        CommentContent = c.CommentContent,
+                                        CreatedDatetime = c.CreatedDatetime,
+                                        UpdatedDatetime = c.UpdatedDatetime,
+                                        FileId = fileId,
+                                        ReplyCommentId = c.ReplyCommentId,
+                                        AuthorId = c.AuthorId,
+                                    },
+                                    ReplyComments = (from rc in _db.Comments
+                                                    where rc.ReplyCommentId == c.CommentId
+                                                    select new ReplyCommentDTO
+                                                    {
+                                                        CommentContent = rc.CommentContent,
+                                                        CreatedDatetime = rc.CreatedDatetime,
+                                                        CommentId = rc.CommentId,
+                                                        ReplyCommentId = rc.ReplyCommentId,
+                                                        AuthorId = rc.AuthorId
+                                                    }).ToList(),
+                                }).GroupBy(c => c.Comment.CommentId)
+                                .Select(group => new CommentDTO
+                                {
+                                    CommentId = group.First().Comment.CommentId,
+                                    CommentContent = group.First().Comment.CommentContent,
+                                    CreatedDatetime = group.First().Comment.CreatedDatetime,
+                                    UpdatedDatetime = group.First().Comment.UpdatedDatetime,
+                                    FileId = group.First().Comment.FileId,
+                                    ReplyCommentId = group.First().Comment.ReplyCommentId,
+                                    AuthorId = group.First().Comment.AuthorId,
+                                    ReplyComment = group.First().ReplyComments,
+                                }).ToList();
 
                 if (comments.Count == 0)
                 {
@@ -136,6 +162,7 @@ namespace ShortPaper_API.Services.Comments
                     CommentContent = commentDTO.CommentContent,
                     CreatedDatetime = DateTime.Now,
                     UpdatedDatetime = DateTime.Now,
+                    ReplyCommentId = commentDTO.replyId,
                     FileId = commentDTO.FileId,
                     AuthorId = commentDTO.AuthorId
                 };
@@ -177,7 +204,7 @@ namespace ShortPaper_API.Services.Comments
                 response.IsSuccess = true;
                 response.Data = commentDTO;
             }
-            catch (Exception ex)
+            catch
             {
                 response.ErrorMessage = "An unexpected error occurred";
                 response.httpStatusCode = StatusCodes.Status500InternalServerError;
