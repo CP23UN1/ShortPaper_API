@@ -201,5 +201,21 @@ namespace ShortPaper_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("studentFileStatus")]
+        public IActionResult GetStudentFileStatusByType()
+        {
+            var result = _fileService.GetStudentFileStatusByType();
+
+            if (result.httpStatusCode == StatusCodes.Status200OK)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+        }
+
     }
 }

@@ -19,6 +19,7 @@ namespace ShortPaper_API.Services.Files
         public byte[] GeneratePdfPreview(int fileId);
         ServiceResponse<string> UpdateFileStatusToApproved(int fileId);
         ServiceResponse<string> UpdateFileStatusToNotApproved(int fileId);
+        ServiceResponse<List<StudentListFileStatusDTO>> GetStudentFileStatusByType();
 
         //        Task<Stream> DownloadFile(int fileId);
     }

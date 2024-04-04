@@ -669,5 +669,99 @@ namespace ShortPaper_API.Services.Files
             }
         }
 
+        private List<FileUploadDataDTO> GetFileUploadData()
+        {
+            try
+            {
+                var fileUploadData = (from sf in _db.ShortpaperFiles
+                                      join sp in _db.Shortpapers on sf.ShortpaperId equals sp.ShortpaperId
+                                      join st in _db.Students on sp.StudentId equals st.StudentId
+                                      join ft in _db.ShortpaperFileTypes on sf.ShortpaperFileTypeId equals ft.TypeId
+                                      select new FileUploadDataDTO
+                                      {
+                                          StudentId = sp.StudentId,
+                                          FileType = ft.TypeName
+                                          // Add other necessary properties here
+                                      }).ToList();
+
+                return fileUploadData;
+            }
+            catch (Exception ex)
+            {
+                // Handle exception appropriately
+                throw new Exception("Failed to retrieve file upload data.", ex);
+            }
+        }
+
+        public ServiceResponse<List<StudentListFileStatusDTO>> GetStudentFileStatusByType()
+        {
+            try
+            {
+                var fileUploadData = GetFileUploadData();
+
+                // Group file upload data by file type and student
+                var groupedData = fileUploadData.GroupBy(d => new { d.FileType, d.StudentId })
+                                                 .Select(g => new { FileType = g.Key.FileType, StudentId = g.Key.StudentId })
+                                                 .ToList();
+
+                // Create a list of StudentFileStatusDTO objects to hold the result
+                var studentFileStatusList = new List<StudentListFileStatusDTO>();
+
+                // Iterate through each group
+                foreach (var group in groupedData)
+                {
+                    // Check if the student already exists in the result list
+                    var existingStudent = studentFileStatusList.FirstOrDefault(s => s.StudentId == group.StudentId);
+
+                    if (existingStudent == null)
+                    {
+                        // If the student does not exist, create a new StudentFileStatusDTO object
+                        var newStudent = new StudentListFileStatusDTO
+                        {
+                            StudentId = group.StudentId,
+                            FileStatusByType = new List<FileStatusByTypeDTO>()
+                        };
+
+                        // Add the file status for the current file type
+                        newStudent.FileStatusByType.Add(new FileStatusByTypeDTO
+                        {
+                            FileType = group.FileType,
+                            HasUploaded = true // Set to true since file exists
+                        });
+
+                        // Add the new student to the result list
+                        studentFileStatusList.Add(newStudent);
+                    }
+                    else
+                    {
+                        // If the student exists, update the file status for the current file type
+                        existingStudent.FileStatusByType.Add(new FileStatusByTypeDTO
+                        {
+                            FileType = group.FileType,
+                            HasUploaded = true // Set to true since file exists
+                        });
+                    }
+                }
+
+                var result = new ServiceResponse<List<StudentListFileStatusDTO>>
+                {
+                    Data = studentFileStatusList,
+                    httpStatusCode = StatusCodes.Status200OK
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<StudentListFileStatusDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
     }
 }
