@@ -18,5 +18,7 @@ namespace ShortPaper_API.Services.Students
 
         ServiceResponse<List<string>> GetUniqueYears();
 
+        Task<byte[]> ExportStudentsToCsvAsync();
+
     }
 }

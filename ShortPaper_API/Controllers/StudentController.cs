@@ -110,5 +110,24 @@ namespace ShortPaper_API.Controllers
             var response = _studentService.GetUniqueYears();
             return response;
         }
+
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportStudentsToCsv()
+        {
+            try
+            {
+                var csvData = await _studentService.ExportStudentsToCsvAsync();
+
+                var memoryStream = new MemoryStream(csvData);
+                var contentType = "text/csv";
+                var fileName = "students.csv";
+
+                return File(memoryStream, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Failed to export students: {ex.Message}");
+            }
+        }
     }
 }
