@@ -367,6 +367,48 @@ namespace ShortPaper_API.Services.Files
             }
         }
 
+        public ServiceResponse<string> UpdateFileStatusToNotApproved(int fileId)
+        {
+            try
+            {
+                var fileToUpdate = _db.ShortpaperFiles.FirstOrDefault(f => f.ShortpaperFileId == fileId);
+                var shortpaper = _db.Shortpapers.FirstOrDefault(s => s.ShortpaperId == fileToUpdate.ShortpaperId);
+                var student = _db.Students.FirstOrDefault(s => s.StudentId == shortpaper.StudentId);
+                var shortpaper_has_commitee = _db.ShortpapersHasCommittees.FirstOrDefault(s => s.ShortpaperId == shortpaper.ShortpaperId);
+                var committee = _db.Committees.FirstOrDefault(s => s.CommitteeId == shortpaper_has_commitee.CommitteeId);
+                if (fileToUpdate == null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        httpStatusCode = StatusCodes.Status404NotFound,
+                        ErrorMessage = "File not found."
+                    };
+                }
+
+                // Update the status to "approved"
+                fileToUpdate.Status = "not_approved";
+                fileToUpdate.UpdatedStatusDatetime = DateTime.Now;
+
+                SendEmailToCommiteeForReUploadFile(committee, student.Firstname, fileToUpdate.ShortpaperFileType.TypeName);
+
+                _db.SaveChanges();
+
+                return new ServiceResponse<string>
+                {
+                    Data = "File status updated to approved.",
+                    httpStatusCode = StatusCodes.Status200OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<string>
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+            }
+        }
+
 
         public ServiceResponse<ShortpaperFileDTO> GetFileByTypeIdAndShortpaper(int fileTypeId, int shortpaperId)
         {
@@ -549,6 +591,52 @@ namespace ShortPaper_API.Services.Files
                 string subject = "File Upload From Student";
                 string link = "https://capstone23.sit.kmutt.ac.th/un1/#/login";
                 string body = $"Dear {committee.Firstname},\n\n{fileName} file from {studentName} has been uploaded \n\nYou can check in this link: <a href='{link}'>here</a>.";
+
+                using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
+                {
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
+
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.From = new MailAddress(senderEmail, "Non-Reply Shortpaper System");
+                    mailMessage.To.Add(new MailAddress(recieverEmail, committee.Firstname));
+                    mailMessage.Subject = subject;
+                    mailMessage.Body = body;
+                    mailMessage.IsBodyHtml = true;
+
+                    // Set the Reply-To header to a non-reply email address
+                    mailMessage.ReplyToList.Add("noreply@example.com");
+
+                    smtpClient.Send(mailMessage);
+                    Console.WriteLine($"Email sent successfully to {committee.Firstname} ({committee.Email})");
+                }
+            }
+            catch (SmtpException ex)
+            {
+                // SMTP server error
+                Console.WriteLine($"SMTP server error: {ex.StatusCode} - {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // Other exceptions
+                Console.WriteLine($"Failed to send email to {studentName}: {ex.Message}");
+            }
+        }
+
+        private void SendEmailToCommiteeForReUploadFile(Committee committee, string studentName, string fileType)
+        {
+            try
+            {
+                // Replace these values with your SMTP server credentials and email content.
+                string smtpServer = "smtp.gmail.com";
+                int smtpPort = 587; // Update with your SMTP port
+                string smtpUsername = "shortpaper.project@gmail.com";
+                string smtpPassword = "mgliofrgespahzof";
+                string recieverEmail = "death.sites123@gmail.com";
+                string senderEmail = "shortpaper.project@gmail.com";
+                string subject = "File Upload From Student";
+                string link = "https://capstone23.sit.kmutt.ac.th/un1/#/login";
+                string body = $"Dear {committee.Firstname},\n\n{studentName} want to upload {fileType} again. \n\nYou can check in this link: <a href='{link}'>here</a>.";
 
                 using (SmtpClient smtpClient = new SmtpClient(smtpServer, smtpPort))
                 {

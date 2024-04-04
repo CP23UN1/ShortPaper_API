@@ -181,5 +181,25 @@ namespace ShortPaper_API.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("file/re/status/{fileId}")]
+        public IActionResult UpdateFileStatusToNotApproved(int fileId)
+        {
+            var updateStatusResponse = _fileService.UpdateFileStatusToNotApproved(fileId);
+
+            if (updateStatusResponse.httpStatusCode == StatusCodes.Status200OK)
+            {
+                return Ok(updateStatusResponse.Data);
+            }
+            else if (updateStatusResponse.httpStatusCode == StatusCodes.Status404NotFound)
+            {
+                return NotFound(updateStatusResponse.ErrorMessage);
+            }
+            else
+            {
+                return BadRequest(updateStatusResponse.ErrorMessage);
+            }
+        }
+
     }
 }
