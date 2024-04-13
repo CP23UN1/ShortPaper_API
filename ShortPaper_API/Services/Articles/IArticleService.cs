@@ -11,7 +11,8 @@ namespace ShortPaper_API.Services.Articles
         void CreateArticlesFromShortpaperFiles();
         ServiceResponse<StudentsHasArticle> AddArticleToStudent(string studentId, int articleId);
         ServiceResponse<List<ArticleDTO>> GetArticlesByFilter(string filterText);
-
+        ServiceResponse<List<ArticleDTO>> GetFavoriteArticles(string studentId);
+        string RemoveFromFavorites(string studentId, int articleId);
     }
 }
 

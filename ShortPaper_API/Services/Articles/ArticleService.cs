@@ -185,6 +185,74 @@ namespace ShortPaper_API.Services.Articles
                 return result;
             }
         }
+
+        public ServiceResponse<List<ArticleDTO>> GetFavoriteArticles(string studentId)
+        {
+            try
+            {
+                var favoriteArticles = (from sa in _db.StudentsHasArticles
+                                        join a in _db.Articles on sa.ArticleId equals a.ArticleId
+                                        where sa.StudentId == studentId
+                                        select new ArticleDTO
+                                        {
+                                            ArticleId = a.ArticleId,
+                                            Topic = a.Topic,
+                                            Author = a.Author,
+                                            FileName = a.FileName,
+                                            FileType = a.FileType,
+                                            Year = a.Year,
+                                            Subjects = new SubjectDTO
+                                            {
+                                                SubjectId = a.Subject.SubjectId,
+                                                SubjectName = a.Subject.SubjectName
+                                            }
+                                        }).ToList();
+
+                var result = new ServiceResponse<List<ArticleDTO>>
+                {
+                    Data = favoriteArticles,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ArticleDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status500InternalServerError,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
+        public string RemoveFromFavorites(string studentId, int articleId)
+        {
+            var response = new ServiceResponse<object>();
+
+            try
+            {
+                var favoriteArticle = _db.StudentsHasArticles.FirstOrDefault(sa => sa.StudentId == studentId && sa.ArticleId == articleId);
+
+                if (favoriteArticle != null)
+                {
+                    _db.StudentsHasArticles.Remove(favoriteArticle);
+                    _db.SaveChanges();
+
+                    return "Article removed from favorites successfully.";
+                }
+                else
+                {
+                    return "Article is not in favorites.";
+                }
+            }
+            catch (Exception ex)
+            {
+                return "An unexpected error occurred while removing article from favorites.";
+            }
+        }
     }
 }
 

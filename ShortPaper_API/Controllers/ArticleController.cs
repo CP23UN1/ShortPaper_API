@@ -64,6 +64,22 @@ namespace ShortPaper_API.Controllers
             var result = _articleService.GetArticlesByFilter(filterText);
             return result;
         }
+
+        [HttpGet]
+        [Route("article/favorite/{studentId}")]
+        public ServiceResponse<List<ArticleDTO>> GetFavoriteArticles(string studentId)
+        {
+            var result = _articleService.GetFavoriteArticles(studentId);
+            return result;
+        }
+
+        [HttpDelete]
+        [Route("article/favorite/remove/{studentId}/{articleId}")]
+        public string RemoveFromFavorites(string studentId, int articleId)
+        {
+            var result = _articleService.RemoveFromFavorites(studentId, articleId);
+            return result;
+        }
     }
 }
 
