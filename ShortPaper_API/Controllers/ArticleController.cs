@@ -80,6 +80,14 @@ namespace ShortPaper_API.Controllers
             var result = _articleService.RemoveFromFavorites(studentId, articleId);
             return result;
         }
+
+        [HttpGet]
+        [Route("article/filter/many")]
+        public ServiceResponse<List<ArticleDTO>> GetArticlesByManyFilter([FromQuery] FilterArticleDTO filter)
+        {
+            var result = _articleService.GetArticlesByManyFilter(filter);
+            return result;
+        }
     }
 }
 

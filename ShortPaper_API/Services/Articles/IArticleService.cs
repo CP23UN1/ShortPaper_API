@@ -13,6 +13,7 @@ namespace ShortPaper_API.Services.Articles
         ServiceResponse<List<ArticleDTO>> GetArticlesByFilter(string filterText);
         ServiceResponse<List<ArticleDTO>> GetFavoriteArticles(string studentId);
         string RemoveFromFavorites(string studentId, int articleId);
+        ServiceResponse<List<ArticleDTO>> GetArticlesByManyFilter(FilterArticleDTO filter);
     }
 }
 

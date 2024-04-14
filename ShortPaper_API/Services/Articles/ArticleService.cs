@@ -253,6 +253,75 @@ namespace ShortPaper_API.Services.Articles
                 return "An unexpected error occurred while removing article from favorites.";
             }
         }
+
+        public ServiceResponse<List<ArticleDTO>> GetArticlesByManyFilter(FilterArticleDTO filter)
+        {
+            try
+            {
+                var articlesQuery = _db.Articles
+                    .Join(_db.Subjects, a => a.SubjectId, b => b.SubjectId, (a, b) => new { Article = a, Subject = b });
+
+                if (!string.IsNullOrEmpty(filter.Topic))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Article.Topic.Contains(filter.Topic));
+                }
+
+                if (!string.IsNullOrEmpty(filter.Year))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Article.Year.Contains(filter.Year));
+                }
+
+                if (!string.IsNullOrEmpty(filter.FileName))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Article.FileName.Contains(filter.FileName));
+                }
+
+                if (!string.IsNullOrEmpty(filter.Author))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Article.Author.Contains(filter.Author));
+                }
+
+                if (!string.IsNullOrEmpty(filter.FileType))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Article.FileType.Contains(filter.FileType));
+                }
+
+                var articles = articlesQuery
+                    .Select(j => new ArticleDTO
+                    {
+                        ArticleId = j.Article.ArticleId,
+                        Topic = j.Article.Topic,
+                        Author = j.Article.Author,
+                        FileName = j.Article.FileName,
+                        FileType = j.Article.FileType,
+                        Year = j.Article.Year,
+                        Subjects = new SubjectDTO
+                        {
+                            SubjectId = j.Subject.SubjectId,
+                            SubjectName = j.Subject.SubjectName
+                        }
+                    })
+                    .ToList();
+
+                var result = new ServiceResponse<List<ArticleDTO>>
+                {
+                    Data = articles,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<ArticleDTO>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
     }
 }
 
