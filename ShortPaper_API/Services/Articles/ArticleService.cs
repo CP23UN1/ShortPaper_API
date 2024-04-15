@@ -283,7 +283,7 @@ namespace ShortPaper_API.Services.Articles
 
                 if(!string.IsNullOrEmpty(filter.Subject))
                 {
-                    articlesQuery = articlesQuery.Where(j => j.Subject.SubjectName.Contains(filter.Subject));
+                    articlesQuery = articlesQuery.Where(j => j.Subject.SubjectId.Contains(filter.Subject));
                 }
 
                 var articles = articlesQuery
