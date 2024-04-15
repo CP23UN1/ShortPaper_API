@@ -261,11 +261,6 @@ namespace ShortPaper_API.Services.Articles
                 var articlesQuery = _db.Articles
                     .Join(_db.Subjects, a => a.SubjectId, b => b.SubjectId, (a, b) => new { Article = a, Subject = b });
 
-                if (!string.IsNullOrEmpty(filter.Topic))
-                {
-                    articlesQuery = articlesQuery.Where(j => j.Article.Topic.Contains(filter.Topic));
-                }
-
                 if (!string.IsNullOrEmpty(filter.Year))
                 {
                     articlesQuery = articlesQuery.Where(j => j.Article.Year.Contains(filter.Year));
@@ -276,14 +271,19 @@ namespace ShortPaper_API.Services.Articles
                     articlesQuery = articlesQuery.Where(j => j.Article.FileName.Contains(filter.FileName));
                 }
 
-                if (!string.IsNullOrEmpty(filter.Author))
+                if (!string.IsNullOrEmpty(filter.TopicOrAuthor))
                 {
-                    articlesQuery = articlesQuery.Where(j => j.Article.Author.Contains(filter.Author));
+                    articlesQuery = articlesQuery.Where(j => j.Article.Author.Contains(filter.TopicOrAuthor) || j.Article.Topic.Contains(filter.TopicOrAuthor));
                 }
 
                 if (!string.IsNullOrEmpty(filter.FileType))
                 {
                     articlesQuery = articlesQuery.Where(j => j.Article.FileType.Contains(filter.FileType));
+                }
+
+                if(!string.IsNullOrEmpty(filter.Subject))
+                {
+                    articlesQuery = articlesQuery.Where(j => j.Subject.SubjectName.Contains(filter.Subject));
                 }
 
                 var articles = articlesQuery
