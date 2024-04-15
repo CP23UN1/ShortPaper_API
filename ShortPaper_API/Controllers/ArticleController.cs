@@ -81,9 +81,9 @@ namespace ShortPaper_API.Controllers
             return result;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("article/filter/many")]
-        public ServiceResponse<List<ArticleDTO>> GetArticlesByManyFilter([FromQuery] FilterArticleDTO filter)
+        public ServiceResponse<List<ArticleDTO>> GetArticlesByManyFilter(FilterArticleDTO filter)
         {
             var result = _articleService.GetArticlesByManyFilter(filter);
             return result;
