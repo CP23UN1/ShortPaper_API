@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using CsvHelper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,8 @@ using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
 using ShortPaper_API.Services.Students;
+using System.Globalization;
+using System.Text;
 
 namespace ShortPaper_API.Controllers
 {
@@ -111,23 +114,25 @@ namespace ShortPaper_API.Controllers
             return response;
         }
 
-        [HttpGet("export")]
-        public async Task<IActionResult> ExportStudentsToCsv()
+        [HttpGet]
+        [Route("export-to-csv")]
+        public IActionResult ExportStudentsToCSV()
         {
-            try
-            {
-                var csvData = await _studentService.ExportStudentsToCsvAsync();
+            var students = _studentService.GetStudents().Data;
+            var response = _studentService.GenerateStudentsCSV(students);
 
-                var memoryStream = new MemoryStream(csvData);
-                var contentType = "text/csv";
-                var fileName = "students.csv";
-
-                return File(memoryStream, contentType, fileName);
-            }
-            catch (Exception ex)
+            if (response.httpStatusCode != StatusCodes.Status200OK)
             {
-                return BadRequest($"Failed to export students: {ex.Message}");
+                return StatusCode(response.httpStatusCode, response.ErrorMessage);
             }
+
+            var csvData = response.Data;
+
+            // Convert CSV data to bytes using UTF-8 encoding
+            var csvBytes = Encoding.UTF8.GetBytes(csvData);
+
+            // Return the CSV file as a file download
+            return File(csvBytes, "text/csv", "students.csv");
         }
     }
 }

@@ -1,13 +1,18 @@
 ﻿using Konscious.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.WSTrust;
 using ShortPaper_API.DTO;
 using ShortPaper_API.Entities;
 using ShortPaper_API.Helper;
+using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using CsvHelper;
+using CsvHelper.Configuration;
+
 
 namespace ShortPaper_API.Services.Students
 {
@@ -1026,55 +1031,40 @@ namespace ShortPaper_API.Services.Students
                 return result;
             }
         }
-
-        public async Task<byte[]> ExportStudentsToCsvAsync()
+        public ServiceResponse<string> GenerateStudentsCSV(List<StudentDTO> students)
         {
             try
             {
-                var students = await _db.Students.Include(s => s.Shortpapers)
-                                                  .Include(s => s.StudentsHasSubjects)
-                                                    .ThenInclude(shs => shs.Subject)
-                                                  .ToListAsync();
-
-                if (students == null || students.Count == 0)
-                {
-                    throw new Exception("No students found.");
-                }
-
+                // Generate CSV content as a string
                 var csvData = new StringBuilder();
-                csvData.AppendLine("StudentId,Firstname,Lastname,ShortpaperTopic,Subjects,Committees");
+                csvData.AppendLine("StudentId,Firstname,Lastname,ShortpaperTopic,Subjects,,Committees");
 
                 foreach (var student in students)
                 {
-                    foreach (var shortpaper in student.Shortpapers)
-                    {
-                        var shortpaperTopic = shortpaper.ShortpaperTopic ?? ""; // Access Shortpaper properties
-                        var subjectNames = string.Join("; ", student.StudentsHasSubjects.Select(shs => shs.Subject.SubjectName));
+                    // Concatenate subject names
+                    var subjectNames = string.Join(", ", student.Subjects.Select(subject => subject.SubjectName));
 
-                        var committeeNames = "";
-                        var shortpaperHasCommittees = await _db.ShortpapersHasCommittees
-                                                            .Where(shc => shc.ShortpaperId == shortpaper.ShortpaperId)
-                                                            .Select(shc => shc.Committee)
-                                                            .ToListAsync();
+                    // Concatenate committee names
+                    var committeeNames = string.Join(", ", student.Committees.Select(committee => $"{committee?.Firstname} {committee?.Lastname}"));
 
-                        if (shortpaperHasCommittees.Any())
-                        {
-                            committeeNames = string.Join("; ", shortpaperHasCommittees.Select(c => $"{c.Firstname} {c.Lastname}"));
-                        }
-
-                        csvData.AppendLine($"{student.StudentId},{student.Firstname},{student.Lastname},{shortpaperTopic},{subjectNames},{committeeNames}");
-                    }
+                    // Append subjects and committees to the CSV row
+                    csvData.AppendLine($"{student.StudentId},{student.Firstname},{student.Lastname},{student.Shortpaper?.ShortpaperTopic ?? ""},{subjectNames},{committeeNames}");
                 }
 
-                return Encoding.UTF8.GetBytes(csvData.ToString());
+                return new ServiceResponse<string>
+                {
+                    Data = csvData.ToString(),
+                    httpStatusCode = StatusCodes.Status200OK
+                };
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to export students: {ex.Message}");
+                return new ServiceResponse<string>
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
             }
         }
-
-
-
     }
 }

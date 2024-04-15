@@ -15,10 +15,8 @@ namespace ShortPaper_API.Services.Students
         Task<ServiceResponse<List<CreateStudentDTO>>> AddStudentsFromCsvAsync(IFormFile csvFile);
         ServiceResponse<UpdateStudentDTO> UpdateStudent(UpdateStudentDTO studentDTO);
         Student DeleteStudent(string id);
-
         ServiceResponse<List<string>> GetUniqueYears();
-
-        Task<byte[]> ExportStudentsToCsvAsync();
+        ServiceResponse<string> GenerateStudentsCSV(List<StudentDTO> students);
 
     }
 }
