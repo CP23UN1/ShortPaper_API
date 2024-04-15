@@ -88,6 +88,14 @@ namespace ShortPaper_API.Controllers
             var result = _articleService.GetArticlesByManyFilter(filter);
             return result;
         }
+
+        [HttpGet]
+        [Route("articles/year")]
+        public ServiceResponse<List<string>> GetArticleYears()
+        {
+            var result = _articleService.GetArticleYears();
+            return result;
+        }
     }
 }
 

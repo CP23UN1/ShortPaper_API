@@ -322,6 +322,32 @@ namespace ShortPaper_API.Services.Articles
                 return result;
             }
         }
+        public ServiceResponse<List<string>> GetArticleYears()
+        {
+            try
+            {
+                var years = _db.Articles.Select(a => a.Year).Distinct().ToList();
+
+                var result = new ServiceResponse<List<string>>
+                {
+                    Data = years,
+                    httpStatusCode = StatusCodes.Status200OK,
+                };
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var result = new ServiceResponse<List<string>>()
+                {
+                    httpStatusCode = StatusCodes.Status400BadRequest,
+                    ErrorMessage = ex.Message
+                };
+
+                return result;
+            }
+        }
+
     }
 }
 
