@@ -322,15 +322,17 @@ namespace ShortPaper_API.Services.Articles
                 return result;
             }
         }
+
         public ServiceResponse<List<string>> GetArticleYears()
         {
             try
             {
-                var years = _db.Articles.Select(a => a.Year).Distinct().ToList();
+                var articles = _db.Articles.Select(a => a.Year).Distinct().ToList();
+                var orderedYears = articles.OrderBy(y => GetYearValue(y)).ThenBy(y => GetMonthValue(y)).ToList();
 
                 var result = new ServiceResponse<List<string>>
                 {
-                    Data = years,
+                    Data = orderedYears,
                     httpStatusCode = StatusCodes.Status200OK,
                 };
 
@@ -346,6 +348,22 @@ namespace ShortPaper_API.Services.Articles
 
                 return result;
             }
+        }
+
+        private int GetYearValue(string year)
+        {
+            var parts = year.Split('/');
+            if (parts.Length == 2 && int.TryParse(parts[1], out int yearValue))
+                return yearValue;
+            return int.MaxValue;
+        }
+
+        private int GetMonthValue(string year)
+        {
+            var parts = year.Split('/');
+            if (parts.Length == 2 && int.TryParse(parts[0], out int monthValue))
+                return monthValue;
+            return int.MaxValue;
         }
 
     }
